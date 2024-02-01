@@ -3,7 +3,7 @@ import { ShaderInfo } from "./ShaderInfo";
 
 export class ProgramUtils {
 
-    public static build(gl: ExpoWebGLRenderingContext, shadersInfo: Array<ShaderInfo>): WebGLProgram | null {
+    public static build(gl: ExpoWebGLRenderingContext, shadersInfo: Array<ShaderInfo>): WebGLProgram {
 
         const program = gl.createProgram();
 
@@ -23,7 +23,7 @@ export class ProgramUtils {
         return program;
     }
 
-    private static compileShader(gl: ExpoWebGLRenderingContext, shaderInfo: ShaderInfo): WebGLShader | null {
+    private static compileShader(gl: ExpoWebGLRenderingContext, shaderInfo: ShaderInfo): WebGLShader {
 
         const shader = gl.createShader(shaderInfo.type);
 

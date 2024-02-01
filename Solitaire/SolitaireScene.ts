@@ -13,13 +13,13 @@ export class SolitaireScene extends Scene {
 
     constructor(
         protected gl: ExpoWebGLRenderingContext,
-        protected resolution: ISize,
+        protected resolution: ISize
     ) {
         const shaders = [
             new ShaderInfo(ShaderType.VERTEX_SHADER, vertexShaderSourceCode),
             new ShaderInfo(ShaderType.FRAGMENT_SHADER, fragmentShaderSourceCode),
         ]
-        super(gl, screen, shaders)
+        super(gl, resolution, shaders)
     }
 
     public override async init(): Promise<void> {

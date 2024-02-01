@@ -11,6 +11,7 @@ export class Rectangle implements IGameObject {
     private vertexCount: number = 0
 
     public visible = true
+    public draggable = false
 
     constructor(
         private gl: ExpoWebGLRenderingContext,

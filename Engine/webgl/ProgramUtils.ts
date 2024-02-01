@@ -1,7 +1,7 @@
 import { ExpoWebGLRenderingContext } from "expo-gl";
 import { ShaderInfo } from "./ShaderInfo";
 
-export class ShaderProgram {
+export class ProgramUtils {
 
     public static build(gl: ExpoWebGLRenderingContext, shadersInfo: Array<ShaderInfo>): WebGLProgram | null {
 
@@ -10,7 +10,7 @@ export class ShaderProgram {
         if (!program) throw new Error("Can't create WebGLProgram")
 
         for (const shaderInfo of shadersInfo) {
-            const shader = ShaderProgram.compileShader(gl, shaderInfo);
+            const shader = ProgramUtils.compileShader(gl, shaderInfo);
             if (shader) gl.attachShader(program, shader);
         }
 

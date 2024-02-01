@@ -7,6 +7,7 @@ import { fragmentShaderSourceCode } from "./shaders/FragmentShader";
 import { Rectangle } from "../Engine/GameObjects/Rectangle";
 import { Color } from "../Engine/Color";
 import { IPosition } from "../Engine/interfaces/IPosition";
+import { IGameObject } from "../Engine/interfaces/IGameObject";
 
 export class SolitaireScene extends Scene {
 
@@ -27,9 +28,10 @@ export class SolitaireScene extends Scene {
         console.log("[SolitaireScene] init");
 
         const rect = new Rectangle(this.gl, 10, 10, 0, 100, 100, Color.RED)
+        rect.draggable = true
         this.objects.push(rect)
 
-        setInterval(() => rect.visible = !rect.visible, 150)
+        // setInterval(() => rect.visible = !rect.visible, 150)
     }
 
     public override update(): void {
@@ -61,21 +63,27 @@ export class SolitaireScene extends Scene {
             newPosition.y = 0
         }
 
-        rect.move(newPosition.x, newPosition.y)
+        // rect.move(newPosition.x, newPosition.y)
     }
 
     public override onTouchStart(position: IPosition): void {
 
-        console.log("[SolitaireScene] onTouchStart", position);
+        // console.log("[SolitaireScene] onTouchStart", position);
     }
 
     public override onTouchEnd(): void {
 
-        console.log("[SolitaireScene] onTouchEnd");
+        // console.log("[SolitaireScene] onTouchEnd");
     }
 
     public override onTouchMove(position: IPosition): void {
 
-        console.log("[SolitaireScene] onTouchMove", position);
+        // console.log("[SolitaireScene] onTouchMove", position);
+    }
+
+    public onGameObjectDrop(gameObject: IGameObject, position: IPosition): void {
+
+        console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);
+        
     }
 }

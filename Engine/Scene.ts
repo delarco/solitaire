@@ -28,4 +28,6 @@ export class Scene {
     public onTouchEnd(): void { }
 
     public onTouchMove(position: IPosition): void { }
+
+    public onGameObjectDrop(gameObject: IGameObject, position: IPosition): void { }
 }

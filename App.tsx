@@ -1,20 +1,23 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ExpoWebGLRenderingContext, GLView } from 'expo-gl';
+import { Dimensions, View } from 'react-native';
 
 export default function App() {
+
+  const screenSize = {
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  }
+
+  function onContextCreate(gl: ExpoWebGLRenderingContext): void {
+
+    console.log(`[App] onContextCreate ${screenSize.width}x${screenSize.height}`);
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
+    <View>
+      <GLView
+        style={{ width: screenSize.width, height: screenSize.height, }}
+        onContextCreate={onContextCreate} />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

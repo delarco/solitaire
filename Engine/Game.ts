@@ -36,9 +36,22 @@ export class Game {
 
     private animate(): void {
 
+        const gl = this.gl
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
+        gl.clearColor(0.75, 0.75, 0.75, 1)
+        gl.clear(gl.COLOR_BUFFER_BIT)
+
         for (const scene of this.renderingScenes) {
+
+            gl.useProgram(scene.shaderProgram.program)
+            gl.uniform2f(scene.shaderProgram.resolutionLocation, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            gl.enableVertexAttribArray(scene.shaderProgram.vertexPosition)
+
             for (const obj of scene.objects) obj.draw()
         }
+
+        gl.flush()
+        gl.endFrameEXP()
 
         requestAnimationFrame(time => {
             this.update(time)

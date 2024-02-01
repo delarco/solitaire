@@ -20,7 +20,6 @@ export class SolitaireScene extends Scene {
 
     public override async init(): Promise<void> {
         console.log("[SolitaireScene] init");
-        console.log(this.program);
         
     }
 

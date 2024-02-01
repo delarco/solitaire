@@ -25,7 +25,10 @@ export class SolitaireScene extends Scene {
     public override async init(): Promise<void> {
         console.log("[SolitaireScene] init");
 
-        this.objects.push(new Rectangle(this.gl, 10, 10, 0, 100, 100, Color.RED))
+        const rect = new Rectangle(this.gl, 10, 10, 0, 100, 100, Color.RED)
+        this.objects.push(rect)
+
+        setInterval(() => rect.visible = !rect.visible, 150)
     }
 
     public override update(): void {

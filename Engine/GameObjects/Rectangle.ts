@@ -10,6 +10,8 @@ export class Rectangle implements IGameObject {
     private vertexNumComponents: number = 0
     private vertexCount: number = 0
 
+    public visible = true
+
     constructor(
         private gl: ExpoWebGLRenderingContext,
         public x: number,
@@ -49,6 +51,8 @@ export class Rectangle implements IGameObject {
 
     public draw(program: ShaderProgram): void {
 
+        if (!this.visible) return
+
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer)
         this.gl.vertexAttribPointer(program.vertexPosition, this.vertexNumComponents, this.gl.FLOAT, false, 0, 0);
 
@@ -58,9 +62,9 @@ export class Rectangle implements IGameObject {
 
     public move(x: number | null = null, y: number | null = null, z: number | null = null): void {
 
-        if(x) this.x = x
-        if(y) this.y = y
-        if(z) this.z = z
+        if (x) this.x = x
+        if (y) this.y = y
+        if (z) this.z = z
 
         this.updateVertexArrayBuffer()
     }

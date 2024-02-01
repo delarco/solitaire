@@ -8,6 +8,13 @@ export class Game {
 
     private renderingScenes: Array<Scene> = []
 
+    private get lastRenderingScenes(): Scene | null {
+
+        const length = this.renderingScenes.length
+        if (length === 0) return null
+        return this.renderingScenes[length - 1]
+    }
+
     private fps: number = 0
     private lastTime = 0
 
@@ -91,26 +98,35 @@ export class Game {
 
     public onTouchStart(event: GestureResponderEvent): void {
 
+        const scene = this.lastRenderingScenes
+        if (!scene) return
+
         const screenPosition: IPosition = {
             x: event.nativeEvent.touches[0].pageX,
             y: event.nativeEvent.touches[0].pageY
         }
 
-        console.log("onTouchStart", this.convertScreenToDrawingPosition(screenPosition))
+        scene.onTouchStart(this.convertScreenToDrawingPosition(screenPosition))
     }
 
     public onTouchEnd(event: GestureResponderEvent): void {
 
-        console.log("onTouchEnd")
+        const scene = this.lastRenderingScenes
+        if (!scene) return
+
+        scene.onTouchEnd()
     }
 
     public onTouchMove(event: GestureResponderEvent): void {
+
+        const scene = this.lastRenderingScenes
+        if (!scene) return
 
         const screenPosition: IPosition = {
             x: event.nativeEvent.touches[0].pageX,
             y: event.nativeEvent.touches[0].pageY
         }
 
-        console.log("onTouchMove", this.convertScreenToDrawingPosition(screenPosition))
+        scene.onTouchMove(this.convertScreenToDrawingPosition(screenPosition))
     }
 }

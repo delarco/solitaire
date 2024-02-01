@@ -3,6 +3,7 @@ import { ISize } from "./interfaces/ISize";
 import { ShaderProgram } from "./webgl/ShaderProgram";
 import { ShaderInfo } from "./webgl/ShaderInfo";
 import { IGameObject } from "./interfaces/IGameObject";
+import { IPosition } from "./interfaces/IPosition";
 
 export class Scene {
 
@@ -18,11 +19,13 @@ export class Scene {
         this.shaderProgram = new ShaderProgram(gl, shadersInfo)
     }
 
-    public async init(): Promise<void> {
-        throw new Error("[Scene] init")
-    }
+    public async init(): Promise<void> { }
 
-    public update(time: number, deltaTime: number): void {
-        throw new Error("[Scene] update")
-    }
+    public update(time: number, deltaTime: number): void { }
+
+    public onTouchStart(position: IPosition): void { }
+
+    public onTouchEnd(): void { }
+
+    public onTouchMove(position: IPosition): void { }
 }

@@ -6,6 +6,7 @@ import { vertexShaderSourceCode } from "./shaders/VertexShader";
 import { fragmentShaderSourceCode } from "./shaders/FragmentShader";
 import { Rectangle } from "../Engine/GameObjects/Rectangle";
 import { Color } from "../Engine/Color";
+import { IPosition } from "../Engine/interfaces/IPosition";
 
 export class SolitaireScene extends Scene {
 
@@ -61,5 +62,20 @@ export class SolitaireScene extends Scene {
         }
 
         rect.move(newPosition.x, newPosition.y)
+    }
+
+    public override onTouchStart(position: IPosition): void {
+
+        console.log("[SolitaireScene] onTouchStart", position);
+    }
+
+    public override onTouchEnd(): void {
+
+        console.log("[SolitaireScene] onTouchEnd");
+    }
+
+    public override onTouchMove(position: IPosition): void {
+
+        console.log("[SolitaireScene] onTouchMove", position);
     }
 }

@@ -1,5 +1,5 @@
 import { ExpoWebGLRenderingContext } from "expo-gl";
-import { ShaderInfo } from "./ShaderInfo";
+import { ShaderInfo, ShaderType } from "./ShaderInfo";
 
 export class ProgramUtils {
 
@@ -25,7 +25,8 @@ export class ProgramUtils {
 
     private static compileShader(gl: ExpoWebGLRenderingContext, shaderInfo: ShaderInfo): WebGLShader {
 
-        const shader = gl.createShader(shaderInfo.type);
+        const type = shaderInfo.type === ShaderType.VERTEX_SHADER ? gl.VERTEX_SHADER : gl.FRAGMENT_SHADER
+        const shader = gl.createShader(type);
 
         if (!shader) throw new Error("Can't create WebGLShader")
 

@@ -47,7 +47,7 @@ export class Game {
             gl.uniform2f(scene.shaderProgram.resolutionLocation, gl.drawingBufferWidth, gl.drawingBufferHeight);
             gl.enableVertexAttribArray(scene.shaderProgram.vertexPosition)
 
-            for (const obj of scene.objects) obj.draw()
+            for (const obj of scene.objects) obj.draw(scene.shaderProgram)
         }
 
         gl.flush()

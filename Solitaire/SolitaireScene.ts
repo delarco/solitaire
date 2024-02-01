@@ -9,9 +9,11 @@ import { Color } from "../Engine/Color";
 
 export class SolitaireScene extends Scene {
 
+    private velocity = { x: 4, y: 4 }
+
     constructor(
         protected gl: ExpoWebGLRenderingContext,
-        protected screen: ISize,
+        protected resolution: ISize,
     ) {
         const shaders = [
             new ShaderInfo(ShaderType.VERTEX_SHADER, vertexShaderSourceCode),
@@ -22,11 +24,39 @@ export class SolitaireScene extends Scene {
 
     public override async init(): Promise<void> {
         console.log("[SolitaireScene] init");
-        
+
         this.objects.push(new Rectangle(this.gl, 10, 10, 0, 100, 100, Color.RED))
     }
 
     public override update(): void {
-        
+
+        const rect = this.objects[0]
+
+        let newPosition = {
+            x: rect.x + this.velocity.x,
+            y: rect.y + this.velocity.y
+        }
+
+        if (newPosition.x + rect.width > this.resolution.width) {
+            this.velocity.x *= -1
+            newPosition.x = this.resolution.width - rect.width
+        }
+
+        if (newPosition.y + rect.height > this.resolution.height) {
+            this.velocity.y *= -1
+            newPosition.y = this.resolution.height - rect.height
+        }
+
+        if (newPosition.x < 0) {
+            this.velocity.x *= -1
+            newPosition.x = 0
+        }
+
+        if (newPosition.y < 0) {
+            this.velocity.y *= -1
+            newPosition.y = 0
+        }
+
+        rect.move(newPosition.x, newPosition.y)
     }
 }

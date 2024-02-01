@@ -11,7 +11,7 @@ export class Scene {
 
     constructor(
         protected gl: ExpoWebGLRenderingContext,
-        protected screen: ISize,
+        protected resolution: ISize,
         shadersInfo: Array<ShaderInfo> = []
     ) {
 

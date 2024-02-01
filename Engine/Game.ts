@@ -10,6 +10,8 @@ export class Game {
     private fps: number = 0
     private lastTime = 0
 
+    private resolution: ISize
+
     constructor(
         private gl: ExpoWebGLRenderingContext,
         private screenSize: ISize,
@@ -17,6 +19,11 @@ export class Game {
     ) {
 
         console.log("[Game] platform", Platform.OS)
+
+        this.resolution = {
+            width: gl.drawingBufferWidth,
+            height: gl.drawingBufferHeight
+        }
     }
 
     public async start(): Promise<void> {
@@ -26,7 +33,7 @@ export class Game {
         if (this.scenes.length > 0) {
 
             const SceneType = this.scenes[0]
-            const scene = new SceneType(this.gl, this.screenSize)
+            const scene = new SceneType(this.gl, this.resolution)
             await scene.init()
             this.renderingScenes.push(scene)
         }

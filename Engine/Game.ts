@@ -3,6 +3,7 @@ import { GestureResponderEvent, Platform } from "react-native";
 import { Scene } from "./Scene";
 import { ISize } from "./interfaces/ISize";
 import { IPosition } from "./interfaces/IPosition";
+import { DragHandler } from "./DragHandler";
 
 export class Game {
 
@@ -106,7 +107,9 @@ export class Game {
             y: event.nativeEvent.touches[0].pageY
         }
 
-        scene.onTouchStart(this.convertScreenToDrawingPosition(screenPosition))
+        const drawingPosition = this.convertScreenToDrawingPosition(screenPosition)
+        DragHandler.onTouchStart(scene, drawingPosition)
+        // scene.onTouchStart()
     }
 
     public onTouchEnd(event: GestureResponderEvent): void {
@@ -114,7 +117,8 @@ export class Game {
         const scene = this.lastRenderingScenes
         if (!scene) return
 
-        scene.onTouchEnd()
+        DragHandler.onTouchEnd(scene)
+        // scene.onTouchEnd()
     }
 
     public onTouchMove(event: GestureResponderEvent): void {
@@ -127,6 +131,9 @@ export class Game {
             y: event.nativeEvent.touches[0].pageY
         }
 
-        scene.onTouchMove(this.convertScreenToDrawingPosition(screenPosition))
+        const drawingPosition = this.convertScreenToDrawingPosition(screenPosition)
+        DragHandler.onTouchMove(scene, drawingPosition)
+
+        // scene.onTouchMove(this.convertScreenToDrawingPosition(screenPosition))
     }
 }

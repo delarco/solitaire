@@ -49,8 +49,8 @@ export class DragHandler {
         if (!DragHandler.selectedGameObject) return
 
         const newPosition: IPosition = {
-            x: position.x - this.offsets.x,
-            y: position.y - this.offsets.y
+            x: Math.round(position.x - this.offsets.x),
+            y: Math.round(position.y - this.offsets.y)
         }
 
         // did it move?

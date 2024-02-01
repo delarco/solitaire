@@ -1,13 +1,13 @@
 import { ExpoWebGLRenderingContext } from "expo-gl";
 import { ISize } from "./interfaces/ISize";
-import { GameObject } from "./GameObject";
 import { ShaderProgram } from "./webgl/ShaderProgram";
 import { ShaderInfo } from "./webgl/ShaderInfo";
+import { IGameObject } from "./interfaces/IGameObject";
 
 export class Scene {
 
     public shaderProgram: ShaderProgram
-    public objects: Array<GameObject> = []
+    public objects: Array<IGameObject> = []
 
     constructor(
         protected gl: ExpoWebGLRenderingContext,

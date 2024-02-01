@@ -27,6 +27,6 @@ export class SolitaireScene extends Scene {
     }
 
     public override update(): void {
-        console.log("[SolitaireScene] update");
+        
     }
 }

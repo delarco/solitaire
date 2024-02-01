@@ -66,6 +66,8 @@ export class Game {
         this.lastTime = now
         this.fps = 1 / deltaTime
 
+        if(Platform.OS === "web") window.document.title = `fps: ${this.fps.toFixed(2)}`
+
         for (const scene of this.renderingScenes) scene.update(time, deltaTime)
     }
 }

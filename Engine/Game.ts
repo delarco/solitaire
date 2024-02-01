@@ -1,7 +1,8 @@
 import { ExpoWebGLRenderingContext } from "expo-gl";
-import { Platform } from "react-native";
+import { GestureResponderEvent, Platform } from "react-native";
 import { Scene } from "./Scene";
 import { ISize } from "./interfaces/ISize";
+import { IPosition } from "./interfaces/IPosition";
 
 export class Game {
 
@@ -24,6 +25,8 @@ export class Game {
             width: gl.drawingBufferWidth,
             height: gl.drawingBufferHeight
         }
+
+        console.log(`[Game] resolution ${this.resolution.width}x${this.resolution.height}`)
     }
 
     public async start(): Promise<void> {
@@ -73,8 +76,41 @@ export class Game {
         this.lastTime = now
         this.fps = 1 / deltaTime
 
-        if(Platform.OS === "web") window.document.title = `fps: ${this.fps.toFixed(2)}`
+        if (Platform.OS === "web") window.document.title = `fps: ${this.fps.toFixed(2)}`
 
         for (const scene of this.renderingScenes) scene.update(time, deltaTime)
+    }
+
+    private convertScreenToDrawingPosition(screenPosition: IPosition): IPosition {
+
+        return {
+            x: screenPosition.x * (this.gl.drawingBufferWidth / this.screenSize.width),
+            y: screenPosition.y * (this.gl.drawingBufferHeight / this.screenSize.height),
+        }
+    }
+
+    public onTouchStart(event: GestureResponderEvent): void {
+
+        const screenPosition: IPosition = {
+            x: event.nativeEvent.touches[0].pageX,
+            y: event.nativeEvent.touches[0].pageY
+        }
+
+        console.log("onTouchStart", this.convertScreenToDrawingPosition(screenPosition))
+    }
+
+    public onTouchEnd(event: GestureResponderEvent): void {
+
+        console.log("onTouchEnd")
+    }
+
+    public onTouchMove(event: GestureResponderEvent): void {
+
+        const screenPosition: IPosition = {
+            x: event.nativeEvent.touches[0].pageX,
+            y: event.nativeEvent.touches[0].pageY
+        }
+
+        console.log("onTouchMove", this.convertScreenToDrawingPosition(screenPosition))
     }
 }

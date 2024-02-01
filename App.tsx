@@ -8,6 +8,8 @@ import { WinScene } from './Solitaire/WinScene';
 
 export default function App() {
 
+  let game: Game | null = null
+
   const screenSize: ISize = {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
@@ -17,7 +19,7 @@ export default function App() {
 
     console.log(`[App] onContextCreate ${screenSize.width}x${screenSize.height}`);
 
-    const game = new Game(gl, screenSize, [
+    game = new Game(gl, screenSize, [
       SolitaireScene,
       GameOverScene,
       WinScene
@@ -29,7 +31,11 @@ export default function App() {
     <View>
       <GLView
         style={{ width: screenSize.width, height: screenSize.height, }}
-        onContextCreate={onContextCreate} />
+        onContextCreate={onContextCreate}
+        onStartShouldSetResponder={() => true}
+        onTouchStart={ev => game?.onTouchStart(ev)}
+        onTouchEnd={ev => game?.onTouchEnd(ev)}
+        onTouchMove={ev => game?.onTouchMove(ev)} />
     </View>
   );
 }

@@ -6,7 +6,7 @@ import { ShaderInfo } from "./webgl/ShaderInfo";
 
 export class Scene {
 
-    public program: ShaderProgram
+    public shaderProgram: ShaderProgram
     public objects: Array<GameObject> = []
 
     constructor(
@@ -15,7 +15,7 @@ export class Scene {
         shadersInfo: Array<ShaderInfo> = []
     ) {
 
-        this.program = new ShaderProgram(gl, shadersInfo)
+        this.shaderProgram = new ShaderProgram(gl, shadersInfo)
     }
 
     public async init(): Promise<void> {

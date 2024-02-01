@@ -25,6 +25,11 @@ export class Rectangle implements IGameObject {
         if (!vertexBuffer) throw new Error("Can't create WebGLBuffer")
 
         this.vertexBuffer = vertexBuffer
+        this.vertexArray = new Float32Array()
+        this.updateVertexArrayBuffer()
+    }
+
+    private updateVertexArrayBuffer(): void {
 
         this.vertexArray = new Float32Array([
             this.x, this.y,
@@ -35,8 +40,8 @@ export class Rectangle implements IGameObject {
             this.x, this.y,
         ])
 
-        gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer)
-        gl.bufferData(gl.ARRAY_BUFFER, this.vertexArray, gl.STATIC_DRAW)
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer)
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vertexArray, this.gl.STATIC_DRAW)
 
         this.vertexNumComponents = 2;
         this.vertexCount = this.vertexArray.length / this.vertexNumComponents;
@@ -49,5 +54,14 @@ export class Rectangle implements IGameObject {
 
         this.gl.uniform4fv(program.colorLocation, this.color.array);
         this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexCount);
+    }
+
+    public move(x: number | null = null, y: number | null = null, z: number | null = null): void {
+
+        if(x) this.x = x
+        if(y) this.y = y
+        if(z) this.z = z
+
+        this.updateVertexArrayBuffer()
     }
 }

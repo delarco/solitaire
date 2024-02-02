@@ -14,7 +14,7 @@ export class Card extends Rectangle {
 
     public get cardColor() { return this._cardColor }
 
-    constructor(id: string, private _suit: Suit) {
+    constructor(id: string, private _suit: Suit, private text: string) {
         super(id,
             0, 0, Card.CARD_DEFAULT_DEPTH,
             Dimensions.cardSize.width, Dimensions.cardSize.height

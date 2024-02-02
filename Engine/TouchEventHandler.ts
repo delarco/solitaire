@@ -32,27 +32,32 @@ export class TouchEventHandler {
         }
     }
 
-    public static onTouchEnd(scene: Scene,): void {
+    public static onTouchEnd(scene: Scene, position: IPosition): void {
 
         if (!TouchEventHandler.selectedGameObject) return
 
         if (!TouchEventHandler.gameObjectMoved) {
 
-            if(TouchEventHandler.selectedGameObject.onPress) {
+            // check if released on the object
+            if (Collision.pointInRect(position, TouchEventHandler.selectedGameObject)) {
 
-                TouchEventHandler.selectedGameObject.onPress()
+                if (TouchEventHandler.selectedGameObject.onPress) {
+
+                    TouchEventHandler.selectedGameObject.onPress()
+                }
+
+                scene.onGameObjectPress(TouchEventHandler.selectedGameObject)
             }
 
-            scene.onGameObjectPress(TouchEventHandler.selectedGameObject)
             return
         }
 
-        const position: IPosition = {
+        const objectPosition: IPosition = {
             x: TouchEventHandler.selectedGameObject.x,
             y: TouchEventHandler.selectedGameObject.y
         }
 
-        scene.onGameObjectDrop(TouchEventHandler.selectedGameObject, position)
+        scene.onGameObjectDrop(TouchEventHandler.selectedGameObject, objectPosition)
 
         TouchEventHandler.selectedGameObject = null
     }
@@ -60,7 +65,7 @@ export class TouchEventHandler {
     public static onTouchMove(scene: Scene, position: IPosition): void {
 
         if (!TouchEventHandler.selectedGameObject) return
-        
+
         if (!TouchEventHandler.selectedGameObject.draggable) return
 
         const newPosition: IPosition = {
@@ -72,7 +77,7 @@ export class TouchEventHandler {
         if (newPosition.x === TouchEventHandler.selectedGameObject.x
             && newPosition.y === TouchEventHandler.selectedGameObject.y) return
 
-        if(!TouchEventHandler.gameObjectMoved) {
+        if (!TouchEventHandler.gameObjectMoved) {
 
             scene.onGameObjectStartDrag(TouchEventHandler.selectedGameObject)
         }

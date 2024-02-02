@@ -42,7 +42,7 @@ export class Game {
 
         console.log(`[Game] resolution ${this.resolution.width}x${this.resolution.height}`)
 
-        TextureManager.init(gl)
+        TextureManager.init()
     }
 
     public async start(): Promise<void> {
@@ -124,12 +124,19 @@ export class Game {
         TouchEventHandler.onTouchStart(scene, drawingPosition)
     }
 
-    public onTouchEnd(event: GestureResponderEvent): void {
+    public onTouchEnd(event: TouchEvent): void {
+
+        const screenPosition: IPosition = {
+            x: event.changedTouches[0].pageX,
+            y: event.changedTouches[0].pageY
+        }
+
+        const drawingPosition = this.convertScreenToDrawingPosition(screenPosition)
 
         const scene = this.lastRenderingScenes
         if (!scene) return
 
-        TouchEventHandler.onTouchEnd(scene)
+        TouchEventHandler.onTouchEnd(scene, drawingPosition)
     }
 
     public onTouchMove(event: GestureResponderEvent): void {

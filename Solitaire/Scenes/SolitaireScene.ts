@@ -38,6 +38,11 @@ export class SolitaireScene extends Scene {
 
     public override update(): void { }
 
+    public onGameObjectStartDrag(gameObject: IGameObject): void {
+
+        console.log(`[SolitaireScene] onGameObjectStartDrag at ${gameObject.x}, ${gameObject.y}`);
+    }
+
     public onGameObjectDrop(gameObject: IGameObject, position: IPosition): void {
 
         console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);

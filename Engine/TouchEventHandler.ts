@@ -13,7 +13,7 @@ export class TouchEventHandler {
 
         const gameObjectList = scene.objects
             .filter(f => f.visible)
-            .sort((a, b) => b.z || 0 - (a.z || 0))
+            .sort((a, b) => (b.z || 0) - (a.z || 0))
 
         for (const gameObject of gameObjectList) {
 

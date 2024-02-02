@@ -11,9 +11,18 @@ import { TextureManager } from "../../Engine/TextureManager";
 import { Card } from "../GameObjects/Card";
 import { Suit } from "../Enums/Suit";
 import { Dimensions } from "../Utils/Dimensions";
-import { Pile } from "../GameObjects/Pile";
+import { TableauPile } from "../GameObjects/TableauPile";
+import { PileUtils } from "../Utils/PileUtils";
+import { FoundationPile } from "../GameObjects/FoundationPile";
+import { IPile } from "../interfaces/IPile";
+import { StockPile } from "../GameObjects/StockPile";
 
 export class SolitaireScene extends Scene {
+
+    private piles: Array<IPile> = []
+    private tableauPiles: Array<TableauPile> = []
+    private foundationPiles: Array<FoundationPile> = []
+    private stockPile!: StockPile
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -28,28 +37,18 @@ export class SolitaireScene extends Scene {
     public override async init(): Promise<void> {
         console.log("[SolitaireScene] init");
 
-        const favicon = await TextureManager.loadTexture("favicon", require("../../assets/favicon.png"))
+        // const favicon = await TextureManager.loadTexture("favicon", require("../../assets/favicon.png"))
 
-        const redRect = new Rectangle("red-rect", 200, 200, 2, 100, 100, Color.RED)
-        redRect.draggable = true
-        redRect.texture = favicon
-        redRect.onPress = () => this.onRedPress()
-        this.objects.push(redRect)
-        
-        const blueRect = new Rectangle("blue-rect", 100, 100, 1, 100, 100, Color.BLUE)
-        blueRect.draggable = false
-        blueRect.texture = favicon
-        blueRect.onPress = () => this.onBluePress()
-        this.objects.push(blueRect)
+        this.tableauPiles = PileUtils.generateTableauPiles()
+        this.piles.push(...this.tableauPiles)
 
-        const card1 = new Card("card-1", Suit.Hearts)
-        this.objects.push(card1)
+        this.foundationPiles = PileUtils.generateFoundationPiles()
+        this.piles.push(...this.foundationPiles)
 
-        const card2 = new Card("card-2", Suit.Clubs)
-        this.objects.push(card2)
+        this.stockPile = PileUtils.generateStockPile()
+        this.piles.push(this.stockPile)
 
-        const pile1 = new Pile("pile-1")
-        this.objects.push(pile1)
+        this.objects.push(...this.piles)
     }
 
     public override update(): void { }
@@ -67,16 +66,5 @@ export class SolitaireScene extends Scene {
     public onGameObjectPress(gameObject: IGameObject): void {
 
         console.log("[SolitaireScene] onGameObjectPress", gameObject.id);
-    }
-
-    private onRedPress() {
-
-        console.log("[SolitaireScene] onRedPress");
-    }
-
-    private onBluePress() {
-
-        console.log("[SolitaireScene] onBluePress");
-        
     }
 }

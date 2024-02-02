@@ -1,11 +1,13 @@
-import { ExpoWebGLRenderingContext } from "expo-gl";
 import { ShaderProgram } from "../webgl/ShaderProgram";
 import { Color } from "../Color";
 import { IGameObject } from "../interfaces/IGameObject";
 import { Texture } from "../Texture";
 import { TextureManager } from "../TextureManager";
+import { Game } from "../Game";
 
 export class Rectangle implements IGameObject {
+
+    public get id() { return this._id }
 
     private vertexArray: Float32Array = new Float32Array()
     private vertexBuffer: WebGLBuffer
@@ -21,7 +23,7 @@ export class Rectangle implements IGameObject {
     public set texture(value: Texture | null) { this._texture = value }
 
     constructor(
-        private gl: ExpoWebGLRenderingContext,
+        private _id: number | string,
         public x: number,
         public y: number,
         public z: number,
@@ -30,13 +32,13 @@ export class Rectangle implements IGameObject {
         private color = Color.WHITE
     ) {
 
-        const vertexBuffer = gl.createBuffer()
+        const vertexBuffer = Game.gl.createBuffer()
         if (!vertexBuffer) throw new Error("Can't create WebGLBuffer (vertex)")
 
         this.vertexBuffer = vertexBuffer
         this.updateVertexArrayBuffer()
 
-        const textureBuffer = gl.createBuffer()
+        const textureBuffer = Game.gl.createBuffer()
         if (!textureBuffer) throw new Error("Can't create WebGLBuffer (texture)")
 
         this.textureBuffer = textureBuffer
@@ -54,8 +56,8 @@ export class Rectangle implements IGameObject {
             this.x, this.y,
         ])
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer)
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, this.vertexArray, this.gl.STATIC_DRAW)
+        Game.gl.bindBuffer(Game.gl.ARRAY_BUFFER, this.vertexBuffer)
+        Game.gl.bufferData(Game.gl.ARRAY_BUFFER, this.vertexArray, Game.gl.STATIC_DRAW)
 
         this.vertexNumComponents = 2;
         this.vertexCount = this.vertexArray.length / this.vertexNumComponents;
@@ -72,24 +74,24 @@ export class Rectangle implements IGameObject {
             0, 0,
         ])
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.bufferData(this.gl.ARRAY_BUFFER, textureArray, this.gl.STATIC_DRAW);
+        Game.gl.bindBuffer(Game.gl.ARRAY_BUFFER, this.textureBuffer);
+        Game.gl.bufferData(Game.gl.ARRAY_BUFFER, textureArray, Game.gl.STATIC_DRAW);
     }
 
     public draw(program: ShaderProgram): void {
 
         if (!this.visible) return
 
-        this.gl.uniform1i(program.textureLocation, this._texture?.id ?? TextureManager.BLANK_TEXTURE.id)
+        Game.gl.uniform1i(program.textureLocation, this._texture?.id ?? TextureManager.BLANK_TEXTURE.id)
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertexBuffer)
-        this.gl.vertexAttribPointer(program.vertexPosition, this.vertexNumComponents, this.gl.FLOAT, false, 0, 0);
+        Game.gl.bindBuffer(Game.gl.ARRAY_BUFFER, this.vertexBuffer)
+        Game.gl.vertexAttribPointer(program.vertexPosition, this.vertexNumComponents, Game.gl.FLOAT, false, 0, 0);
 
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
-        this.gl.vertexAttribPointer(program.textureCoord, 2, this.gl.FLOAT, false, 0, 0);
+        Game.gl.bindBuffer(Game.gl.ARRAY_BUFFER, this.textureBuffer);
+        Game.gl.vertexAttribPointer(program.textureCoord, 2, Game.gl.FLOAT, false, 0, 0);
 
-        this.gl.uniform4fv(program.colorLocation, this.color.array);
-        this.gl.drawArrays(this.gl.TRIANGLES, 0, this.vertexCount);
+        Game.gl.uniform4fv(program.colorLocation, this.color.array);
+        Game.gl.drawArrays(Game.gl.TRIANGLES, 0, this.vertexCount);
     }
 
     public move(x: number | null = null, y: number | null = null, z: number | null = null): void {

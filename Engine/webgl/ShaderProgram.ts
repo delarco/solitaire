@@ -1,6 +1,6 @@
-import { ExpoWebGLRenderingContext } from "expo-gl";
 import { ShaderInfo } from "./ShaderInfo";
 import { ProgramUtils } from "./ProgramUtils";
+import { Game } from "../Game";
 
 export class ShaderProgram {
 
@@ -17,17 +17,17 @@ export class ShaderProgram {
     public colorLocation: WebGLUniformLocation
     public textureLocation: WebGLUniformLocation
 
-    constructor(gl: ExpoWebGLRenderingContext, shadersInfo: Array<ShaderInfo>) {
+    constructor(shadersInfo: Array<ShaderInfo>) {
 
-        this.webGLProgram = ProgramUtils.build(gl, shadersInfo)
+        this.webGLProgram = ProgramUtils.build(Game.gl, shadersInfo)
 
         // Attributes locations
-        this.vertexPosition = gl.getAttribLocation(this.webGLProgram, "a_position")
-        this.textureCoord = gl.getAttribLocation(this.program, "a_texcoord")
+        this.vertexPosition = Game.gl.getAttribLocation(this.webGLProgram, "a_position")
+        this.textureCoord = Game.gl.getAttribLocation(this.program, "a_texcoord")
 
         // Uniform locations
-        this.resolutionLocation = gl.getUniformLocation(this.program, "u_resolution")!
-        this.colorLocation = gl.getUniformLocation(this.program, "u_color")!
-        this.textureLocation = gl.getUniformLocation(this.program, "u_texture")!
+        this.resolutionLocation = Game.gl.getUniformLocation(this.program, "u_resolution")!
+        this.colorLocation = Game.gl.getUniformLocation(this.program, "u_color")!
+        this.textureLocation = Game.gl.getUniformLocation(this.program, "u_texture")!
     }
 }

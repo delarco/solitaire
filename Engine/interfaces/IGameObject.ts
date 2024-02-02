@@ -5,6 +5,7 @@ import { ISize } from "./ISize";
 
 export interface IGameObject extends IPosition, ISize {
 
+    id: number | string
     visible: boolean
     draggable: boolean
     texture?: Texture | null

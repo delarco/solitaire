@@ -1,4 +1,3 @@
-import { ExpoWebGLRenderingContext } from "expo-gl";
 import { ISize } from "./interfaces/ISize";
 import { ShaderProgram } from "./webgl/ShaderProgram";
 import { ShaderInfo } from "./webgl/ShaderInfo";
@@ -11,12 +10,11 @@ export class Scene {
     public objects: Array<IGameObject> = []
 
     constructor(
-        protected gl: ExpoWebGLRenderingContext,
         protected resolution: ISize,
         shadersInfo: Array<ShaderInfo> = []
     ) {
 
-        this.shaderProgram = new ShaderProgram(gl, shadersInfo)
+        this.shaderProgram = new ShaderProgram(shadersInfo)
     }
 
     public async init(): Promise<void> { }

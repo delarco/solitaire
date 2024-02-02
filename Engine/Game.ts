@@ -52,7 +52,7 @@ export class Game {
         if (this.scenes.length > 0) {
 
             const SceneType = this.scenes[0]
-            const scene = new SceneType(Game.gl, this.resolution)
+            const scene = new SceneType(this.resolution)
             await scene.init()
             this.renderingScenes.push(scene)
         }
@@ -105,8 +105,8 @@ export class Game {
     private convertScreenToDrawingPosition(screenPosition: IPosition): IPosition {
 
         return {
-            x: screenPosition.x * (Game.gl.drawingBufferWidth / this.screenSize.width),
-            y: screenPosition.y * (Game.gl.drawingBufferHeight / this.screenSize.height),
+            x: screenPosition.x * (this.resolution.width / this.screenSize.width),
+            y: screenPosition.y * (this.resolution.height / this.screenSize.height),
         }
     }
 

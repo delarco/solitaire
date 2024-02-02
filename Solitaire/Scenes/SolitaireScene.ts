@@ -16,9 +16,11 @@ import { PileUtils } from "../Utils/PileUtils";
 import { FoundationPile } from "../GameObjects/FoundationPile";
 import { IPile } from "../interfaces/IPile";
 import { StockPile } from "../GameObjects/StockPile";
+import { DeckGenerator } from "../Utils/DeckGenerator";
 
 export class SolitaireScene extends Scene {
 
+    private cards: Array<Card> = []
     private piles: Array<IPile> = []
     private tableauPiles: Array<TableauPile> = []
     private foundationPiles: Array<FoundationPile> = []
@@ -39,15 +41,16 @@ export class SolitaireScene extends Scene {
 
         // const favicon = await TextureManager.loadTexture("favicon", require("../../assets/favicon.png"))
 
+        this.cards = DeckGenerator.generate()
         this.tableauPiles = PileUtils.generateTableauPiles()
-        this.piles.push(...this.tableauPiles)
-
         this.foundationPiles = PileUtils.generateFoundationPiles()
-        this.piles.push(...this.foundationPiles)
-
         this.stockPile = PileUtils.generateStockPile()
+        
+        this.piles.push(...this.tableauPiles)
+        this.piles.push(...this.foundationPiles)
         this.piles.push(this.stockPile)
 
+        this.objects.push(...this.cards)
         this.objects.push(...this.piles)
     }
 

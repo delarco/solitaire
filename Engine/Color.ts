@@ -10,6 +10,15 @@ export class Color {
         return [this.red, this.green, this.blue, this.alpha]
     }
 
+    public get Uint8Array() {
+        return new Uint8Array([
+            this.red * 255,
+            this.green * 255,
+            this.blue * 255,
+            this.alpha * 255
+        ])
+    }
+
     constructor(
         public red: number,
         public green: number,

@@ -4,6 +4,7 @@ import { Scene } from "./Scene";
 import { ISize } from "./interfaces/ISize";
 import { IPosition } from "./interfaces/IPosition";
 import { DragHandler } from "./DragHandler";
+import { TextureManager } from "./TextureManager";
 
 export class Game {
 
@@ -35,6 +36,8 @@ export class Game {
         }
 
         console.log(`[Game] resolution ${this.resolution.width}x${this.resolution.height}`)
+
+        TextureManager.init(gl)
     }
 
     public async start(): Promise<void> {

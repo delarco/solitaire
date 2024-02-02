@@ -6,13 +6,15 @@ export class Dimensions {
     public static screenPaddingTop: number
     public static screenPaddingBottom: number
 
-    public static pileWidth: number
-    public static pilePadding: number
+    public static gapBetweenPiles: number
 
     public static cardSize: ISize = { width: 0, height: 0 }
     public static cardVerticalMargin: number
 
     public static buttonSize: ISize = { width: 0, height: 0 }
+
+    public static foundationPilesY: number
+    public static tableauPilesY: number
 
     public static init(screen: ISize) {
 
@@ -20,16 +22,18 @@ export class Dimensions {
         Dimensions.screenPaddingTop = Math.floor(screen.height * 0.1)
         Dimensions.screenPaddingBottom = Math.floor(screen.height * 0.05)
 
-        Dimensions.pileWidth = Math.floor(screen.width / 7)
-
-        Dimensions.cardSize.width = Math.floor(Dimensions.pileWidth * 0.9)
+        const screenWidthOver8 = Math.floor(screen.width / 8)
+        Dimensions.cardSize.width = screenWidthOver8
         Dimensions.cardSize.height = Math.floor(Dimensions.cardSize.width * 1.4)
-
-        Dimensions.pilePadding = Math.floor((Dimensions.pileWidth - Dimensions.cardSize.width) / 2)
         Dimensions.cardVerticalMargin = Math.ceil(Dimensions.cardSize.height * 0.3)
+        
+        Dimensions.gapBetweenPiles = Math.floor(screenWidthOver8 / 8)
 
         Dimensions.buttonSize.width = Dimensions.cardSize.width
         Dimensions.buttonSize.height = Dimensions.buttonSize.width
+
+        Dimensions.foundationPilesY = Dimensions.screenPaddingTop
+        Dimensions.tableauPilesY = Dimensions.foundationPilesY + Dimensions.cardSize.height + Dimensions.gapBetweenPiles
     }
 
     public static print() {
@@ -38,12 +42,14 @@ export class Dimensions {
         console.log("[Dimensions] screenPaddingTop", Dimensions.screenPaddingTop)
         console.log("[Dimensions] screenPaddingBottom", Dimensions.screenPaddingBottom)
 
-        console.log("[Dimensions] pileWidth", Dimensions.pileWidth)
-        console.log("[Dimensions] pilePadding", Dimensions.pilePadding)
-
         console.log("[Dimensions] cardSize", Dimensions.cardSize.width, Dimensions.cardSize.height)
         console.log("[Dimensions] cardVerticalMargin", Dimensions.cardVerticalMargin)
+        
+        console.log("[Dimensions] gapBetweenPiles", Dimensions.gapBetweenPiles)
 
         console.log("[Dimensions] buttonSize", Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        
+        console.log("[Dimensions] foundationPilesY", Dimensions.foundationPilesY)
+        console.log("[Dimensions] tableauPilesY", Dimensions.tableauPilesY)
     }
 }

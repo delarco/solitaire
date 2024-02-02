@@ -69,7 +69,11 @@ export class Game {
             gl.enableVertexAttribArray(scene.shaderProgram.vertexPosition)
             gl.enableVertexAttribArray(scene.shaderProgram.textureCoord)
 
-            for (const obj of scene.objects) obj.draw(scene.shaderProgram)
+            const visibleObjects = scene.objects
+                .filter(f => f.visible)
+                .sort((a, b) => (a.z || 0) - (b.z || 0))
+
+            for (const obj of visibleObjects) obj.draw(scene.shaderProgram)
         }
 
         gl.flush()

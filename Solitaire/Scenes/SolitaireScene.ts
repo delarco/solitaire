@@ -1,4 +1,3 @@
-import { ExpoWebGLRenderingContext } from "expo-gl";
 import { Scene } from "../../Engine/Scene";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { ShaderInfo, ShaderType } from "../../Engine/webgl/ShaderInfo";
@@ -12,12 +11,12 @@ import { TextureManager } from "../../Engine/TextureManager";
 
 export class SolitaireScene extends Scene {
 
-    constructor(protected gl: ExpoWebGLRenderingContext, protected resolution: ISize) {
+    constructor(protected resolution: ISize) {
         const shaders = [
             new ShaderInfo(ShaderType.VERTEX_SHADER, vertexShaderSourceCode),
             new ShaderInfo(ShaderType.FRAGMENT_SHADER, fragmentShaderSourceCode),
         ]
-        super(gl, resolution, shaders)
+        super(resolution, shaders)
     }
 
     public override async init(): Promise<void> {
@@ -25,16 +24,16 @@ export class SolitaireScene extends Scene {
 
         const favicon = await TextureManager.loadTexture("favicon", require("../../assets/favicon.png"))
 
-        const redRect = new Rectangle(this.gl, 200, 200, 2, 100, 100, Color.RED)
+        const redRect = new Rectangle("red-rect", 200, 200, 2, 100, 100, Color.RED)
         redRect.draggable = true
         redRect.texture = favicon
         redRect.onPress = () => console.log("red press");
         this.objects.push(redRect)
         
-        const blueRect = new Rectangle(this.gl, 100, 100, 1, 100, 100, Color.BLUE)
+        const blueRect = new Rectangle("blue-rect", 100, 100, 1, 100, 100, Color.BLUE)
         blueRect.draggable = false
         blueRect.texture = favicon
-        redRect.onPress = () => console.log("blue press");
+        blueRect.onPress = () => console.log("blue press");
         this.objects.push(blueRect)
     }
 
@@ -52,6 +51,6 @@ export class SolitaireScene extends Scene {
 
     public onGameObjectPress(gameObject: IGameObject): void {
 
-        console.log(`[SolitaireScene] onGameObjectPress ${gameObject}`);
+        console.log(`[SolitaireScene] onGameObjectPress ${gameObject.id}`);
     }
 }

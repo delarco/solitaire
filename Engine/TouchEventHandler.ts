@@ -38,6 +38,11 @@ export class TouchEventHandler {
 
         if (!TouchEventHandler.gameObjectMoved) {
 
+            if(TouchEventHandler.selectedGameObject.onPress) {
+
+                TouchEventHandler.selectedGameObject.onPress()
+            }
+
             scene.onGameObjectPress(TouchEventHandler.selectedGameObject)
             return
         }

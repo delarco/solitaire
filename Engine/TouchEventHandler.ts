@@ -12,7 +12,7 @@ export class TouchEventHandler {
     public static onTouchStart(scene: Scene, position: IPosition): void {
 
         const gameObjectList = scene.objects
-            .filter(f => f.draggable && f.visible)
+            .filter(f => f.visible)
             .sort((a, b) => b.z || 0 - (a.z || 0))
 
         for (const gameObject of gameObjectList) {
@@ -55,6 +55,8 @@ export class TouchEventHandler {
     public static onTouchMove(scene: Scene, position: IPosition): void {
 
         if (!TouchEventHandler.selectedGameObject) return
+        
+        if (!TouchEventHandler.selectedGameObject.draggable) return
 
         const newPosition: IPosition = {
             x: Math.round(position.x - this.offsets.x),

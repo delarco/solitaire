@@ -29,6 +29,8 @@ export class Scene {
 
     public onTouchMove(position: IPosition): void { }
 
+    public onGameObjectStartDrag(gameObject: IGameObject): void { }
+
     public onGameObjectDrop(gameObject: IGameObject, position: IPosition): void { }
 
     public onGameObjectPress(gameObject: IGameObject): void { }

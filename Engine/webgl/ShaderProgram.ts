@@ -10,10 +10,12 @@ export class ShaderProgram {
 
     // Attributes locations
     public vertexPosition: number
+    public textureCoord: number
 
     // Uniform locations
     public resolutionLocation: WebGLUniformLocation
     public colorLocation: WebGLUniformLocation
+    public textureLocation: WebGLUniformLocation
 
     constructor(gl: ExpoWebGLRenderingContext, shadersInfo: Array<ShaderInfo>) {
 
@@ -21,9 +23,11 @@ export class ShaderProgram {
 
         // Attributes locations
         this.vertexPosition = gl.getAttribLocation(this.webGLProgram, "a_position")
+        this.textureCoord = gl.getAttribLocation(this.program, "a_texcoord")
 
         // Uniform locations
         this.resolutionLocation = gl.getUniformLocation(this.program, "u_resolution")!
         this.colorLocation = gl.getUniformLocation(this.program, "u_color")!
+        this.textureLocation = gl.getUniformLocation(this.program, "u_texture")!
     }
 }

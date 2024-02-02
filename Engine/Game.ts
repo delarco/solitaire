@@ -8,6 +8,9 @@ import { TextureManager } from "./TextureManager";
 
 export class Game {
 
+    private static _gl: ExpoWebGLRenderingContext
+    public static get gl() { return Game._gl }
+
     private renderingScenes: Array<Scene> = []
 
     private get lastRenderingScenes(): Scene | null {
@@ -23,10 +26,12 @@ export class Game {
     private resolution: ISize
 
     constructor(
-        private gl: ExpoWebGLRenderingContext,
+        gl: ExpoWebGLRenderingContext,
         private screenSize: ISize,
         private scenes: Array<typeof Scene>
     ) {
+
+        Game._gl = gl
 
         console.log("[Game] platform", Platform.OS)
 
@@ -47,7 +52,7 @@ export class Game {
         if (this.scenes.length > 0) {
 
             const SceneType = this.scenes[0]
-            const scene = new SceneType(this.gl, this.resolution)
+            const scene = new SceneType(Game.gl, this.resolution)
             await scene.init()
             this.renderingScenes.push(scene)
         }
@@ -57,7 +62,7 @@ export class Game {
 
     private animate(): void {
 
-        const gl = this.gl
+        const gl = Game.gl
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
         gl.clearColor(0.75, 0.75, 0.75, 1)
         gl.clear(gl.COLOR_BUFFER_BIT)
@@ -100,8 +105,8 @@ export class Game {
     private convertScreenToDrawingPosition(screenPosition: IPosition): IPosition {
 
         return {
-            x: screenPosition.x * (this.gl.drawingBufferWidth / this.screenSize.width),
-            y: screenPosition.y * (this.gl.drawingBufferHeight / this.screenSize.height),
+            x: screenPosition.x * (Game.gl.drawingBufferWidth / this.screenSize.width),
+            y: screenPosition.y * (Game.gl.drawingBufferHeight / this.screenSize.height),
         }
     }
 

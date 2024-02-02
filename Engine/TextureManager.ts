@@ -8,13 +8,21 @@ export class TextureManager {
     public static textures: Array<Texture> = []
     private static gl: ExpoWebGLRenderingContext
 
+    public static BLANK_TEXTURE: Texture
+
     public static init(gl: ExpoWebGLRenderingContext): void {
 
         TextureManager.gl = gl
 
+        TextureManager.BLANK_TEXTURE = TextureManager.createTextureFromColor("white", Color.WHITE)
         TextureManager.createTextureFromColor("red", Color.RED)
         TextureManager.createTextureFromColor("green", Color.GREEN)
         TextureManager.createTextureFromColor("blue", Color.BLUE)
+    }
+
+    public static getTexture(key: string): Texture | null {
+
+        return TextureManager.textures.find(f => f.key === key) || null
     }
 
     public static async loadTexture(key: string, content: any): Promise<Texture> {

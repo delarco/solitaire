@@ -52,6 +52,8 @@ export class SolitaireScene extends Scene {
 
         this.objects.push(...this.cards)
         this.objects.push(...this.piles)
+
+        PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
     }
 
     public override update(): void { }

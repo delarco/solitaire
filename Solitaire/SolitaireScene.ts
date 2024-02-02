@@ -27,9 +27,13 @@ export class SolitaireScene extends Scene {
     public override async init(): Promise<void> {
         console.log("[SolitaireScene] init");
 
-        const rect = new Rectangle(this.gl, 10, 10, 0, 100, 100, Color.RED)
-        rect.draggable = true
-        this.objects.push(rect)
+        const redRect = new Rectangle(this.gl, 200, 200, 0, 100, 100, Color.RED)
+        redRect.draggable = true
+        this.objects.push(redRect)
+        
+        const blueRect = new Rectangle(this.gl, 100, 100, 1, 100, 100, Color.BLUE)
+        blueRect.draggable = true
+        this.objects.push(blueRect)
 
         // setInterval(() => rect.visible = !rect.visible, 150)
     }

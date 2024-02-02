@@ -11,4 +11,5 @@ export interface IGameObject extends IPosition, ISize {
 
     move(x?: number | null, y?: number | null, z?: number | null): void
     draw(program: ShaderProgram): void
+    onPress?(): void
 }

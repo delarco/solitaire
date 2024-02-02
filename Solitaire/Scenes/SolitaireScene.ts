@@ -8,6 +8,8 @@ import { Color } from "../../Engine/Color";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { IGameObject } from "../../Engine/interfaces/IGameObject";
 import { TextureManager } from "../../Engine/TextureManager";
+import { Card } from "../GameObjects/Card";
+import { Suit } from "../Enums/Suit";
 
 export class SolitaireScene extends Scene {
 
@@ -35,6 +37,12 @@ export class SolitaireScene extends Scene {
         blueRect.texture = favicon
         blueRect.onPress = () => this.onBluePress()
         this.objects.push(blueRect)
+
+        const card1 = new Card("card-1", Suit.Hearts)
+        this.objects.push(card1)
+
+        const card2 = new Card("card-2", Suit.Clubs)
+        this.objects.push(card2)
     }
 
     public override update(): void { }
@@ -47,6 +55,11 @@ export class SolitaireScene extends Scene {
     public onGameObjectDrop(gameObject: IGameObject, position: IPosition): void {
 
         console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);
+    }
+
+    public onGameObjectPress(gameObject: IGameObject): void {
+
+        console.log("[SolitaireScene] onGameObjectPress", gameObject.id);
     }
 
     private onRedPress() {

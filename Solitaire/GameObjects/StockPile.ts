@@ -3,6 +3,7 @@ import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { PileType } from "../Enums/PileType";
+import { Dimensions } from "../Utils/Dimensions";
 import { IPile } from "../interfaces/IPile";
 import { Card } from "./Card";
 
@@ -28,7 +29,13 @@ export class StockPile extends Rectangle implements IPile {
     }
 
     public add(card: Card): void {
-        throw new Error("Method not implemented.")
+        
+        card.pile = this
+
+        card.move(this.x, this.y)
+        card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+
+        this.cards.push(card)
     }
 
     public remove(card: Card): void {

@@ -12,12 +12,7 @@ import { TextureManager } from "../Engine/TextureManager";
 
 export class SolitaireScene extends Scene {
 
-    private velocity = { x: 4, y: 4 }
-
-    constructor(
-        protected gl: ExpoWebGLRenderingContext,
-        protected resolution: ISize
-    ) {
+    constructor(protected gl: ExpoWebGLRenderingContext, protected resolution: ISize) {
         const shaders = [
             new ShaderInfo(ShaderType.VERTEX_SHADER, vertexShaderSourceCode),
             new ShaderInfo(ShaderType.FRAGMENT_SHADER, fragmentShaderSourceCode),
@@ -30,7 +25,7 @@ export class SolitaireScene extends Scene {
 
         const favicon = await TextureManager.loadTexture("favicon", require("../assets/favicon.png"))
 
-        const redRect = new Rectangle(this.gl, 200, 200, 0, 100, 100, Color.RED)
+        const redRect = new Rectangle(this.gl, 200, 200, 2, 100, 100, Color.RED)
         redRect.draggable = true
         redRect.texture = favicon
         this.objects.push(redRect)
@@ -43,15 +38,13 @@ export class SolitaireScene extends Scene {
 
     public override update(): void { }
 
-    public override onTouchStart(position: IPosition): void { }
-
-    public override onTouchEnd(): void { }
-
-    public override onTouchMove(position: IPosition): void { }
-
     public onGameObjectDrop(gameObject: IGameObject, position: IPosition): void {
 
         console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);
+    }
 
+    public onGameObjectPress(gameObject: IGameObject): void {
+
+        console.log(`[SolitaireScene] onGameObjectPress ${gameObject}`);
     }
 }

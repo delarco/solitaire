@@ -2,6 +2,7 @@ import { ExpoWebGLRenderingContext } from "expo-gl";
 import { ShaderProgram } from "../webgl/ShaderProgram";
 import { Color } from "../Color";
 import { IGameObject } from "../interfaces/IGameObject";
+import { Texture } from "../Texture";
 
 export class Rectangle implements IGameObject {
 
@@ -12,6 +13,10 @@ export class Rectangle implements IGameObject {
 
     public visible = true
     public draggable = false
+
+
+    private _texture: Texture | null = null
+    private textureBuffer: WebGLBuffer | null = null
 
     constructor(
         private gl: ExpoWebGLRenderingContext,
@@ -25,7 +30,7 @@ export class Rectangle implements IGameObject {
 
         const vertexBuffer = gl.createBuffer()
 
-        if (!vertexBuffer) throw new Error("Can't create WebGLBuffer")
+        if (!vertexBuffer) throw new Error("Can't create WebGLBuffer (vertex)")
 
         this.vertexBuffer = vertexBuffer
         this.vertexArray = new Float32Array()
@@ -68,5 +73,32 @@ export class Rectangle implements IGameObject {
         if (z) this.z = z
 
         this.updateVertexArrayBuffer()
+    }
+
+    public get texture() {
+
+        return this._texture
+    }
+
+    public set texture(value: Texture | null) {
+
+        this._texture = value
+
+        if (this.textureBuffer) return
+
+        this.textureBuffer = this.gl.createBuffer()
+        if (!this.textureBuffer) throw new Error("Can't create WebGLBuffer (texture)")
+
+        const textureArray = new Float32Array([
+            0, 0,
+            1, 0,
+            1, 1,
+            1, 1,
+            0, 1,
+            0, 0,
+        ])
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.textureBuffer);
+        this.gl.bufferData(this.gl.ARRAY_BUFFER, textureArray, this.gl.STATIC_DRAW);
     }
 }

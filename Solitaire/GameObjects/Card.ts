@@ -1,8 +1,8 @@
-import { Color } from "../../Engine/Color";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 import { TextureManager } from "../../Engine/TextureManager";
 import { CardColor } from "../Enums/CardColor";
 import { Suit } from "../Enums/Suit";
+import { Dimensions } from "../Utils/Dimensions";
 
 export class Card extends Rectangle {
 
@@ -15,7 +15,10 @@ export class Card extends Rectangle {
     public get cardColor() { return this._cardColor }
 
     constructor(id: string, private _suit: Suit) {
-        super(id, 0, 0, Card.CARD_DEFAULT_DEPTH, 100, 100)
+        super(id,
+            0, 0, Card.CARD_DEFAULT_DEPTH,
+            Dimensions.cardSize.width, Dimensions.cardSize.height
+        )
 
         switch (_suit) {
             case Suit.Diamonds:

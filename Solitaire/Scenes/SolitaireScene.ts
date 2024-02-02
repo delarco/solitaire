@@ -28,11 +28,13 @@ export class SolitaireScene extends Scene {
         const redRect = new Rectangle(this.gl, 200, 200, 2, 100, 100, Color.RED)
         redRect.draggable = true
         redRect.texture = favicon
+        redRect.onPress = () => console.log("red press");
         this.objects.push(redRect)
-
+        
         const blueRect = new Rectangle(this.gl, 100, 100, 1, 100, 100, Color.BLUE)
         blueRect.draggable = false
         blueRect.texture = favicon
+        redRect.onPress = () => console.log("blue press");
         this.objects.push(blueRect)
     }
 

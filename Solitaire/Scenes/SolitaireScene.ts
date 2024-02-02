@@ -11,6 +11,7 @@ import { TextureManager } from "../../Engine/TextureManager";
 import { Card } from "../GameObjects/Card";
 import { Suit } from "../Enums/Suit";
 import { Dimensions } from "../Utils/Dimensions";
+import { Pile } from "../GameObjects/Pile";
 
 export class SolitaireScene extends Scene {
 
@@ -46,6 +47,9 @@ export class SolitaireScene extends Scene {
 
         const card2 = new Card("card-2", Suit.Clubs)
         this.objects.push(card2)
+
+        const pile1 = new Pile("pile-1")
+        this.objects.push(pile1)
     }
 
     public override update(): void { }

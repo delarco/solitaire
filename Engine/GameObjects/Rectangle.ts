@@ -100,4 +100,6 @@ export class Rectangle implements IGameObject {
 
         this.updateVertexArrayBuffer()
     }
+
+    public onPress(): void { }
 }

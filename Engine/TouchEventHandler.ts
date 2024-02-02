@@ -65,6 +65,11 @@ export class TouchEventHandler {
         if (newPosition.x === TouchEventHandler.selectedGameObject.x
             && newPosition.y === TouchEventHandler.selectedGameObject.y) return
 
+        if(!TouchEventHandler.gameObjectMoved) {
+
+            scene.onGameObjectStartDrag(TouchEventHandler.selectedGameObject)
+        }
+
         TouchEventHandler.gameObjectMoved = true
         TouchEventHandler.selectedGameObject.move(newPosition.x, newPosition.y)
     }

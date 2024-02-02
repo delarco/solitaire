@@ -27,13 +27,13 @@ export class SolitaireScene extends Scene {
         const redRect = new Rectangle("red-rect", 200, 200, 2, 100, 100, Color.RED)
         redRect.draggable = true
         redRect.texture = favicon
-        redRect.onPress = () => console.log("red press");
+        redRect.onPress = () => this.onRedPress()
         this.objects.push(redRect)
         
         const blueRect = new Rectangle("blue-rect", 100, 100, 1, 100, 100, Color.BLUE)
         blueRect.draggable = false
         blueRect.texture = favicon
-        blueRect.onPress = () => console.log("blue press");
+        blueRect.onPress = () => this.onBluePress()
         this.objects.push(blueRect)
     }
 
@@ -49,8 +49,14 @@ export class SolitaireScene extends Scene {
         console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);
     }
 
-    public onGameObjectPress(gameObject: IGameObject): void {
+    private onRedPress() {
 
-        console.log(`[SolitaireScene] onGameObjectPress ${gameObject.id}`);
+        console.log("[SolitaireScene] onRedPress");
+    }
+
+    private onBluePress() {
+
+        console.log("[SolitaireScene] onBluePress");
+        
     }
 }

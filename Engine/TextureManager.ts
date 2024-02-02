@@ -15,6 +15,8 @@ export class TextureManager {
         TextureManager.createTextureFromColor("red", Color.RED)
         TextureManager.createTextureFromColor("green", Color.GREEN)
         TextureManager.createTextureFromColor("blue", Color.BLUE)
+        TextureManager.createTextureFromColor("white", Color.WHITE)
+        TextureManager.createTextureFromColor("black", Color.BLACK)
     }
 
     public static getTexture(key: string): Texture | null {

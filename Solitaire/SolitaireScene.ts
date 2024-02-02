@@ -8,6 +8,7 @@ import { Rectangle } from "../Engine/GameObjects/Rectangle";
 import { Color } from "../Engine/Color";
 import { IPosition } from "../Engine/interfaces/IPosition";
 import { IGameObject } from "../Engine/interfaces/IGameObject";
+import { TextureManager } from "../Engine/TextureManager";
 
 export class SolitaireScene extends Scene {
 
@@ -27,67 +28,30 @@ export class SolitaireScene extends Scene {
     public override async init(): Promise<void> {
         console.log("[SolitaireScene] init");
 
+        const favicon = await TextureManager.loadTexture("favicon", require("../assets/favicon.png"))
+
         const redRect = new Rectangle(this.gl, 200, 200, 0, 100, 100, Color.RED)
         redRect.draggable = true
+        redRect.texture = favicon
         this.objects.push(redRect)
-        
+
         const blueRect = new Rectangle(this.gl, 100, 100, 1, 100, 100, Color.BLUE)
-        blueRect.draggable = true
+        blueRect.draggable = false
+        blueRect.texture = favicon
         this.objects.push(blueRect)
-
-        // setInterval(() => rect.visible = !rect.visible, 150)
     }
 
-    public override update(): void {
+    public override update(): void { }
 
-        const rect = this.objects[0]
+    public override onTouchStart(position: IPosition): void { }
 
-        let newPosition = {
-            x: rect.x + this.velocity.x,
-            y: rect.y + this.velocity.y
-        }
+    public override onTouchEnd(): void { }
 
-        if (newPosition.x + rect.width > this.resolution.width) {
-            this.velocity.x *= -1
-            newPosition.x = this.resolution.width - rect.width
-        }
-
-        if (newPosition.y + rect.height > this.resolution.height) {
-            this.velocity.y *= -1
-            newPosition.y = this.resolution.height - rect.height
-        }
-
-        if (newPosition.x < 0) {
-            this.velocity.x *= -1
-            newPosition.x = 0
-        }
-
-        if (newPosition.y < 0) {
-            this.velocity.y *= -1
-            newPosition.y = 0
-        }
-
-        // rect.move(newPosition.x, newPosition.y)
-    }
-
-    public override onTouchStart(position: IPosition): void {
-
-        // console.log("[SolitaireScene] onTouchStart", position);
-    }
-
-    public override onTouchEnd(): void {
-
-        // console.log("[SolitaireScene] onTouchEnd");
-    }
-
-    public override onTouchMove(position: IPosition): void {
-
-        // console.log("[SolitaireScene] onTouchMove", position);
-    }
+    public override onTouchMove(position: IPosition): void { }
 
     public onGameObjectDrop(gameObject: IGameObject, position: IPosition): void {
 
         console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);
-        
+
     }
 }

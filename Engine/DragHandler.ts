@@ -12,7 +12,7 @@ export class DragHandler {
 
         const gameObjectList = scene.objects
             .filter(f => f.draggable && f.visible)
-            .sort((a, b) => a.z || 0 - (b.z || 0))
+            .sort((a, b) => b.z || 0 - (a.z || 0))
 
         for (const gameObject of gameObjectList) {
 

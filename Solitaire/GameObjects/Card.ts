@@ -3,15 +3,19 @@ import { TextureManager } from "../../Engine/TextureManager";
 import { CardColor } from "../Enums/CardColor";
 import { Suit } from "../Enums/Suit";
 import { Dimensions } from "../Utils/Dimensions";
+import { IPile } from "../interfaces/IPile";
 
 export class Card extends Rectangle {
 
-    private static readonly CARD_DEFAULT_DEPTH = 10
-
-    public get suit() { return this._suit }
+    public static readonly CARD_DEFAULT_DEPTH = 10
 
     private _cardColor: CardColor
 
+    public pile: IPile | null = null
+    public parent: Card | null = null
+    public child: Card | null = null
+
+    public get suit() { return this._suit }
     public get cardColor() { return this._cardColor }
 
     constructor(id: string, private _suit: Suit, private text: string) {

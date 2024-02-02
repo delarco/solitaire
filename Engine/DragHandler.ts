@@ -7,6 +7,7 @@ export class DragHandler {
 
     private static selectedGameObject: IGameObject | null = null
     private static offsets: IPosition = { x: 0, y: 0 }
+    private static gameObjectMoved = false
 
     public static onTouchStart(scene: Scene, position: IPosition): void {
 
@@ -19,6 +20,7 @@ export class DragHandler {
             if (Collision.pointInRect(position, gameObject)) {
 
                 DragHandler.selectedGameObject = gameObject
+                DragHandler.gameObjectMoved = false
 
                 DragHandler.offsets = {
                     x: position.x - gameObject.x,
@@ -33,6 +35,12 @@ export class DragHandler {
     public static onTouchEnd(scene: Scene,): void {
 
         if (!DragHandler.selectedGameObject) return
+
+        if (!DragHandler.gameObjectMoved) {
+            
+            scene.onGameObjectPress(DragHandler.selectedGameObject)
+            return
+        }
 
         const position: IPosition = {
             x: DragHandler.selectedGameObject.x,
@@ -57,6 +65,7 @@ export class DragHandler {
         if (newPosition.x === DragHandler.selectedGameObject.x
             && newPosition.y === DragHandler.selectedGameObject.y) return
 
+        DragHandler.gameObjectMoved = true
         DragHandler.selectedGameObject.move(newPosition.x, newPosition.y)
     }
 }

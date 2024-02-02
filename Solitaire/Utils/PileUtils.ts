@@ -1,8 +1,10 @@
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
+import { Card } from "../GameObjects/Card";
 import { FoundationPile } from "../GameObjects/FoundationPile";
 import { StockPile } from "../GameObjects/StockPile";
 import { TableauPile } from "../GameObjects/TableauPile";
+import { IPile } from "../interfaces/IPile";
 import { Dimensions } from "./Dimensions";
 
 export class PileUtils {
@@ -64,5 +66,37 @@ export class PileUtils {
         }
 
         return new StockPile("stock", pos, size)
+    }
+
+    public static placeCards(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
+
+        console.log("[PileUtils] placeCards");
+
+        let cardCounter = 0
+
+        // add cards to tableau piles
+        for (let pileIndex = 0; pileIndex < 7; pileIndex++) {
+
+            const pile = tableauPiles[pileIndex]
+
+            for (let pileCardCounter = 0; pileCardCounter <= pileIndex; pileCardCounter++) {
+
+                const card = cards[cardCounter++]
+                card.visible = true
+                card.draggable = false
+                pile.add(card)
+            }
+
+            pile.last!.draggable = true
+        }
+
+        // add cards to stock pile
+        for (let cardIndex = cardCounter; cardIndex < cards.length; cardIndex++) {
+
+            const card = cards[cardCounter++]
+            card.visible = false
+            card.draggable = false
+            stockPile.add(card)
+        }
     }
 }

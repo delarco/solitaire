@@ -1,10 +1,10 @@
 import { ExpoWebGLRenderingContext, GLView } from 'expo-gl';
 import { Dimensions, View } from 'react-native';
 import { Game } from './Engine/Game';
-import { SolitaireScene } from './Solitaire/SolitaireScene';
+import { SolitaireScene } from './Solitaire/Scenes/SolitaireScene';
 import { ISize } from './Engine/interfaces/ISize';
-import { GameOverScene } from './Solitaire/GameOverScene';
-import { WinScene } from './Solitaire/WinScene';
+import { GameOverScene } from './Solitaire/Scenes/GameOverScene';
+import { WinScene } from './Solitaire/Scenes/WinScene';
 
 export default function App() {
 

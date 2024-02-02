@@ -3,7 +3,7 @@ import { Scene } from "./Scene";
 import { IGameObject } from "./interfaces/IGameObject";
 import { IPosition } from "./interfaces/IPosition";
 
-export class DragHandler {
+export class TouchEventandler {
 
     private static selectedGameObject: IGameObject | null = null
     private static offsets: IPosition = { x: 0, y: 0 }
@@ -19,10 +19,10 @@ export class DragHandler {
 
             if (Collision.pointInRect(position, gameObject)) {
 
-                DragHandler.selectedGameObject = gameObject
-                DragHandler.gameObjectMoved = false
+                TouchEventandler.selectedGameObject = gameObject
+                TouchEventandler.gameObjectMoved = false
 
-                DragHandler.offsets = {
+                TouchEventandler.offsets = {
                     x: position.x - gameObject.x,
                     y: position.y - gameObject.y
                 }
@@ -34,27 +34,27 @@ export class DragHandler {
 
     public static onTouchEnd(scene: Scene,): void {
 
-        if (!DragHandler.selectedGameObject) return
+        if (!TouchEventandler.selectedGameObject) return
 
-        if (!DragHandler.gameObjectMoved) {
-            
-            scene.onGameObjectPress(DragHandler.selectedGameObject)
+        if (!TouchEventandler.gameObjectMoved) {
+
+            scene.onGameObjectPress(TouchEventandler.selectedGameObject)
             return
         }
 
         const position: IPosition = {
-            x: DragHandler.selectedGameObject.x,
-            y: DragHandler.selectedGameObject.y
+            x: TouchEventandler.selectedGameObject.x,
+            y: TouchEventandler.selectedGameObject.y
         }
 
-        scene.onGameObjectDrop(DragHandler.selectedGameObject, position)
+        scene.onGameObjectDrop(TouchEventandler.selectedGameObject, position)
 
-        DragHandler.selectedGameObject = null
+        TouchEventandler.selectedGameObject = null
     }
 
     public static onTouchMove(scene: Scene, position: IPosition): void {
 
-        if (!DragHandler.selectedGameObject) return
+        if (!TouchEventandler.selectedGameObject) return
 
         const newPosition: IPosition = {
             x: Math.round(position.x - this.offsets.x),
@@ -62,10 +62,10 @@ export class DragHandler {
         }
 
         // did it move?
-        if (newPosition.x === DragHandler.selectedGameObject.x
-            && newPosition.y === DragHandler.selectedGameObject.y) return
+        if (newPosition.x === TouchEventandler.selectedGameObject.x
+            && newPosition.y === TouchEventandler.selectedGameObject.y) return
 
-        DragHandler.gameObjectMoved = true
-        DragHandler.selectedGameObject.move(newPosition.x, newPosition.y)
+        TouchEventandler.gameObjectMoved = true
+        TouchEventandler.selectedGameObject.move(newPosition.x, newPosition.y)
     }
 }

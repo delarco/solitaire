@@ -3,7 +3,7 @@ import { GestureResponderEvent, Platform } from "react-native";
 import { Scene } from "./Scene";
 import { ISize } from "./interfaces/ISize";
 import { IPosition } from "./interfaces/IPosition";
-import { DragHandler } from "./DragHandler";
+import { TouchEventHandler } from "./TouchEventHandler";
 import { TextureManager } from "./TextureManager";
 
 export class Game {
@@ -116,8 +116,7 @@ export class Game {
         }
 
         const drawingPosition = this.convertScreenToDrawingPosition(screenPosition)
-        DragHandler.onTouchStart(scene, drawingPosition)
-        // scene.onTouchStart()
+        TouchEventHandler.onTouchStart(scene, drawingPosition)
     }
 
     public onTouchEnd(event: GestureResponderEvent): void {
@@ -125,8 +124,7 @@ export class Game {
         const scene = this.lastRenderingScenes
         if (!scene) return
 
-        DragHandler.onTouchEnd(scene)
-        // scene.onTouchEnd()
+        TouchEventHandler.onTouchEnd(scene)
     }
 
     public onTouchMove(event: GestureResponderEvent): void {
@@ -140,8 +138,6 @@ export class Game {
         }
 
         const drawingPosition = this.convertScreenToDrawingPosition(screenPosition)
-        DragHandler.onTouchMove(scene, drawingPosition)
-
-        // scene.onTouchMove(this.convertScreenToDrawingPosition(screenPosition))
+        TouchEventHandler.onTouchMove(scene, drawingPosition)
     }
 }

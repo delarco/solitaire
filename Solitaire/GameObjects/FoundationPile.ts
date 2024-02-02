@@ -1,7 +1,8 @@
 import { Color } from "../../Engine/Color";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
+import { IPosition } from "../../Engine/interfaces/IPosition";
+import { ISize } from "../../Engine/interfaces/ISize";
 import { PileType } from "../Enums/PileType";
-import { Dimensions } from "../Utils/Dimensions";
 import { IPile } from "../interfaces/IPile";
 import { Card } from "./Card";
 
@@ -18,10 +19,10 @@ export class FoundationPile extends Rectangle implements IPile {
         return this.cards[length - 1]
     }
 
-    constructor(id: string) {
+    constructor(id: string, position: IPosition, size: ISize) {
         super(id,
-            0, 50, 0,
-            Dimensions.pileWidth, Dimensions.cardSize.height,
+            position.x, position.y, 0,
+            size.width, size.height,
             Color.WHITE
         )
     }

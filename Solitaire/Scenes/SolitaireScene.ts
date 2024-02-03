@@ -16,6 +16,7 @@ import { StockPile } from "../GameObjects/StockPile";
 import { DeckGenerator } from "../Utils/DeckGenerator";
 import { IAction } from "../interfaces/IAction";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
+import { MoveAction } from "../Actions/MoveAction";
 
 export class SolitaireScene extends Scene {
 
@@ -130,14 +131,7 @@ export class SolitaireScene extends Scene {
 
                 if (pile.canAdd(gameObject)) {
 
-                    const action: IAction = {
-                        card: gameObject,
-                        newPile: pile,
-                        previousPile: gameObject.pile!,
-                        previousIndex: gameObject.pile!.cards.indexOf(gameObject)
-                    }
-
-                    this.executeAction(action)
+                    this.executeAction(new MoveAction(gameObject, pile))
                     return
                 }
             }
@@ -162,17 +156,6 @@ export class SolitaireScene extends Scene {
         return false
     }
 
-    private executeAction(action: IAction): void {
-
-        action.newPile.add(action.card)
-        this.actions.push(action)
-
-        if (this.checkVictory()) {
-
-            console.log("win!");
-        }
-    }
-
     private onNewGamePress(): void {
 
         this.cards.forEach(card => card.reset())
@@ -189,10 +172,7 @@ export class SolitaireScene extends Scene {
     private onUndoPress(): void {
 
         const action = this.actions.pop()
-
-        if (!action) return
-
-        console.log("onUndoPress", action)
+        if (action) this.undoAction(action)
     }
 
     private autoMove(card: Card): void {
@@ -228,15 +208,30 @@ export class SolitaireScene extends Scene {
 
         if (pileFound) {
 
-            const action: IAction = {
-                card,
-                newPile: pileFound,
-                previousPile: card.pile!,
-                previousIndex: card.pile!.cards.indexOf(card)
-            }
-
-            this.executeAction(action)
+            this.executeAction(new MoveAction(card, pileFound))
         }
 
+    }
+
+    private executeAction(action: IAction): void {
+
+        action.execute()
+        this.actions.push(action)
+
+        console.log(this.foundationPiles[0].cards);
+        console.log(this.tableauPiles[0].cards);
+
+        if (this.checkVictory()) {
+
+            console.log("win!");
+        }
+    }
+
+    private undoAction(action: IAction): void {
+
+        action.undo()
+
+        console.log(this.foundationPiles[0].cards);
+        console.log(this.tableauPiles[0].cards);
     }
 }

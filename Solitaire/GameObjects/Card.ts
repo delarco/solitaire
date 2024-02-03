@@ -53,6 +53,14 @@ export class Card extends Container {
         this.showChildren()
     }
 
+    public unflip(): void {
+
+        this._flipped = false
+        this.draggable = false
+        this.texture = TextureManager.getTexture("card")
+        this.hideChildren()
+    }
+
     public saveDepth(): void {
 
         this.lastDepth = this.z

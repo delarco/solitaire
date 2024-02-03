@@ -91,15 +91,21 @@ export class SolitaireScene extends Scene {
 
     private createButtons(): void {
 
-        const newGameButton = new Rectangle("new-game", 0, Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        const screenWidth80 = Dimensions.screenSize.width * 0.8
+        const screenPadding = (Dimensions.screenSize.width - screenWidth80) / 2
+        const widthOver3 = screenWidth80 / 3
+        const baseButtonX = widthOver3 + ((widthOver3 - Dimensions.buttonSize.width) / 2)
+        const buttonX = (index: number) => index * baseButtonX + screenPadding
+
+        const newGameButton = new Rectangle("new-game", buttonX(0), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
         newGameButton.texture = TextureManager.getTexture("cards")
         newGameButton.onPress = () => this.onNewGamePress()
 
-        const hintButton = new Rectangle("hint-game", 150, Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        const hintButton = new Rectangle("hint-game", buttonX(1), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
         hintButton.texture = TextureManager.getTexture("hint")
         hintButton.onPress = () => this.onHintPress()
 
-        const undoButton = new Rectangle("undo-game", 300, Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        const undoButton = new Rectangle("undo-game", buttonX(2), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
         undoButton.texture = TextureManager.getTexture("undo")
         undoButton.onPress = () => this.onUndoPress()
 
@@ -241,8 +247,6 @@ export class SolitaireScene extends Scene {
     private undoAction(action: IAction): void {
 
         action.undo()
-
-        console.log(this.stockPile.cards.map(a => a.id + " at " + String(a.z)));
     }
 
     private checkAutoCompleteCondition(): boolean {

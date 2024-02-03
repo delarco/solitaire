@@ -1,3 +1,4 @@
+import { Collision } from "../../Engine/Collision";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { Card } from "../GameObjects/Card";
@@ -98,5 +99,10 @@ export class PileUtils {
             card.draggable = false
             stockPile.add(card)
         }
+    }
+
+    public static cardPilesCollided(card: Card, piles: Array<IPile>): Array<IPile> {
+
+        return piles.filter(pile => Collision.rectsCollision(card, pile))
     }
 }

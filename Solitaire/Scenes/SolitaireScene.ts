@@ -27,6 +27,7 @@ export class SolitaireScene extends Scene {
     private foundationPiles: Array<FoundationPile> = []
     private stockPile!: StockPile
     private actions: Array<IAction> = []
+    private autoCompleteButton!: Rectangle
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -59,7 +60,8 @@ export class SolitaireScene extends Scene {
         this.objects.push(...this.cards)
         this.objects.push(...this.piles)
 
-        PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
+        // PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
+        PileUtils.placeCardsWin(this.cards, this.tableauPiles, this.stockPile)
     }
 
     private async loadTextures(): Promise<void> {
@@ -74,6 +76,7 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("cards", require("../../assets/cards.png"))
         await TextureManager.loadTexture("hint", require("../../assets/hint.png"))
         await TextureManager.loadTexture("undo", require("../../assets/undo.png"))
+        await TextureManager.loadTexture("auto-complete", require("../../assets/auto-complete.png"))
         await TextureManager.loadTexture("2", require("../../assets/2.png"))
         await TextureManager.loadTexture("3", require("../../assets/3.png"))
         await TextureManager.loadTexture("4", require("../../assets/4.png"))
@@ -109,9 +112,17 @@ export class SolitaireScene extends Scene {
         undoButton.texture = TextureManager.getTexture("undo")
         undoButton.onPress = () => this.onUndoPress()
 
+        this.autoCompleteButton = new Rectangle("auto-complete-button",
+            (Dimensions.screenSize.width - screenWidth80) / 2, Dimensions.buttonsY - Dimensions.buttonSize.height - Dimensions.gapBetweenPiles, 1,
+            screenWidth80, screenWidth80 * 0.09)
+        this.autoCompleteButton.texture = TextureManager.getTexture("auto-complete")
+        this.autoCompleteButton.onPress = () => this.onAutoCompletePress()
+        this.autoCompleteButton.visible = false
+
         this.objects.push(newGameButton)
         this.objects.push(hintButton)
         this.objects.push(undoButton)
+        this.objects.push(this.autoCompleteButton)
     }
 
     public override update(): void { }
@@ -176,6 +187,7 @@ export class SolitaireScene extends Scene {
         this.piles.forEach(pile => pile.reset())
         DeckGenerator.shuffle(this.cards)
         PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
+        this.autoCompleteButton.visible = false
     }
 
     private onHintPress(): void {
@@ -238,8 +250,7 @@ export class SolitaireScene extends Scene {
 
         if (this.checkAutoCompleteCondition()) {
 
-            console.log("auto complete");
-
+            this.autoCompleteButton.visible = true
         }
 
         if (this.checkVictory()) {
@@ -256,5 +267,11 @@ export class SolitaireScene extends Scene {
     private checkAutoCompleteCondition(): boolean {
 
         return this.tableauPiles.every(tableau => tableau.cards.every(card => card.flipped))
+    }
+
+    private onAutoCompletePress(): void {
+
+        console.log("onAutoCompletePress");
+
     }
 }

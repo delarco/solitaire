@@ -75,6 +75,7 @@ export class TableauPile extends Rectangle implements IPile {
     }
 
     public reset(): void {
-        throw new Error("Method not implemented.")
+        
+        this.cards = []
     }
 }

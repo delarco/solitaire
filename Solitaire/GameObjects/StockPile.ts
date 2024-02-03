@@ -79,11 +79,14 @@ export class StockPile extends Rectangle implements IPile {
     }
 
     public canAdd(card: Card): boolean {
-        throw new Error("Method not implemented.")
+        
+        return false
     }
 
     public reset(): void {
-        throw new Error("Method not implemented.")
+        
+        this.currentIndex = -1
+        this.cards = []
     }
 
     public onPress(): void {

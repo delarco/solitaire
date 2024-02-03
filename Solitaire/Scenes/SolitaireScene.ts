@@ -45,7 +45,7 @@ export class SolitaireScene extends Scene {
 
         this.createButtons()
 
-        this.cards = DeckGenerator.generate(false)
+        this.cards = DeckGenerator.generate()
         this.tableauPiles = PileUtils.generateTableauPiles()
         this.foundationPiles = PileUtils.generateFoundationPiles()
         this.stockPile = PileUtils.generateStockPile()
@@ -226,6 +226,12 @@ export class SolitaireScene extends Scene {
         action.execute()
         this.actions.push(action)
 
+        if(this.checkAutoCompleteCondition()) {
+
+            console.log("auto complete");
+            
+        }
+
         if (this.checkVictory()) {
 
             console.log("win!");
@@ -235,5 +241,12 @@ export class SolitaireScene extends Scene {
     private undoAction(action: IAction): void {
 
         action.undo()
+
+        console.log(this.stockPile.cards.map(a => a.id + " at " + String(a.z)));
+    }
+
+    private checkAutoCompleteCondition(): boolean {
+
+        return this.tableauPiles.every(tableau => tableau.cards.every(card => card.flipped))
     }
 }

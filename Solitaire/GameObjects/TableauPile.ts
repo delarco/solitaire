@@ -26,7 +26,25 @@ export class TableauPile extends Rectangle implements IPile {
     }
 
     public add(card: Card): void {
-        
+
+        if (!card.visible) card.visible = true
+
+        // remove from old pile
+        if (card.pile) card.pile.remove(card)
+
+        // remove child from parent
+        if (card.parent) card.parent.child = null
+
+        // remove parent
+        card.parent = null
+
+        // attach to last card
+        if (this.last && this.last.flipped) {
+
+            this.last.child = card
+            card.parent = this.last
+        }
+
         card.pile = this
 
         const y = this.y + (this.cards.length * Dimensions.cardVerticalMargin)
@@ -37,11 +55,21 @@ export class TableauPile extends Rectangle implements IPile {
     }
 
     public remove(card: Card): void {
-        throw new Error("Method not implemented.")
+
+        this.cards = this.cards.filter(f => f != card)
+        card.pile = null
+
+        if (this.last && !this.last.flipped) this.last.flip()
     }
 
     public canAdd(card: Card): boolean {
-        throw new Error("Method not implemented.")
+
+        if (this.last) {
+            return this.last.canSetChild(card)
+        }
+        else {
+            return card.number === 13
+        }
     }
 
     public reset(): void {

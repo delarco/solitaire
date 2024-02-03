@@ -17,6 +17,7 @@ import { DeckGenerator } from "../Utils/DeckGenerator";
 import { IAction } from "../interfaces/IAction";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 import { MoveAction } from "../Actions/MoveAction";
+import { StockNextAction } from "../Actions/StockNextAction";
 
 export class SolitaireScene extends Scene {
 
@@ -44,10 +45,12 @@ export class SolitaireScene extends Scene {
 
         this.createButtons()
 
-        this.cards = DeckGenerator.generate()
+        this.cards = DeckGenerator.generate(false)
         this.tableauPiles = PileUtils.generateTableauPiles()
         this.foundationPiles = PileUtils.generateFoundationPiles()
         this.stockPile = PileUtils.generateStockPile()
+        
+        this.stockPile.onPress = () => this.onStockPilePress()
 
         this.piles.push(...this.tableauPiles)
         this.piles.push(...this.foundationPiles)
@@ -147,6 +150,11 @@ export class SolitaireScene extends Scene {
     public onGameObjectPress(gameObject: IGameObject): void {
 
         if (gameObject instanceof Card) this.autoMove(gameObject)
+    }
+
+    private onStockPilePress(): void {
+
+        this.executeAction(new StockNextAction(this.stockPile))
     }
 
     private checkVictory(): boolean {

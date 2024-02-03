@@ -23,13 +23,15 @@ export class StockPile extends Rectangle implements IPile {
         return this.cards[length - 1]
     }
 
-    private currentIndex = -1
+    private _currentIndex = -1
+
+    public get currentIndex() { return this._currentIndex }
 
     private get currentCard(): Card | null {
 
-        if (this.currentIndex < 0) return null
+        if (this._currentIndex < 0) return null
         if (this.cards.length === 0) return null
-        return this.cards[this.currentIndex]
+        return this.cards[this._currentIndex]
     }
 
     private firstCardBaseX: number
@@ -68,7 +70,7 @@ export class StockPile extends Rectangle implements IPile {
             prevCard.move(this.firstCardBaseX - index * Math.floor(Dimensions.cardSize.width / 2), null)
         })
 
-        this.currentIndex--
+        this._currentIndex--
 
         if (this.currentCard) this.currentCard.draggable = true
 
@@ -79,21 +81,21 @@ export class StockPile extends Rectangle implements IPile {
     }
 
     public canAdd(card: Card): boolean {
-        
+
         return false
     }
 
     public reset(): void {
-        
-        this.currentIndex = -1
+
+        this._currentIndex = -1
         this.cards = []
     }
 
-    public onPress(): void {
+    public nextCard(): void {
 
-        this.currentIndex++
+        this._currentIndex++
 
-        if (this.currentIndex < this.cards.length) {
+        if (this._currentIndex < this.cards.length) {
             this.showNextCard()
         }
         else {
@@ -101,9 +103,24 @@ export class StockPile extends Rectangle implements IPile {
         }
     }
 
+    public hideCurrentCard(): void {
+
+        if (this.currentCard) this.currentCard.visible = false
+
+        // move previous cards
+        this.getPreviousCards().forEach((prevCard, index) => {
+
+            prevCard.move(this.firstCardBaseX - index * Math.floor(Dimensions.cardSize.width / 2), null)
+        })
+
+        this._currentIndex--
+
+        if (this.currentCard) this.currentCard.draggable = true
+    }
+
     private showNextCard(): void {
 
-        const nextCard = this.cards[this.currentIndex]
+        const nextCard = this.cards[this._currentIndex]
         nextCard.visible = true
         nextCard.draggable = true
         nextCard.move(this.firstCardBaseX, null)
@@ -116,7 +133,7 @@ export class StockPile extends Rectangle implements IPile {
         })
 
         // if it was the last card, replace pile texture
-        if (this.currentIndex === this.cards.length - 1) {
+        if (this._currentIndex === this.cards.length - 1) {
             this.texture = TextureManager.getTexture("card-empty")
         }
     }
@@ -125,11 +142,11 @@ export class StockPile extends Rectangle implements IPile {
 
         const cards: Array<Card> = []
 
-        if (this.currentIndex === 0) cards
+        if (this._currentIndex === 0) cards
 
         for (let prevCounter = 1; prevCounter < StockPile.MAX_VISIBLE; prevCounter++) {
 
-            const prevIndex = this.currentIndex - prevCounter
+            const prevIndex = this._currentIndex - prevCounter
             if (prevIndex >= 0) cards.push(this.cards[prevIndex])
         }
 
@@ -140,6 +157,6 @@ export class StockPile extends Rectangle implements IPile {
 
         for (const card of this.cards) card.visible = false
         this.texture = TextureManager.getTexture("card")
-        this.currentIndex = -1
+        this._currentIndex = -1
     }
 }

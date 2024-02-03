@@ -26,13 +26,14 @@ export class Card extends Container {
     public child: Card | null = null
 
     public get suit() { return this._suit }
+    public get number() { return this._number }
     public get cardColor() { return this._cardColor }
     public get flipped() { return this._flipped }
 
     private lastDepth: number | null = null
     private lastPosition: IPosition | null = null
 
-    constructor(id: string, private _suit: Suit, private text: string) {
+    constructor(id: string, private _suit: Suit, private _number: number) {
         super(id,
             0, 0, Card.CARD_DEFAULT_DEPTH,
             Dimensions.cardSize.width, Dimensions.cardSize.height,
@@ -74,5 +75,11 @@ export class Card extends Container {
         if (this.lastPosition === null) throw new Error("restorePosition")
         this.move(this.lastPosition.x, this.lastPosition.y)
         this.lastPosition = null
+    }
+
+    public canSetChild(card: Card): boolean {
+
+        return card.number === this.number - 1
+            && card.cardColor != this.cardColor
     }
 }

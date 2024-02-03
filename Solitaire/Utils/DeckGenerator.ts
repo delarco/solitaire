@@ -43,7 +43,7 @@ export class DeckGenerator {
             }
 
             id = `card-${String(suit)}-${text}`
-            return CardUtils.createCardContainer(id, suit, text)
+            return CardUtils.createCardContainer(id, suit, number, text)
         })
 
         if (shuffle) return this.shuffle(deck)

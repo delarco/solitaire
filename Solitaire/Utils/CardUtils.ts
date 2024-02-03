@@ -7,9 +7,9 @@ import { Card } from "../GameObjects/Card";
 
 export class CardUtils {
 
-    public static createCardContainer(id: string, suit: Suit, text: string): Card {
+    public static createCardContainer(id: string, suit: Suit, number: number, text: string): Card {
 
-        const card = new Card(id, suit, text)
+        const card = new Card(id, suit, number)
 
         const cardPadding = Math.floor(card.width * 0.10)
 

@@ -60,8 +60,8 @@ export class StockPile extends Rectangle implements IPile {
     }
 
     public takeCardBack(card: Card): void {
-        
-        if(this.currentCard) this.currentCard.draggable = false
+
+        if (this.currentCard) this.currentCard.draggable = false
 
         card.pile = this
 
@@ -125,7 +125,11 @@ export class StockPile extends Rectangle implements IPile {
 
     public hideCurrentCard(): void {
 
-        if (this.currentCard) this.currentCard.visible = false
+        if (this.currentCard) {
+            
+            this.currentCard.visible = false
+            this.texture = TextureManager.getTexture("card")
+        }
 
         // move previous cards
         this.getPreviousCards().forEach((prevCard, index) => {

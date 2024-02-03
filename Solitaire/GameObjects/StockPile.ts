@@ -89,6 +89,7 @@ export class StockPile extends Rectangle implements IPile {
 
         this._currentIndex = -1
         this.cards = []
+        this.texture = TextureManager.getTexture("card")
     }
 
     public nextCard(): void {

@@ -107,4 +107,30 @@ export class PileUtils {
         // TODO: foundation first
         return piles.filter(pile => Collision.rectsCollision(card, pile))
     }
+
+    public static placeCardsWin(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
+
+        console.log("[PileUtils] placeCardsWin");
+
+        let allCards: Array<Card> = []
+        allCards.push(...cards)
+
+        while(allCards.length > 0) {
+
+            for(const card of allCards) {
+
+                for(const tableau of tableauPiles) {
+
+                    if(tableau.canAdd(card)) {
+
+                        tableau.add(card)
+                        card.flip()
+                        allCards = allCards.filter(c => c !== card)
+                        break
+                    }
+                }
+            }
+
+        }
+    }
 }

@@ -28,15 +28,38 @@ export class FoundationPile extends Rectangle implements IPile {
     }
 
     public add(card: Card): void {
-        throw new Error("Method not implemented.")
+
+        // remove from old pile
+        if (card.pile) card.pile.remove(card)
+
+        // remove child from parent
+        if (card.parent) card.parent.child = null
+
+        // remove parent
+        card.parent = null
+
+        card.pile = this
+
+        card.move(this.x, this.y)
+        card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+
+        this.cards.push(card)
     }
 
     public remove(card: Card): void {
-        throw new Error("Method not implemented.")
+
+        this.cards = this.cards.filter(f => f != card)
+        card.pile = null
     }
 
     public canAdd(card: Card): boolean {
-        throw new Error("Method not implemented.")
+
+        if (this.last) {
+            return card.suit === this.last.suit && card.number === this.last.number + 1
+        }
+        else {
+            return card.number === 1
+        }
     }
 
     public reset(): void {

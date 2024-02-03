@@ -24,8 +24,10 @@ export class Container extends Rectangle {
 
     public override draw(program: ShaderProgram): void {
 
+        if (!this.visible) return
+
         super.draw(program)
-        for (const object of this.objects) object.draw(program)
+        for (const object of this.objects.filter(obj => obj.visible)) object.draw(program)
     }
 
     public override move(x: number | null = null, y: number | null = null, z: number | null = null): void {
@@ -49,5 +51,15 @@ export class Container extends Rectangle {
 
         gameObject.move(this.x + gameObject.x, this.y + gameObject.y, this.z + (gameObject.z || 0))
         this.objects.push(gameObject)
+    }
+
+    protected showChildren(): void {
+
+        for (const child of this.objects) child.visible = true
+    }
+
+    protected hideChildren(): void {
+
+        for (const child of this.objects) child.visible = false
     }
 }

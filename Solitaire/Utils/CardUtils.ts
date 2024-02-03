@@ -20,6 +20,7 @@ export class CardUtils {
 
         const textRect = new Rectangle(`${id}-text`, cardPadding, cardPadding, 0, textWidth, textWidth * textScale, textColor)
         textRect.texture = textTexture
+        textRect.visible = false
         card.add(textRect)
 
         const suitTexture = TextureManager.getTexture(String(card.suit))
@@ -29,6 +30,7 @@ export class CardUtils {
             card.width - suitWidth - cardPadding, cardPadding, 0,
             suitWidth, suitWidth * suitScale)
         suitRect.texture = suitTexture
+        suitRect.visible = false
         card.add(suitRect)
 
         const bigSuitWidth = Math.floor((card.width / 5) * 3)
@@ -36,6 +38,7 @@ export class CardUtils {
             (card.width - bigSuitWidth) / 2, 2 * cardPadding + suitRect.height, 0,
             bigSuitWidth, bigSuitWidth * suitScale)
         bigSuitRect.texture = suitTexture
+        bigSuitRect.visible = false
         card.add(bigSuitRect)
 
         return card

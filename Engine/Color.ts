@@ -1,5 +1,6 @@
 export class Color {
 
+    public static readonly TRANSPARENT = new Color(1, 1, 1, 0)
     public static readonly RED = new Color(1, 0, 0)
     public static readonly GREEN = new Color(0, 1, 0)
     public static readonly BLUE = new Color(0, 0, 1)

@@ -10,12 +10,14 @@ export class TextureManager {
     public static textures: Array<Texture> = []
 
     public static BLANK_TEXTURE: Texture
+    public static TRANSPARENT_TEXTURE: Texture
 
     public static init(gl: ExpoWebGLRenderingContext): void {
 
         TextureManager.gl = gl
 
         TextureManager.BLANK_TEXTURE = TextureManager.createTextureFromColor("white", Color.WHITE)
+        TextureManager.TRANSPARENT_TEXTURE = TextureManager.createTextureFromColor("transparent", Color.TRANSPARENT)
         TextureManager.createTextureFromColor("red", Color.RED)
         TextureManager.createTextureFromColor("green", Color.GREEN)
         TextureManager.createTextureFromColor("blue", Color.BLUE)

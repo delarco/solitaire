@@ -104,6 +104,7 @@ export class PileUtils {
     public static cardPilesCollided(card: Card, piles: Array<IPile>): Array<IPile> {
 
         // TODO: sort by collision area desc
+        // TODO: foundation first
         return piles.filter(pile => Collision.rectsCollision(card, pile))
     }
 }

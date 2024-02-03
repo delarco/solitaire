@@ -14,6 +14,7 @@ import { FoundationPile } from "../GameObjects/FoundationPile";
 import { IPile } from "../interfaces/IPile";
 import { StockPile } from "../GameObjects/StockPile";
 import { DeckGenerator } from "../Utils/DeckGenerator";
+import { IAction } from "../interfaces/IAction";
 
 export class SolitaireScene extends Scene {
 
@@ -22,6 +23,7 @@ export class SolitaireScene extends Scene {
     private tableauPiles: Array<TableauPile> = []
     private foundationPiles: Array<FoundationPile> = []
     private stockPile!: StockPile
+    private actions: Array<IAction> = []
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -103,7 +105,14 @@ export class SolitaireScene extends Scene {
 
                 if (pile.canAdd(gameObject)) {
 
-                    pile.add(gameObject)
+                    const action: IAction = {
+                        card: gameObject,
+                        newPile: pile,
+                        previousPile: gameObject.pile!,
+                        previousIndex: gameObject.pile!.cards.indexOf(gameObject)
+                    }
+
+                    this.executeAction(action)
                     return
                 }
             }
@@ -119,5 +128,24 @@ export class SolitaireScene extends Scene {
     public onGameObjectPress(gameObject: IGameObject): void {
 
         // console.log("[SolitaireScene] onGameObjectPress", gameObject.id);
+    }
+
+    private checkVictory(): boolean {
+
+        if (this.foundationPiles.every(p => p.cards.length === 13)) return true
+
+        return false
+    }
+
+    private executeAction(action: IAction): void {
+
+        action.newPile.add(action.card)
+        this.actions.push(action)
+
+        if(this.checkVictory()) {
+
+            console.log("win!");
+            
+        }
     }
 }

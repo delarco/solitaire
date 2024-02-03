@@ -57,6 +57,7 @@ export class SolitaireScene extends Scene {
 
         await TextureManager.loadTexture("card", require("../../assets/card.png"))
         await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
+        await TextureManager.loadTexture("card-empty", require("../../assets/card-empty.png"))
         await TextureManager.loadTexture("clubs", require("../../assets/clubs.png"))
         await TextureManager.loadTexture("diamonds", require("../../assets/diamonds.png"))
         await TextureManager.loadTexture("hearts", require("../../assets/hearts.png"))

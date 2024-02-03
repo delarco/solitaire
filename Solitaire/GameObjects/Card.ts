@@ -56,6 +56,7 @@ export class Card extends Container {
     public saveDepth(): void {
 
         this.lastDepth = this.z
+        if (this.child) this.child.saveDepth()
     }
 
     public restoreDepth(): void {
@@ -63,11 +64,13 @@ export class Card extends Container {
         if (this.lastDepth === null) throw new Error("restoreDepth")
         this.z = this.lastDepth
         this.lastDepth = null
+        if (this.child) this.child.restoreDepth()
     }
 
     public savePosition(): void {
 
         this.lastPosition = { x: this.x, y: this.y }
+        if (this.child) this.child.savePosition()
     }
 
     public restorePosition(): void {
@@ -75,11 +78,23 @@ export class Card extends Container {
         if (this.lastPosition === null) throw new Error("restorePosition")
         this.move(this.lastPosition.x, this.lastPosition.y)
         this.lastPosition = null
+        if (this.child) this.child.restorePosition()
     }
 
     public canSetChild(card: Card): boolean {
 
         return card.number === this.number - 1
             && card.cardColor != this.cardColor
+    }
+
+    public override move(x: number | null = null, y: number | null = null, z: number | null = null): void {
+        super.move(x, y, z)
+        if (this.child) this.child.move(x, (y || 0) + Dimensions.cardVerticalMargin, z)
+    }
+
+    public setDepth(z: number): void {
+
+        this.z = z
+        if (this.child) this.child.setDepth(z + 1)
     }
 }

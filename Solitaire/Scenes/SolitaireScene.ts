@@ -84,7 +84,7 @@ export class SolitaireScene extends Scene {
 
             gameObject.savePosition()
             gameObject.saveDepth()
-            gameObject.z = 100
+            gameObject.setDepth(100)
         }
 
         // console.log(`[SolitaireScene] onGameObjectStartDrag at ${gameObject.x}, ${gameObject.y}`);

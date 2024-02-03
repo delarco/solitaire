@@ -1,15 +1,19 @@
 import { Texture } from "./Texture";
 import { Asset } from "expo-asset";
 import { Color } from "./Color";
-import { Game } from "./Game";
+import { ExpoWebGLRenderingContext } from "expo-gl";
 
 export class TextureManager {
+
+    private static gl: ExpoWebGLRenderingContext //| null = null
 
     public static textures: Array<Texture> = []
 
     public static BLANK_TEXTURE: Texture
 
-    public static init(): void {
+    public static init(gl: ExpoWebGLRenderingContext): void {
+
+        TextureManager.gl = gl
 
         TextureManager.BLANK_TEXTURE = TextureManager.createTextureFromColor("white", Color.WHITE)
         TextureManager.createTextureFromColor("red", Color.RED)
@@ -26,7 +30,7 @@ export class TextureManager {
 
     public static async loadTexture(key: string, content: any): Promise<Texture> {
 
-        const gl = Game.gl
+        const gl = TextureManager.gl
 
         // download asset
         const asset: any = Asset.fromModule(content)
@@ -51,7 +55,7 @@ export class TextureManager {
 
     private static createTextureFromColor(key: string, color: Color): Texture {
 
-        const gl = Game.gl
+        const gl = TextureManager.gl
 
         const webgltexture = gl.createTexture()!;
 

@@ -42,7 +42,7 @@ export class Game {
 
         console.log(`[Game] resolution ${this.resolution.width}x${this.resolution.height}`)
 
-        TextureManager.init()
+        TextureManager.init(gl)
     }
 
     public async start(): Promise<void> {

@@ -15,6 +15,7 @@ import { IPile } from "../interfaces/IPile";
 import { StockPile } from "../GameObjects/StockPile";
 import { DeckGenerator } from "../Utils/DeckGenerator";
 import { IAction } from "../interfaces/IAction";
+import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 
 export class SolitaireScene extends Scene {
 
@@ -40,6 +41,8 @@ export class SolitaireScene extends Scene {
 
         await this.loadTextures()
 
+        this.createButtons()
+
         this.cards = DeckGenerator.generate()
         this.tableauPiles = PileUtils.generateTableauPiles()
         this.foundationPiles = PileUtils.generateFoundationPiles()
@@ -64,6 +67,9 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("diamonds", require("../../assets/diamonds.png"))
         await TextureManager.loadTexture("hearts", require("../../assets/hearts.png"))
         await TextureManager.loadTexture("spades", require("../../assets/spades.png"))
+        await TextureManager.loadTexture("cards", require("../../assets/cards.png"))
+        await TextureManager.loadTexture("hint", require("../../assets/hint.png"))
+        await TextureManager.loadTexture("undo", require("../../assets/undo.png"))
         await TextureManager.loadTexture("2", require("../../assets/2.png"))
         await TextureManager.loadTexture("3", require("../../assets/3.png"))
         await TextureManager.loadTexture("4", require("../../assets/4.png"))
@@ -77,6 +83,25 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("J", require("../../assets/J.png"))
         await TextureManager.loadTexture("Q", require("../../assets/Q.png"))
         await TextureManager.loadTexture("K", require("../../assets/K.png"))
+    }
+
+    private createButtons(): void {
+
+        const newGameButton = new Rectangle("new-game", 0, Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        newGameButton.texture = TextureManager.getTexture("cards")
+        newGameButton.onPress = () => this.onNewGamePress()
+
+        const hintButton = new Rectangle("hint-game", 150, Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        hintButton.texture = TextureManager.getTexture("hint")
+        hintButton.onPress = () => this.onHintPress()
+
+        const undoButton = new Rectangle("undo-game", 300, Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        undoButton.texture = TextureManager.getTexture("undo")
+        undoButton.onPress = () => this.onUndoPress()
+
+        this.objects.push(newGameButton)
+        this.objects.push(hintButton)
+        this.objects.push(undoButton)
     }
 
     public override update(): void { }
@@ -142,10 +167,28 @@ export class SolitaireScene extends Scene {
         action.newPile.add(action.card)
         this.actions.push(action)
 
-        if(this.checkVictory()) {
+        if (this.checkVictory()) {
 
             console.log("win!");
-            
         }
+    }
+
+    private onNewGamePress(): void {
+
+        console.log("onNewGamePress")
+    }
+
+    private onHintPress(): void {
+
+        console.log("onHintPress")
+    }
+
+    private onUndoPress(): void {
+
+        const action = this.actions.pop()
+
+        if (!action) return
+
+        console.log("onUndoPress", action)
     }
 }

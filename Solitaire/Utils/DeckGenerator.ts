@@ -1,6 +1,7 @@
 import { CardColor } from "../Enums/CardColor"
 import { Suit } from "../Enums/Suit"
 import { Card } from "../GameObjects/Card"
+import { CardUtils } from "./CardUtils"
 
 export class DeckGenerator {
 
@@ -42,7 +43,7 @@ export class DeckGenerator {
             }
 
             id = `card-${String(suit)}-${text}`
-            return new Card(id, suit, text)
+            return CardUtils.createCardContainer(id, suit, text)
         })
 
         if (shuffle) return this.shuffle(deck)

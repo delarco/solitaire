@@ -3,13 +3,10 @@ import { ISize } from "../../Engine/interfaces/ISize";
 import { ShaderInfo, ShaderType } from "../../Engine/webgl/ShaderInfo";
 import { vertexShaderSourceCode } from "../Shaders/VertexShader";
 import { fragmentShaderSourceCode } from "../Shaders/FragmentShader";
-import { Rectangle } from "../../Engine/GameObjects/Rectangle";
-import { Color } from "../../Engine/Color";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { IGameObject } from "../../Engine/interfaces/IGameObject";
 import { TextureManager } from "../../Engine/TextureManager";
 import { Card } from "../GameObjects/Card";
-import { Suit } from "../Enums/Suit";
 import { Dimensions } from "../Utils/Dimensions";
 import { TableauPile } from "../GameObjects/TableauPile";
 import { PileUtils } from "../Utils/PileUtils";
@@ -17,6 +14,9 @@ import { FoundationPile } from "../GameObjects/FoundationPile";
 import { IPile } from "../interfaces/IPile";
 import { StockPile } from "../GameObjects/StockPile";
 import { DeckGenerator } from "../Utils/DeckGenerator";
+import { Container } from "../../Engine/GameObjects/Container";
+import { Color } from "../../Engine/Color";
+import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 
 export class SolitaireScene extends Scene {
 
@@ -39,13 +39,13 @@ export class SolitaireScene extends Scene {
     public override async init(): Promise<void> {
         console.log("[SolitaireScene] init");
 
-        // const favicon = await TextureManager.loadTexture("favicon", require("../../assets/favicon.png"))
+        await this.loadTextures()
 
         this.cards = DeckGenerator.generate()
         this.tableauPiles = PileUtils.generateTableauPiles()
         this.foundationPiles = PileUtils.generateFoundationPiles()
         this.stockPile = PileUtils.generateStockPile()
-        
+
         this.piles.push(...this.tableauPiles)
         this.piles.push(...this.foundationPiles)
         this.piles.push(this.stockPile)
@@ -54,6 +54,40 @@ export class SolitaireScene extends Scene {
         this.objects.push(...this.piles)
 
         PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
+
+        // const container = new Container("c1", 10, 10, 0, 100, 50, Color.BLACK)
+        // const insideRect = new Rectangle("r1.1", 0, 0, 0, 20, 20, Color.RED)
+        // container.add(insideRect)
+        // container.draggable = true
+        // container.showBorder = true
+        // this.objects.push(container)
+    }
+
+    private async loadTextures(): Promise<void> {
+
+        await TextureManager.loadTexture("favicon", require("../../assets/favicon.png"))
+        
+        await TextureManager.loadTexture("card", require("../../assets/card.png"))
+        await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
+        
+        await TextureManager.loadTexture("clubs", require("../../assets/clubs.png"))
+        await TextureManager.loadTexture("diamonds", require("../../assets/diamonds.png"))
+        await TextureManager.loadTexture("hearts", require("../../assets/hearts.png"))
+        await TextureManager.loadTexture("spades", require("../../assets/spades.png"))
+        
+        await TextureManager.loadTexture("2", require("../../assets/2.png"))
+        await TextureManager.loadTexture("3", require("../../assets/3.png"))
+        await TextureManager.loadTexture("4", require("../../assets/4.png"))
+        await TextureManager.loadTexture("5", require("../../assets/5.png"))
+        await TextureManager.loadTexture("6", require("../../assets/6.png"))
+        await TextureManager.loadTexture("7", require("../../assets/7.png"))
+        await TextureManager.loadTexture("8", require("../../assets/8.png"))
+        await TextureManager.loadTexture("9", require("../../assets/9.png"))
+        await TextureManager.loadTexture("10", require("../../assets/10.png"))
+        await TextureManager.loadTexture("A", require("../../assets/A.png"))
+        await TextureManager.loadTexture("J", require("../../assets/J.png"))
+        await TextureManager.loadTexture("Q", require("../../assets/Q.png"))
+        await TextureManager.loadTexture("K", require("../../assets/K.png"))
     }
 
     public override update(): void { }

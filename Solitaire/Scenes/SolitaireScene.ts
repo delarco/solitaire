@@ -49,7 +49,7 @@ export class SolitaireScene extends Scene {
         this.tableauPiles = PileUtils.generateTableauPiles()
         this.foundationPiles = PileUtils.generateFoundationPiles()
         this.stockPile = PileUtils.generateStockPile()
-        
+
         this.stockPile.onPress = () => this.onStockPilePress()
 
         this.piles.push(...this.tableauPiles)
@@ -191,6 +191,8 @@ export class SolitaireScene extends Scene {
 
     private autoMove(card: Card): void {
 
+        if (!card.flipped) return
+
         let pileFound: IPile | null = null
 
         // look for foundation pile to fit
@@ -232,10 +234,10 @@ export class SolitaireScene extends Scene {
         action.execute()
         this.actions.push(action)
 
-        if(this.checkAutoCompleteCondition()) {
+        if (this.checkAutoCompleteCondition()) {
 
             console.log("auto complete");
-            
+
         }
 
         if (this.checkVictory()) {

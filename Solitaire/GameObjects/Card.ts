@@ -1,6 +1,7 @@
 import { Color } from "../../Engine/Color";
 import { Container } from "../../Engine/GameObjects/Container";
 import { TextureManager } from "../../Engine/TextureManager";
+import { IPosition } from "../../Engine/interfaces/IPosition";
 import { CardColor } from "../Enums/CardColor";
 import { Suit } from "../Enums/Suit";
 import { Dimensions } from "../Utils/Dimensions";
@@ -28,6 +29,9 @@ export class Card extends Container {
     public get cardColor() { return this._cardColor }
     public get flipped() { return this._flipped }
 
+    private lastDepth: number | null = null
+    private lastPosition: IPosition | null = null
+
     constructor(id: string, private _suit: Suit, private text: string) {
         super(id,
             0, 0, Card.CARD_DEFAULT_DEPTH,
@@ -46,5 +50,29 @@ export class Card extends Container {
         this.draggable = true
         this.texture = TextureManager.getTexture("card-flipped")
         this.showChildren()
+    }
+
+    public saveDepth(): void {
+
+        this.lastDepth = this.z
+    }
+
+    public restoreDepth(): void {
+
+        if (this.lastDepth === null) throw new Error("restoreDepth")
+        this.z = this.lastDepth
+        this.lastDepth = null
+    }
+
+    public savePosition(): void {
+
+        this.lastPosition = { x: this.x, y: this.y }
+    }
+
+    public restorePosition(): void {
+
+        if (this.lastPosition === null) throw new Error("restorePosition")
+        this.move(this.lastPosition.x, this.lastPosition.y)
+        this.lastPosition = null
     }
 }

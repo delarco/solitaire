@@ -175,7 +175,10 @@ export class SolitaireScene extends Scene {
 
     private onNewGamePress(): void {
 
-        console.log("onNewGamePress")
+        this.cards.forEach(card => card.reset())
+        this.piles.forEach(pile => pile.reset())
+        DeckGenerator.shuffle(this.cards)
+        PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
     }
 
     private onHintPress(): void {

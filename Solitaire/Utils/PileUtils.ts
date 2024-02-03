@@ -23,7 +23,7 @@ export class PileUtils {
 
             const size: ISize = {
                 width: Dimensions.cardSize.width,
-                height: Dimensions.screenSize.height - pos.y - 10
+                height: Dimensions.screenSize.height - pos.y - Dimensions.screenPaddingBottom - Dimensions.buttonSize.height - Dimensions.gapBetweenPiles
             }
 
             return new TableauPile(id, pos, size)

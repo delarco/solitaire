@@ -6,10 +6,18 @@ import { Suit } from "../Enums/Suit";
 import { Dimensions } from "../Utils/Dimensions";
 import { IPile } from "../interfaces/IPile";
 
+const SuitColor = {
+    "diamonds": CardColor.Red,
+    "hearts": CardColor.Red,
+    "clubs": CardColor.Black,
+    "spades": CardColor.Black,
+}
+
 export class Card extends Container {
 
     public static readonly CARD_DEFAULT_DEPTH = 10
 
+    private _flipped = false
     private _cardColor: CardColor
 
     public pile: IPile | null = null
@@ -18,6 +26,7 @@ export class Card extends Container {
 
     public get suit() { return this._suit }
     public get cardColor() { return this._cardColor }
+    public get flipped() { return this._flipped }
 
     constructor(id: string, private _suit: Suit, private text: string) {
         super(id,
@@ -26,18 +35,16 @@ export class Card extends Container {
             Color.WHITE
         )
 
-        switch (_suit) {
-            case Suit.Diamonds:
-            case Suit.Hearts:
-                this._cardColor = CardColor.Red
-                break
-            case Suit.Clubs:
-            case Suit.Spades:
-                this._cardColor = CardColor.Black
-                break
-        }
+        this._cardColor = SuitColor[_suit]
+        this.draggable = true
+        this.texture = TextureManager.getTexture("card")
+    }
 
+    public flip(): void {
+
+        this._flipped = true
         this.draggable = true
         this.texture = TextureManager.getTexture("card-flipped")
+        this.showChildren()
     }
 }

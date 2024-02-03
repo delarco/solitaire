@@ -52,6 +52,8 @@ export class TableauPile extends Rectangle implements IPile {
         card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
 
         this.cards.push(card)
+
+        if (card.child) this.add(card.child)
     }
 
     public remove(card: Card): void {

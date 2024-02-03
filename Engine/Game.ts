@@ -5,6 +5,7 @@ import { ISize } from "./interfaces/ISize";
 import { IPosition } from "./interfaces/IPosition";
 import { TouchEventHandler } from "./TouchEventHandler";
 import { TextureManager } from "./TextureManager";
+import { Color } from "./Color";
 
 export class Game {
 
@@ -24,6 +25,8 @@ export class Game {
     private lastTime = 0
 
     private resolution: ISize
+
+    public backgroundColor: Color = new Color(0.75, 0.75, 0.75, 1)
 
     constructor(
         gl: ExpoWebGLRenderingContext,
@@ -64,7 +67,7 @@ export class Game {
 
         const gl = Game.gl
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight)
-        gl.clearColor(0.75, 0.75, 0.75, 1)
+        gl.clearColor(this.backgroundColor.red, this.backgroundColor.green, this.backgroundColor.blue, this.backgroundColor.alpha)
         gl.clear(gl.COLOR_BUFFER_BIT)
 
         for (const scene of this.renderingScenes) {

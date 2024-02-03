@@ -5,6 +5,7 @@ import { SolitaireScene } from './Solitaire/Scenes/SolitaireScene';
 import { ISize } from './Engine/interfaces/ISize';
 import { GameOverScene } from './Solitaire/Scenes/GameOverScene';
 import { WinScene } from './Solitaire/Scenes/WinScene';
+import { Color } from './Engine/Color';
 
 export default function App() {
 
@@ -24,6 +25,7 @@ export default function App() {
       GameOverScene,
       WinScene
     ])
+    game.backgroundColor = new Color(0.215, 0.635, 0.313)
     game.start()
   }
 

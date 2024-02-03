@@ -14,9 +14,6 @@ import { FoundationPile } from "../GameObjects/FoundationPile";
 import { IPile } from "../interfaces/IPile";
 import { StockPile } from "../GameObjects/StockPile";
 import { DeckGenerator } from "../Utils/DeckGenerator";
-import { Container } from "../../Engine/GameObjects/Container";
-import { Color } from "../../Engine/Color";
-import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 
 export class SolitaireScene extends Scene {
 
@@ -54,27 +51,16 @@ export class SolitaireScene extends Scene {
         this.objects.push(...this.piles)
 
         PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
-
-        // const container = new Container("c1", 10, 10, 0, 100, 50, Color.BLACK)
-        // const insideRect = new Rectangle("r1.1", 0, 0, 0, 20, 20, Color.RED)
-        // container.add(insideRect)
-        // container.draggable = true
-        // container.showBorder = true
-        // this.objects.push(container)
     }
 
     private async loadTextures(): Promise<void> {
 
-        await TextureManager.loadTexture("favicon", require("../../assets/favicon.png"))
-        
         await TextureManager.loadTexture("card", require("../../assets/card.png"))
         await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
-        
         await TextureManager.loadTexture("clubs", require("../../assets/clubs.png"))
         await TextureManager.loadTexture("diamonds", require("../../assets/diamonds.png"))
         await TextureManager.loadTexture("hearts", require("../../assets/hearts.png"))
         await TextureManager.loadTexture("spades", require("../../assets/spades.png"))
-        
         await TextureManager.loadTexture("2", require("../../assets/2.png"))
         await TextureManager.loadTexture("3", require("../../assets/3.png"))
         await TextureManager.loadTexture("4", require("../../assets/4.png"))
@@ -94,16 +80,43 @@ export class SolitaireScene extends Scene {
 
     public onGameObjectStartDrag(gameObject: IGameObject): void {
 
-        console.log(`[SolitaireScene] onGameObjectStartDrag at ${gameObject.x}, ${gameObject.y}`);
+        if (gameObject instanceof Card) {
+
+            gameObject.savePosition()
+            gameObject.saveDepth()
+            gameObject.z = 100
+        }
+
+        // console.log(`[SolitaireScene] onGameObjectStartDrag at ${gameObject.x}, ${gameObject.y}`);
     }
 
     public onGameObjectDrop(gameObject: IGameObject, position: IPosition): void {
 
-        console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);
+        if (gameObject instanceof Card) {
+
+            const pilesCollided = PileUtils.cardPilesCollided(gameObject, this.piles)
+
+            for (const pile of pilesCollided) {
+
+                if (pile === gameObject.pile) continue
+
+                if (pile.canAdd(gameObject)) {
+
+                    pile.add(gameObject)
+                    return
+                }
+            }
+
+            // can't add to collided piles
+            gameObject.restorePosition()
+            gameObject.restoreDepth()
+        }
+
+        // console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);
     }
 
     public onGameObjectPress(gameObject: IGameObject): void {
 
-        console.log("[SolitaireScene] onGameObjectPress", gameObject.id);
+        // console.log("[SolitaireScene] onGameObjectPress", gameObject.id);
     }
 }

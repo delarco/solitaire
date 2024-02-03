@@ -87,7 +87,7 @@ export class PileUtils {
                 pile.add(card)
             }
 
-            pile.last!.draggable = true
+            pile.last!.flip()
         }
 
         // add cards to stock pile

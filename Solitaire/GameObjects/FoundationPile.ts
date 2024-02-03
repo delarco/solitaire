@@ -1,5 +1,6 @@
 import { Color } from "../../Engine/Color";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
+import { TextureManager } from "../../Engine/TextureManager";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { PileType } from "../Enums/PileType";
@@ -23,8 +24,10 @@ export class FoundationPile extends Rectangle implements IPile {
         super(id,
             position.x, position.y, 0,
             size.width, size.height,
-            Color.WHITE
+            new Color(0x2d / 255, 0x7b / 255, 0x40 / 255)
         )
+
+        this.texture = TextureManager.getTexture("card-flipped")
     }
 
     public add(card: Card): void {

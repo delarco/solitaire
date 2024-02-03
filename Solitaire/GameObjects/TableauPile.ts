@@ -22,7 +22,7 @@ export class TableauPile extends Rectangle implements IPile {
 
     constructor(id: string, position: IPosition, size: ISize) {
 
-        super(id, position.x, position.y, 0, size.width, size.height, Color.WHITE)
+        super(id, position.x, position.y, 0, size.width, size.height, Color.TRANSPARENT)
     }
 
     public add(card: Card): void {

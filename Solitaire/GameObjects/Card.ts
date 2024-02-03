@@ -97,4 +97,18 @@ export class Card extends Container {
         this.z = z
         if (this.child) this.child.setDepth(z + 1)
     }
+
+    public reset(): void {
+
+        this._flipped = false
+        this.draggable = false
+        this.visible = false
+        this.pile = null
+        this.parent = null
+        this.child = null
+        this.lastDepth = null
+        this.lastPosition = null
+        this.hideChildren()
+        this.texture = TextureManager.getTexture("card")
+    }
 }

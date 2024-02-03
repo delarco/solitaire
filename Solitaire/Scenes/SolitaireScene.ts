@@ -193,6 +193,8 @@ export class SolitaireScene extends Scene {
 
         if (!card.flipped) return
 
+        if (!card.draggable) return
+
         let pileFound: IPile | null = null
 
         // look for foundation pile to fit

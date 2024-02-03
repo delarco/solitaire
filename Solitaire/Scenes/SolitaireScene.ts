@@ -226,9 +226,6 @@ export class SolitaireScene extends Scene {
         action.execute()
         this.actions.push(action)
 
-        console.log(this.foundationPiles[0].cards);
-        console.log(this.tableauPiles[0].cards);
-
         if (this.checkVictory()) {
 
             console.log("win!");
@@ -238,8 +235,5 @@ export class SolitaireScene extends Scene {
     private undoAction(action: IAction): void {
 
         action.undo()
-
-        console.log(this.foundationPiles[0].cards);
-        console.log(this.tableauPiles[0].cards);
     }
 }

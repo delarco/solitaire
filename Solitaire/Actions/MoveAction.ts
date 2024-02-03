@@ -1,10 +1,10 @@
 import { Card } from "../GameObjects/Card";
+import { StockPile } from "../GameObjects/StockPile";
 import { IAction } from "../interfaces/IAction";
 import { IPile } from "../interfaces/IPile";
 
 export class MoveAction implements IAction {
 
-    private previousIndex: number = -1
     private previousPile: IPile
     private cardAbove: Card | null = null
     private cardAboveFlipped: boolean | null = null
@@ -14,9 +14,8 @@ export class MoveAction implements IAction {
         public newPile: IPile) {
 
         this.previousPile = card.pile!
-        this.previousIndex = card.pile!.cards.indexOf(card)
-
-        const cardAboveIndex = this.previousIndex - 1
+        const previousIndex = card.pile!.cards.indexOf(card)
+        const cardAboveIndex = previousIndex - 1
 
         if (cardAboveIndex >= 0) {
 
@@ -33,9 +32,15 @@ export class MoveAction implements IAction {
     public undo(): void {
 
         this.newPile.remove(this.card)
-        this.previousPile.add(this.card)
 
-        if(this.cardAbove && !this.cardAboveFlipped) {
+        if (this.previousPile instanceof StockPile) {
+            this.previousPile.takeCardBack(this.card)
+        }
+        else {
+            this.previousPile.add(this.card)
+        }
+
+        if (this.cardAbove && !this.cardAboveFlipped) {
 
             this.cardAbove.unflip()
         }

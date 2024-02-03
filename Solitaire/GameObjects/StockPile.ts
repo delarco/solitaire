@@ -59,6 +59,25 @@ export class StockPile extends Rectangle implements IPile {
         this.cards.push(card)
     }
 
+    public takeCardBack(card: Card): void {
+        
+        if(this.currentCard) this.currentCard.draggable = false
+
+        card.pile = this
+
+        card.move(this.firstCardBaseX, this.y)
+        card.z = Card.CARD_DEFAULT_DEPTH + this._currentIndex + 1
+        this.cards.splice(this._currentIndex + 1, 0, card)
+
+        this._currentIndex++
+
+        // move previous cards
+        this.getPreviousCards().forEach((prevCard, index) => {
+
+            prevCard.move(this.firstCardBaseX - (index + 1) * Math.floor(Dimensions.cardSize.width / 2), null)
+        })
+    }
+
     public remove(card: Card): void {
 
         this.cards = this.cards.filter(f => f != card)

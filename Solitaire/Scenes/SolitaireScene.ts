@@ -152,7 +152,7 @@ export class SolitaireScene extends Scene {
 
     public onGameObjectPress(gameObject: IGameObject): void {
 
-        // console.log("[SolitaireScene] onGameObjectPress", gameObject.id);
+        if (gameObject instanceof Card) this.autoMove(gameObject)
     }
 
     private checkVictory(): boolean {
@@ -193,5 +193,50 @@ export class SolitaireScene extends Scene {
         if (!action) return
 
         console.log("onUndoPress", action)
+    }
+
+    private autoMove(card: Card): void {
+
+        let pileFound: IPile | null = null
+
+        // look for foundation pile to fit
+        for (const pile of this.foundationPiles) {
+
+            if (pile === card.pile) continue
+
+            if (pile.canAdd(card)) {
+
+                pileFound = pile
+                break
+            }
+        }
+
+        // look for tableau pile to fit
+        if (!pileFound) {
+
+            for (const pile of this.tableauPiles) {
+
+                if (pile === card.pile) continue
+
+                if (pile.canAdd(card)) {
+
+                    pileFound = pile
+                    break
+                }
+            }
+        }
+
+        if (pileFound) {
+
+            const action: IAction = {
+                card,
+                newPile: pileFound,
+                previousPile: card.pile!,
+                previousIndex: card.pile!.cards.indexOf(card)
+            }
+
+            this.executeAction(action)
+        }
+
     }
 }

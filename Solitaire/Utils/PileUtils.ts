@@ -108,20 +108,20 @@ export class PileUtils {
         return piles.filter(pile => Collision.rectsCollision(card, pile))
     }
 
-    public static placeCardsWin(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
+    public static placeCardsAllTableauWin(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
 
         console.log("[PileUtils] placeCardsWin");
 
         let allCards: Array<Card> = []
         allCards.push(...cards)
 
-        while(allCards.length > 0) {
+        while (allCards.length > 0) {
 
-            for(const card of allCards) {
+            for (const card of allCards) {
 
-                for(const tableau of tableauPiles) {
+                for (const tableau of tableauPiles) {
 
-                    if(tableau.canAdd(card)) {
+                    if (tableau.canAdd(card)) {
 
                         tableau.add(card)
                         card.flip()
@@ -130,7 +130,38 @@ export class PileUtils {
                     }
                 }
             }
+        }
+    }
 
+    public static placeCardsTableauAndStockWin(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
+
+        console.log("[PileUtils] placeCardsWin");
+
+        let allCards: Array<Card> = []
+        allCards.push(...cards)
+
+        while (allCards.length > 10) {
+
+            for (const card of allCards) {
+
+                for (const tableau of tableauPiles) {
+
+                    if (tableau.canAdd(card)) {
+
+                        tableau.add(card)
+                        card.flip()
+                        allCards = allCards.filter(c => c !== card)
+                        break
+                    }
+                }
+            }
+        }
+
+        for (const card of allCards) {
+
+            card.visible = false
+            card.draggable = false
+            stockPile.add(card)
         }
     }
 }

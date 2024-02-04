@@ -27,7 +27,7 @@ export class StockPile extends Rectangle implements IPile {
 
     public get currentIndex() { return this._currentIndex }
 
-    private get currentCard(): Card | null {
+    public get currentCard(): Card | null {
 
         if (this._currentIndex < 0) return null
         if (this.cards.length === 0) return null

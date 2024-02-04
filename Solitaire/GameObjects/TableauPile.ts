@@ -1,8 +1,11 @@
+import { Animator } from "../../Engine/Animations/Animator";
+import { MoveAnimation } from "../../Engine/Animations/MoveAnimation";
 import { Color } from "../../Engine/Color";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { PileType } from "../Enums/PileType";
+import { SolitaireScene } from "../Scenes/SolitaireScene";
 import { Dimensions } from "../Utils/Dimensions";
 import { IPile } from "../interfaces/IPile";
 import { Card } from "./Card";
@@ -25,7 +28,7 @@ export class TableauPile extends Rectangle implements IPile {
         super(id, position.x, position.y, 0, size.width, size.height, Color.TRANSPARENT)
     }
 
-    public add(card: Card): void {
+    public add(card: Card, animate: boolean = true): void {
 
         if (!card.visible) card.visible = true
 
@@ -48,12 +51,27 @@ export class TableauPile extends Rectangle implements IPile {
         card.pile = this
 
         const y = this.y + (this.cards.length * Dimensions.cardVerticalMargin)
-        card.move(this.x, y)
-        card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+
+
+        if (!animate) {
+
+            card.move(this.x, y)
+            card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+        }
+        else {
+
+            Animator.add(new MoveAnimation(
+                card,
+                this.x,
+                y,
+                null,
+                Card.CARD_DEFAULT_DEPTH + this.cards.length
+            ))
+        }
 
         this.cards.push(card)
 
-        if (card.child) this.add(card.child)
+        if (card.child) this.add(card.child, false)
     }
 
     public remove(card: Card): void {
@@ -75,7 +93,7 @@ export class TableauPile extends Rectangle implements IPile {
     }
 
     public reset(): void {
-        
+
         this.cards = []
     }
 }

@@ -190,14 +190,16 @@ export class SolitaireScene extends Scene {
 
         if (this.autoCompleting) return
 
-        this.cards.forEach(card => card.reset())
-        this.piles.forEach(pile => pile.reset())
-        DeckGenerator.shuffle(this.cards)
-        PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
         this.autoCompleteButton.visible = false
         this.autoCompleting = false
         this.hintButton.visible = true
         this.undoButton.visible = true
+        this.actions = []
+
+        this.cards.forEach(card => card.reset())
+        this.piles.forEach(pile => pile.reset())
+        DeckGenerator.shuffle(this.cards)
+        PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
     }
 
     private onHintPress(): void {

@@ -36,6 +36,7 @@ export class SolitaireScene extends Scene {
     private undoButton!: Rectangle
     private autoCompleteButton!: Rectangle
     private autoCompleting = false
+    private placingCards = false
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -68,7 +69,7 @@ export class SolitaireScene extends Scene {
         this.objects.push(...this.cards)
         this.objects.push(...this.piles)
 
-        PileUtils.placeCardsAnimated(this.cards, this.tableauPiles, this.stockPile)
+        this.onNewGamePress()
     }
 
     private async loadTextures(): Promise<void> {
@@ -209,7 +210,7 @@ export class SolitaireScene extends Scene {
 
     private onNewGamePress(): void {
 
-        if (this.autoCompleting) return
+        if (this.autoCompleting || this.placingCards) return
 
         this.autoCompleteButton.visible = false
         this.autoCompleting = false
@@ -220,14 +221,21 @@ export class SolitaireScene extends Scene {
         this.cards.forEach(card => card.reset())
         this.piles.forEach(pile => pile.reset())
         DeckGenerator.shuffle(this.cards)
-        PileUtils.placeCardsAnimated(this.cards, this.tableauPiles, this.stockPile)
+
+        this.placingCards = true
+        PileUtils.placeCardsAnimated(
+            this.cards,
+            this.tableauPiles,
+            this.stockPile,
+            () => this.placingCards = false
+        )
     }
 
     private onHintPress(): void {
 
         if (this.autoCompleting) return
 
-        console.log("onHintPress")
+
     }
 
     private onUndoPress(): void {

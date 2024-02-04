@@ -167,7 +167,7 @@ export class PileUtils {
         }
     }
 
-    public static placeCardsAnimated(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
+    public static placeCardsAnimated(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile, callback: () => void): void {
 
         console.log("[PileUtils] placeCardsAnimated");
 
@@ -227,6 +227,7 @@ export class PileUtils {
             else {
 
                 clearInterval(handler)
+                callback()
             }
         }, 30)
     }

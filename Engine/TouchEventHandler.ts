@@ -27,6 +27,7 @@ export class TouchEventHandler {
                     y: position.y - gameObject.y
                 }
 
+                scene.onGameObjectTouchStart(gameObject)
                 return
             }
         }

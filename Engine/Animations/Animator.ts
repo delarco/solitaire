@@ -6,10 +6,14 @@ export class Animator {
 
     public static add(animation: IAnimation): void {
 
-        if (this.animations.find(f => f.gameObject === animation.gameObject)) {
+        const previousAnimation = this.animations.find(f => f.gameObject === animation.gameObject)
+
+        if (previousAnimation) {
+
+            previousAnimation.kill()
 
             // remove
-            this.animations = this.animations.filter(f => f.gameObject !== animation.gameObject)
+            this.animations = this.animations.filter(animation => animation !== previousAnimation)
 
             // recalc
             animation.init()

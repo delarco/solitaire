@@ -28,7 +28,16 @@ export class MoveAnimation implements IAnimation {
         this.stepX = ((this.toX || 0) - this.gameObject.x) / this.frames
         this.stepY = ((this.toY || 0) - this.gameObject.y) / this.frames
 
-        if(this.movingZ) this.gameObject.z = this.movingZ
+        if (this.movingZ) this.gameObject.z = this.movingZ
+    }
+
+    public kill(): void {
+
+        // another animation has started, force this one to end
+        this.gameObject.move(this.toX, this.toY)
+        if (this.endZ) this.gameObject.z = this.endZ
+        this.done = true
+        return
     }
 
     public update(time: number): void {
@@ -48,7 +57,7 @@ export class MoveAnimation implements IAnimation {
         if (this.frameCounter >= this.frames) {
 
             this.gameObject.move(this.toX, this.toY)
-            if(this.endZ) this.gameObject.z = this.endZ
+            if (this.endZ) this.gameObject.z = this.endZ
             if (this.callback) this.callback()
             this.done = true
         }

@@ -7,5 +7,6 @@ export interface IAnimation {
 
     init(): void
     update(time: number): void
+    kill(): void
     callback: (() => void) | null
 }

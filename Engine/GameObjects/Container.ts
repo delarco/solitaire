@@ -53,6 +53,11 @@ export class Container extends Rectangle {
         this.objects.push(gameObject)
     }
 
+    public remove(gameObject: IGameObject): void {
+
+        this.objects = this.objects.filter(obj => obj !== gameObject)
+    }
+
     protected showChildren(): void {
 
         for (const child of this.objects) child.visible = true

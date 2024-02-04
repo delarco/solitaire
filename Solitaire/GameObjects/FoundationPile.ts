@@ -1,9 +1,12 @@
+import { Animator } from "../../Engine/Animations/Animator";
+import { MoveAnimation } from "../../Engine/Animations/MoveAnimation";
 import { Color } from "../../Engine/Color";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 import { TextureManager } from "../../Engine/TextureManager";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { PileType } from "../Enums/PileType";
+import { SolitaireScene } from "../Scenes/SolitaireScene";
 import { IPile } from "../interfaces/IPile";
 import { Card } from "./Card";
 
@@ -42,9 +45,13 @@ export class FoundationPile extends Rectangle implements IPile {
         card.parent = null
 
         card.pile = this
-
-        card.move(this.x, this.y)
-        card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+        
+        Animator.add(new MoveAnimation(
+            card,
+            this.x,
+            this.y,
+            SolitaireScene.MOVING_CARD_DEPTH, card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+        ))
 
         this.cards.push(card)
     }

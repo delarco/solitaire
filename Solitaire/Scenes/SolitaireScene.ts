@@ -27,6 +27,9 @@ export class SolitaireScene extends Scene {
     private foundationPiles: Array<FoundationPile> = []
     private stockPile!: StockPile
     private actions: Array<IAction> = []
+    private newGameButton!: Rectangle
+    private hintButton!: Rectangle
+    private undoButton!: Rectangle
     private autoCompleteButton!: Rectangle
     private autoCompleting = false
 
@@ -102,17 +105,17 @@ export class SolitaireScene extends Scene {
         const baseButtonX = widthOver3 + ((widthOver3 - Dimensions.buttonSize.width) / 2)
         const buttonX = (index: number) => index * baseButtonX + screenPadding
 
-        const newGameButton = new Rectangle("new-game", buttonX(0), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
-        newGameButton.texture = TextureManager.getTexture("cards")
-        newGameButton.onPress = () => this.onNewGamePress()
+        this.newGameButton = new Rectangle("new-game", buttonX(0), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        this.newGameButton.texture = TextureManager.getTexture("cards")
+        this.newGameButton.onPress = () => this.onNewGamePress()
 
-        const hintButton = new Rectangle("hint-game", buttonX(1), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
-        hintButton.texture = TextureManager.getTexture("hint")
-        hintButton.onPress = () => this.onHintPress()
+        this.hintButton = new Rectangle("hint-game", buttonX(1), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        this.hintButton.texture = TextureManager.getTexture("hint")
+        this.hintButton.onPress = () => this.onHintPress()
 
-        const undoButton = new Rectangle("undo-game", buttonX(2), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
-        undoButton.texture = TextureManager.getTexture("undo")
-        undoButton.onPress = () => this.onUndoPress()
+        this.undoButton = new Rectangle("undo-game", buttonX(2), Dimensions.buttonsY, 0, Dimensions.buttonSize.width, Dimensions.buttonSize.height)
+        this.undoButton.texture = TextureManager.getTexture("undo")
+        this.undoButton.onPress = () => this.onUndoPress()
 
         this.autoCompleteButton = new Rectangle("auto-complete-button",
             (Dimensions.screenSize.width - screenWidth80) / 2, Dimensions.buttonsY - Dimensions.buttonSize.height - Dimensions.gapBetweenPiles, 1,
@@ -121,9 +124,9 @@ export class SolitaireScene extends Scene {
         this.autoCompleteButton.onPress = () => this.onAutoCompletePress()
         this.autoCompleteButton.visible = false
 
-        this.objects.push(newGameButton)
-        this.objects.push(hintButton)
-        this.objects.push(undoButton)
+        this.objects.push(this.newGameButton)
+        this.objects.push(this.hintButton)
+        this.objects.push(this.undoButton)
         this.objects.push(this.autoCompleteButton)
     }
 
@@ -185,20 +188,28 @@ export class SolitaireScene extends Scene {
 
     private onNewGamePress(): void {
 
+        if (this.autoCompleting) return
+
         this.cards.forEach(card => card.reset())
         this.piles.forEach(pile => pile.reset())
         DeckGenerator.shuffle(this.cards)
         PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
         this.autoCompleteButton.visible = false
         this.autoCompleting = false
+        this.hintButton.visible = true
+        this.undoButton.visible = true
     }
 
     private onHintPress(): void {
+
+        if (this.autoCompleting) return
 
         console.log("onHintPress")
     }
 
     private onUndoPress(): void {
+
+        if (this.autoCompleting) return
 
         const action = this.actions.pop()
         if (action) this.undoAction(action)
@@ -256,10 +267,7 @@ export class SolitaireScene extends Scene {
             this.autoCompleteButton.visible = true
         }
 
-        if (this.checkVictory()) {
-
-            console.log("win!");
-        }
+        if (this.checkVictory()) this.onWin()
     }
 
     private undoAction(action: IAction): void {
@@ -328,9 +336,17 @@ export class SolitaireScene extends Scene {
             }
             else {
 
+                this.autoCompleting = false
                 clearInterval(handler)
             }
 
         }, 150)
+    }
+
+    private onWin(): void {
+
+        console.log("win!");
+        this.hintButton.visible = false
+        this.undoButton.visible = false
     }
 }

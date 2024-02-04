@@ -24,7 +24,7 @@ export class Animator {
 
     public static update(time: number, deltaTime: number): void {
 
-        Animator.animations.forEach(animation => animation.update(time))
+        Animator.animations.forEach(animation => animation.update(time, deltaTime))
         this.animations = this.animations.filter(f => !f.done)
     }
 }

@@ -6,7 +6,7 @@ export interface IAnimation {
     done: boolean
 
     init(): void
-    update(time: number): void
+    update(time: number, deltaTime: number): void
     kill(): void
     callback: (() => void) | null
 }

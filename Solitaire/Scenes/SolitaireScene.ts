@@ -24,6 +24,7 @@ import { HintGenerator } from "../Utils/HintGenerator";
 import { ShakeAnimation } from "../../Engine/Animations/ShakeAnimation";
 import { CardBlinkAnimation } from "../Animations/CardBlinkAnimation";
 import { GameOverScene } from "./GameOverScene";
+import { WinScene } from "./WinScene";
 
 export class SolitaireScene extends Scene {
 
@@ -106,6 +107,7 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
         await TextureManager.loadTexture("gameover", require("../../assets/gameover.png"))
         await TextureManager.loadTexture("new-game", require("../../assets/new-game.png"))
+        await TextureManager.loadTexture("win-text", require("../../assets/win-text.png"))
     }
 
     private createButtons(): void {
@@ -412,11 +414,15 @@ export class SolitaireScene extends Scene {
         }, 150)
     }
 
-    private onWin(): void {
+    private async onWin(): Promise<void> {
 
-        console.log("win!");
-        this.hintButton.visible = false
-        this.undoButton.visible = false
+        const winScene = <WinScene>await this.gameInstace.start(WinScene)
+
+        winScene.onNewGamePress = () => {
+
+            this.gameInstace.stop(winScene)
+            this.onNewGamePress()
+        }
     }
 
     private async onGameOver(): Promise<void> {

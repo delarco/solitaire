@@ -66,9 +66,7 @@ export class SolitaireScene extends Scene {
         this.objects.push(...this.cards)
         this.objects.push(...this.piles)
 
-        // PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
-        // PileUtils.placeCardsAllTableauWin(this.cards, this.tableauPiles, this.stockPile)
-        PileUtils.placeCardsTableauAndStockWin(this.cards, this.tableauPiles, this.stockPile)
+        PileUtils.placeCardsAnimated(this.cards, this.tableauPiles, this.stockPile)
     }
 
     private async loadTextures(): Promise<void> {
@@ -203,7 +201,7 @@ export class SolitaireScene extends Scene {
         this.cards.forEach(card => card.reset())
         this.piles.forEach(pile => pile.reset())
         DeckGenerator.shuffle(this.cards)
-        PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
+        PileUtils.placeCardsAnimated(this.cards, this.tableauPiles, this.stockPile)
     }
 
     private onHintPress(): void {

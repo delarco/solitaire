@@ -6,6 +6,7 @@ export class Color {
     public static readonly BLUE = new Color(0, 0, 1)
     public static readonly BLACK = new Color(0, 0, 0)
     public static readonly WHITE = new Color(1, 1, 1)
+    public static get YELLOW() { return new Color(1, 1, 0) }
 
     public get array() {
         return [this.red, this.green, this.blue, this.alpha]

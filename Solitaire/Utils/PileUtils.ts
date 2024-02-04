@@ -1,3 +1,5 @@
+import { Animator } from "../../Engine/Animations/Animator";
+import { MoveAnimation } from "../../Engine/Animations/MoveAnimation";
 import { Collision } from "../../Engine/Collision";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
@@ -163,5 +165,69 @@ export class PileUtils {
             card.draggable = false
             stockPile.add(card)
         }
+    }
+
+    public static placeCardsAnimated(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
+
+        console.log("[PileUtils] placeCardsAnimated");
+
+        let cardCounter = 0
+
+        const cardPile: Array<{
+            card: Card,
+            pile: IPile,
+            shouldFlip: boolean
+        }> = []
+
+        // move all cards to stock
+        cards.forEach(card => card.move(stockPile.x, stockPile.y))
+
+        // add cards to tableau piles
+        for (let pileIndex = 0; pileIndex < 7; pileIndex++) {
+
+            const pile = tableauPiles[pileIndex]
+
+            for (let pileCardCounter = 0; pileCardCounter <= pileIndex; pileCardCounter++) {
+
+                const card = cards[cardCounter++]
+
+                card.visible = true
+                card.draggable = false
+                cardPile.push({ card, pile, shouldFlip: false })
+            }
+
+            cardPile[cardPile.length - 1].shouldFlip = true
+        }
+
+        // add cards to stock pile
+        for (let cardIndex = cardCounter; cardIndex < cards.length; cardIndex++) {
+
+            const card = cards[cardCounter++]
+            card.visible = false
+            card.draggable = false
+            stockPile.add(card)
+        }
+
+        const moveNext = () => {
+
+            const pair = cardPile.shift()
+            if (pair) {
+
+                pair.pile.add(pair.card)
+                if (pair.shouldFlip) pair.card.flip()
+            }
+        }
+
+        const handler = setInterval(() => {
+
+            if (cardPile.length > 0) {
+
+                moveNext()
+            }
+            else {
+
+                clearInterval(handler)
+            }
+        }, 30)
     }
 }

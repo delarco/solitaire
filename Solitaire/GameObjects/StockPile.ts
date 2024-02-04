@@ -1,3 +1,5 @@
+import { Animator } from "../../Engine/Animations/Animator";
+import { MoveAnimation } from "../../Engine/Animations/MoveAnimation";
 import { Color } from "../../Engine/Color";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 import { TextureManager } from "../../Engine/TextureManager";
@@ -51,8 +53,11 @@ export class StockPile extends Rectangle implements IPile {
 
         card.pile = this
 
-        card.move(this.x, this.y)
-        card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+        Animator.add(new MoveAnimation(
+            card,
+            this.x, this.y,
+            null, card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+        ))
 
         card.flip()
 
@@ -65,8 +70,12 @@ export class StockPile extends Rectangle implements IPile {
 
         card.pile = this
 
-        card.move(this.firstCardBaseX, this.y)
-        card.z = Card.CARD_DEFAULT_DEPTH + this._currentIndex + 1
+        Animator.add(new MoveAnimation(
+            card,
+            this.firstCardBaseX, this.y,
+            null, Card.CARD_DEFAULT_DEPTH + this._currentIndex + 1
+        ))
+
         this.cards.splice(this._currentIndex + 1, 0, card)
 
         this._currentIndex++
@@ -74,7 +83,10 @@ export class StockPile extends Rectangle implements IPile {
         // move previous cards
         this.getPreviousCards().forEach((prevCard, index) => {
 
-            prevCard.move(this.firstCardBaseX - (index + 1) * Math.floor(Dimensions.cardSize.width / 2), null)
+            Animator.add(new MoveAnimation(
+                prevCard,
+                this.firstCardBaseX - (index + 1) * Math.floor(Dimensions.cardSize.width / 2), null
+            ))
         })
     }
 
@@ -86,7 +98,11 @@ export class StockPile extends Rectangle implements IPile {
         // move previous cards
         this.getPreviousCards().forEach((prevCard, index) => {
 
-            prevCard.move(this.firstCardBaseX - index * Math.floor(Dimensions.cardSize.width / 2), null)
+            // prevCard.move(this.firstCardBaseX - index * Math.floor(Dimensions.cardSize.width / 2), null)
+            Animator.add(new MoveAnimation(
+                prevCard,
+                this.firstCardBaseX - index * Math.floor(Dimensions.cardSize.width / 2), null
+            ))
         })
 
         this._currentIndex--
@@ -126,7 +142,7 @@ export class StockPile extends Rectangle implements IPile {
     public hideCurrentCard(): void {
 
         if (this.currentCard) {
-            
+
             this.currentCard.visible = false
             this.texture = TextureManager.getTexture("card")
         }
@@ -134,7 +150,11 @@ export class StockPile extends Rectangle implements IPile {
         // move previous cards
         this.getPreviousCards().forEach((prevCard, index) => {
 
-            prevCard.move(this.firstCardBaseX - index * Math.floor(Dimensions.cardSize.width / 2), null)
+            // prevCard.move(this.firstCardBaseX - index * Math.floor(Dimensions.cardSize.width / 2), null)
+            Animator.add(new MoveAnimation(
+                prevCard,
+                this.firstCardBaseX - index * Math.floor(Dimensions.cardSize.width / 2), null
+            ))
         })
 
         this._currentIndex--
@@ -147,13 +167,20 @@ export class StockPile extends Rectangle implements IPile {
         const nextCard = this.cards[this._currentIndex]
         nextCard.visible = true
         nextCard.draggable = true
-        nextCard.move(this.firstCardBaseX, null)
+
+        Animator.add(new MoveAnimation(
+            nextCard,
+            this.firstCardBaseX, null
+        ))
 
         // move previous cards
         this.getPreviousCards().forEach((prevCard, index) => {
 
             prevCard.draggable = false
-            prevCard.move(this.firstCardBaseX - (index + 1) * Math.floor(Dimensions.cardSize.width / 2), null)
+            Animator.add(new MoveAnimation(
+                prevCard,
+                this.firstCardBaseX - (index + 1) * Math.floor(Dimensions.cardSize.width / 2), null
+            ))
         })
 
         // if it was the last card, replace pile texture
@@ -179,7 +206,11 @@ export class StockPile extends Rectangle implements IPile {
 
     private hideAllCards(): void {
 
-        for (const card of this.cards) card.visible = false
+        this.cards.forEach(card => Animator.add(new MoveAnimation(
+            card, this.x, null, null, null,
+            () => card.visible = false
+        )))
+
         this.texture = TextureManager.getTexture("card")
         this._currentIndex = -1
     }

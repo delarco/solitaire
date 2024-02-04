@@ -280,14 +280,17 @@ export class SolitaireScene extends Scene {
         let pileFound: IPile | null = null
 
         // look for foundation pile to fit
-        for (const pile of this.foundationPiles) {
+        if (!card.child) {
 
-            if (pile === card.pile) continue
+            for (const pile of this.foundationPiles) {
 
-            if (pile.canAdd(card)) {
+                if (pile === card.pile) continue
 
-                pileFound = pile
-                break
+                if (pile.canAdd(card)) {
+
+                    pileFound = pile
+                    break
+                }
             }
         }
 

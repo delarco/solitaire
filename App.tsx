@@ -6,6 +6,7 @@ import { ISize } from './Engine/interfaces/ISize';
 import { GameOverScene } from './Solitaire/Scenes/GameOverScene';
 import { WinScene } from './Solitaire/Scenes/WinScene';
 import { Color } from './Engine/Color';
+import { Dimensions as GameDimensions } from "./Solitaire/Utils/Dimensions";
 
 export default function App() {
 
@@ -19,6 +20,9 @@ export default function App() {
   function onContextCreate(gl: ExpoWebGLRenderingContext): void {
 
     console.log(`[App] onContextCreate ${screenSize.width}x${screenSize.height}`);
+
+    GameDimensions.init({ width: gl.drawingBufferWidth, height: gl.drawingBufferHeight })
+    GameDimensions.print()
 
     game = new Game(gl, screenSize, [
       SolitaireScene,

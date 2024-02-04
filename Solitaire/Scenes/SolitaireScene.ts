@@ -45,8 +45,6 @@ export class SolitaireScene extends Scene {
             new ShaderInfo(ShaderType.FRAGMENT_SHADER, fragmentShaderSourceCode),
         ]
         super(resolution, shaders)
-        Dimensions.init(resolution)
-        Dimensions.print()
     }
 
     public override async init(): Promise<void> {

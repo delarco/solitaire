@@ -29,7 +29,7 @@ export class Rectangle implements IGameObject {
         public z: number,
         public width: number,
         public height: number,
-        private color = Color.WHITE
+        public color = Color.WHITE
     ) {
 
         const vertexBuffer = Game.gl.createBuffer()

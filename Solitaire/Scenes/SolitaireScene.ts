@@ -23,6 +23,7 @@ import { ColorBlinkAnimation } from "../../Engine/Animations/ColorBlinkAnimation
 import { HintGenerator } from "../Utils/HintGenerator";
 import { ShakeAnimation } from "../../Engine/Animations/ShakeAnimation";
 import { CardBlinkAnimation } from "../Animations/CardBlinkAnimation";
+import { GameOverScene } from "./GameOverScene";
 
 export class SolitaireScene extends Scene {
 
@@ -45,6 +46,10 @@ export class SolitaireScene extends Scene {
             new ShaderInfo(ShaderType.FRAGMENT_SHADER, fragmentShaderSourceCode),
         ]
         super(resolution, shaders)
+    }
+
+    public preload(): void {
+
     }
 
     public override async init(): Promise<void> {
@@ -98,6 +103,9 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("J", require("../../assets/J.png"))
         await TextureManager.loadTexture("Q", require("../../assets/Q.png"))
         await TextureManager.loadTexture("K", require("../../assets/K.png"))
+        await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
+        await TextureManager.loadTexture("gameover", require("../../assets/gameover.png"))
+        await TextureManager.loadTexture("new-game", require("../../assets/new-game.png"))
     }
 
     private createButtons(): void {
@@ -411,10 +419,14 @@ export class SolitaireScene extends Scene {
         this.undoButton.visible = false
     }
 
-    private onGameOver(): void {
+    private async onGameOver(): Promise<void> {
 
-        console.log("gameover!");
-        this.hintButton.visible = false
-        this.undoButton.visible = false
+        const gameoverScene = <GameOverScene>await this.gameInstace.start(GameOverScene)
+
+        gameoverScene.onNewGamePress = () => {
+
+            this.gameInstace.stop(gameoverScene)
+            this.onNewGamePress()
+        }
     }
 }

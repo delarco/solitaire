@@ -22,6 +22,7 @@ import { Animator } from "../../Engine/Animations/Animator";
 import { ColorBlinkAnimation } from "../../Engine/Animations/ColorBlinkAnimation";
 import { HintGenerator } from "../Utils/HintGenerator";
 import { ShakeAnimation } from "../../Engine/Animations/ShakeAnimation";
+import { CardBlinkAnimation } from "../Animations/CardBlinkAnimation";
 
 export class SolitaireScene extends Scene {
 
@@ -77,6 +78,7 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("card", require("../../assets/card.png"))
         await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
         await TextureManager.loadTexture("card-empty", require("../../assets/card-empty.png"))
+        await TextureManager.loadTexture("card-blink", require("../../assets/card-blink.png"))
         await TextureManager.loadTexture("clubs", require("../../assets/clubs.png"))
         await TextureManager.loadTexture("diamonds", require("../../assets/diamonds.png"))
         await TextureManager.loadTexture("hearts", require("../../assets/hearts.png"))
@@ -223,6 +225,7 @@ export class SolitaireScene extends Scene {
         DeckGenerator.shuffle(this.cards)
 
         this.placingCards = true
+        // PileUtils.placeCards(
         PileUtils.placeCardsAnimated(
             this.cards,
             this.tableauPiles,
@@ -237,13 +240,27 @@ export class SolitaireScene extends Scene {
 
         const hint = HintGenerator.check(this.tableauPiles, this.foundationPiles, this.stockPile)
 
-        if(!hint) {
+        if (!hint) {
 
             this.onGameOver()
             return
         }
 
-        console.log(hint?.card.id, hint?.pile.id);
+        if (hint.card.pile instanceof TableauPile) {
+
+            Animator.add(new CardBlinkAnimation(hint.card))
+        }
+        else if (hint.card.pile instanceof StockPile) {
+
+            if (this.stockPile.currentCard === hint.card) {
+
+                Animator.add(new CardBlinkAnimation(hint.card))
+            }
+            else {
+
+                Animator.add(new CardBlinkAnimation(this.stockPile))
+            }
+        }
     }
 
     private onUndoPress(): void {

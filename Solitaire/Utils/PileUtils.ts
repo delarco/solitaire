@@ -193,6 +193,7 @@ export class PileUtils {
 
                 card.visible = true
                 card.draggable = false
+                card.z = Dimensions.MOVING_CARD_DEPTH - cardCounter
                 cardPile.push({ card, pile, shouldFlip: false })
             }
 

@@ -28,6 +28,7 @@ export class SolitaireScene extends Scene {
     private stockPile!: StockPile
     private actions: Array<IAction> = []
     private autoCompleteButton!: Rectangle
+    private autoCompleting = false
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -61,7 +62,8 @@ export class SolitaireScene extends Scene {
         this.objects.push(...this.piles)
 
         // PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
-        PileUtils.placeCardsWin(this.cards, this.tableauPiles, this.stockPile)
+        // PileUtils.placeCardsAllTableauWin(this.cards, this.tableauPiles, this.stockPile)
+        PileUtils.placeCardsTableauAndStockWin(this.cards, this.tableauPiles, this.stockPile)
     }
 
     private async loadTextures(): Promise<void> {
@@ -188,6 +190,7 @@ export class SolitaireScene extends Scene {
         DeckGenerator.shuffle(this.cards)
         PileUtils.placeCards(this.cards, this.tableauPiles, this.stockPile)
         this.autoCompleteButton.visible = false
+        this.autoCompleting = false
     }
 
     private onHintPress(): void {
@@ -248,7 +251,7 @@ export class SolitaireScene extends Scene {
         action.execute()
         this.actions.push(action)
 
-        if (this.checkAutoCompleteCondition()) {
+        if (!this.autoCompleting && this.checkAutoCompleteCondition()) {
 
             this.autoCompleteButton.visible = true
         }
@@ -271,7 +274,63 @@ export class SolitaireScene extends Scene {
 
     private onAutoCompletePress(): void {
 
-        console.log("onAutoCompletePress");
+        if (this.autoCompleting) return
 
+        this.autoCompleteButton.visible = false
+        this.autoCompleting = true
+
+        const nextMove = (): IAction | null => {
+
+            for (const foundation of this.foundationPiles) {
+
+                for (const card of this.tableauPiles.map(tableau => tableau.last)) {
+
+                    if (!card) continue
+
+                    if (foundation.canAdd(card)) {
+
+                        return new MoveAction(card, foundation)
+                    }
+                }
+            }
+
+            if (this.stockPile.currentCard === null && this.stockPile.cards.length > 0) {
+
+                return new StockNextAction(this.stockPile)
+            }
+
+            if (this.stockPile.currentCard !== null) {
+
+                for (const foundation of this.foundationPiles) {
+
+                    if (foundation.canAdd(this.stockPile.currentCard)) {
+
+                        return new MoveAction(this.stockPile.currentCard, foundation)
+                    }
+                }
+            }
+
+            if (this.stockPile.cards.length > 0) {
+
+                return new StockNextAction(this.stockPile)
+            }
+
+            return null
+        }
+
+        const handler = setInterval(() => {
+
+            const moveAction = nextMove()
+
+            if (moveAction) {
+
+                this.executeAction(moveAction)
+            }
+            else {
+
+                clearInterval(handler)
+            }
+
+        }, 150)
     }
 }

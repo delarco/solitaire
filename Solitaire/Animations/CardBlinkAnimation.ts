@@ -1,11 +1,9 @@
 import { Color } from "../../Engine/Color"
+import { Container } from "../../Engine/GameObjects/Container"
 import { Rectangle } from "../../Engine/GameObjects/Rectangle"
 import { TextureManager } from "../../Engine/TextureManager"
 import { IAnimation } from "../../Engine/interfaces/IAnimation"
-import { IGameObject } from "../../Engine/interfaces/IGameObject"
 import { IPosition } from "../../Engine/interfaces/IPosition"
-import { Card } from "../GameObjects/Card"
-import { Dimensions } from "../Utils/Dimensions"
 
 export class CardBlinkAnimation implements IAnimation {
 
@@ -19,7 +17,7 @@ export class CardBlinkAnimation implements IAnimation {
     private readonly blinkCounterMax = 4
 
     constructor(
-        public gameObject: Card,
+        public gameObject: Container,
         public callback: (() => void) | null = null
     ) {
 
@@ -35,7 +33,7 @@ export class CardBlinkAnimation implements IAnimation {
         )
 
         this.border.texture = TextureManager.getTexture("card-blink")
-        this.gameObject.add(this.border)
+        this.gameObject.addObject(this.border)
     }
 
     public init(): void {
@@ -45,7 +43,7 @@ export class CardBlinkAnimation implements IAnimation {
 
     public kill(): void {
 
-        this.gameObject.remove(this.border)
+        this.gameObject.removeObject(this.border)
         this.done = true
         return
     }

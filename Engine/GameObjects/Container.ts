@@ -47,13 +47,13 @@ export class Container extends Rectangle {
 
     public onPress(): void { }
 
-    public add(gameObject: IGameObject): void {
+    public addObject(gameObject: IGameObject): void {
 
         gameObject.move(this.x + gameObject.x, this.y + gameObject.y, this.z + (gameObject.z || 0))
         this.objects.push(gameObject)
     }
 
-    public remove(gameObject: IGameObject): void {
+    public removeObject(gameObject: IGameObject): void {
 
         this.objects = this.objects.filter(obj => obj !== gameObject)
     }

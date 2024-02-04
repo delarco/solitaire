@@ -6,6 +6,7 @@ import { IPosition } from "./interfaces/IPosition";
 import { TouchEventHandler } from "./TouchEventHandler";
 import { TextureManager } from "./TextureManager";
 import { Color } from "./Color";
+import { Animator } from "./Animations/Animator";
 
 export class Game {
 
@@ -102,6 +103,7 @@ export class Game {
 
         if (Platform.OS === "web") window.document.title = `fps: ${this.fps.toFixed(2)}`
 
+        Animator.update(time, deltaTime)
         for (const scene of this.renderingScenes) scene.update(time, deltaTime)
     }
 

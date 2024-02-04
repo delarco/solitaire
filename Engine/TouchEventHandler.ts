@@ -86,4 +86,11 @@ export class TouchEventHandler {
         TouchEventHandler.gameObjectMoved = true
         TouchEventHandler.selectedGameObject.move(newPosition.x, newPosition.y)
     }
+
+    public static reset(): void {
+
+        this.selectedGameObject = null
+        this.offsets = { x: 0, y: 0 }
+        this.gameObjectMoved = false
+    }
 }

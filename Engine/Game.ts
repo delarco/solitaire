@@ -50,7 +50,9 @@ export class Game {
 
     public async start(sceneType: typeof Scene): Promise<Scene> {
 
-        console.log("[Game] start")
+        console.log("[Game] start", sceneType.name)
+
+        TouchEventHandler.reset()
 
         const scene = new sceneType(this.resolution)
         scene.gameInstace = this
@@ -142,7 +144,6 @@ export class Game {
 
         const scene = this.lastRenderingScenes
         if (!scene) return
-
         TouchEventHandler.onTouchEnd(scene, drawingPosition)
     }
 
@@ -150,7 +151,6 @@ export class Game {
 
         const scene = this.lastRenderingScenes
         if (!scene) return
-
         const screenPosition: IPosition = {
             x: event.nativeEvent.touches[0].pageX,
             y: event.nativeEvent.touches[0].pageY

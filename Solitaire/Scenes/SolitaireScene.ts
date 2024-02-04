@@ -21,6 +21,7 @@ import { StockNextAction } from "../Actions/StockNextAction";
 import { Animator } from "../../Engine/Animations/Animator";
 import { ColorBlinkAnimation } from "../../Engine/Animations/ColorBlinkAnimation";
 import { HintGenerator } from "../Utils/HintGenerator";
+import { ShakeAnimation } from "../../Engine/Animations/ShakeAnimation";
 
 export class SolitaireScene extends Scene {
 
@@ -293,6 +294,10 @@ export class SolitaireScene extends Scene {
         if (pileFound) {
 
             this.executeAction(new MoveAction(card, pileFound))
+        }
+        else {
+
+            Animator.add(new ShakeAnimation(card))
         }
 
     }

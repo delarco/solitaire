@@ -20,6 +20,7 @@ import { MoveAction } from "../Actions/MoveAction";
 import { StockNextAction } from "../Actions/StockNextAction";
 import { Animator } from "../../Engine/Animations/Animator";
 import { ColorBlinkAnimation } from "../../Engine/Animations/ColorBlinkAnimation";
+import { HintGenerator } from "../Utils/HintGenerator";
 
 export class SolitaireScene extends Scene {
 
@@ -235,7 +236,15 @@ export class SolitaireScene extends Scene {
 
         if (this.autoCompleting) return
 
+        const hint = HintGenerator.check(this.tableauPiles, this.foundationPiles, this.stockPile)
 
+        if(!hint) {
+
+            this.onGameOver()
+            return
+        }
+
+        console.log(hint?.card.id, hint?.pile.id);
     }
 
     private onUndoPress(): void {
@@ -377,6 +386,13 @@ export class SolitaireScene extends Scene {
     private onWin(): void {
 
         console.log("win!");
+        this.hintButton.visible = false
+        this.undoButton.visible = false
+    }
+
+    private onGameOver(): void {
+
+        console.log("gameover!");
         this.hintButton.visible = false
         this.undoButton.visible = false
     }

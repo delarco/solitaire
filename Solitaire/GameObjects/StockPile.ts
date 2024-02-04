@@ -1,7 +1,7 @@
 import { Animator } from "../../Engine/Animations/Animator";
 import { MoveAnimation } from "../../Engine/Animations/MoveAnimation";
 import { Color } from "../../Engine/Color";
-import { Rectangle } from "../../Engine/GameObjects/Rectangle";
+import { Container } from "../../Engine/GameObjects/Container";
 import { TextureManager } from "../../Engine/TextureManager";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
@@ -10,7 +10,7 @@ import { Dimensions } from "../Utils/Dimensions";
 import { IPile } from "../interfaces/IPile";
 import { Card } from "./Card";
 
-export class StockPile extends Rectangle implements IPile {
+export class StockPile extends Container implements IPile {
 
     private static readonly MAX_VISIBLE = 3
 

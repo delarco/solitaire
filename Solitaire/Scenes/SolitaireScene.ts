@@ -18,6 +18,8 @@ import { IAction } from "../interfaces/IAction";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 import { MoveAction } from "../Actions/MoveAction";
 import { StockNextAction } from "../Actions/StockNextAction";
+import { Animator } from "../../Engine/Animations/Animator";
+import { ColorBlinkAnimation } from "../../Engine/Animations/ColorBlinkAnimation";
 
 export class SolitaireScene extends Scene {
 
@@ -131,6 +133,23 @@ export class SolitaireScene extends Scene {
     }
 
     public override update(): void { }
+
+    public onGameObjectTouchStart(gameObject: IGameObject): void {
+
+        const buttonIdList = [
+            this.newGameButton.id,
+            this.hintButton.id,
+            this.undoButton.id
+        ]
+
+        if (buttonIdList.includes(gameObject.id)) {
+
+            if (gameObject instanceof Rectangle) {
+
+                Animator.add(new ColorBlinkAnimation(gameObject))
+            }
+        }
+    }
 
     public onGameObjectStartDrag(gameObject: IGameObject): void {
 

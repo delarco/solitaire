@@ -2,6 +2,8 @@ import { ISize } from "../../Engine/interfaces/ISize"
 
 export class Dimensions {
 
+    public static readonly MOVING_CARD_DEPTH = 100
+
     public static screenSize: ISize
     public static screenPaddingTop: number
     public static screenPaddingBottom: number

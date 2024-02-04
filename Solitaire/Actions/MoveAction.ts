@@ -1,6 +1,6 @@
 import { Card } from "../GameObjects/Card";
 import { StockPile } from "../GameObjects/StockPile";
-import { SolitaireScene } from "../Scenes/SolitaireScene";
+import { Dimensions } from "../Utils/Dimensions";
 import { IAction } from "../interfaces/IAction";
 import { IPile } from "../interfaces/IPile";
 
@@ -27,7 +27,7 @@ export class MoveAction implements IAction {
 
     public execute(): void {
 
-        this.card.setDepth(SolitaireScene.MOVING_CARD_DEPTH)
+        this.card.setDepth(Dimensions.MOVING_CARD_DEPTH)
         this.newPile.add(this.card)
     }
 

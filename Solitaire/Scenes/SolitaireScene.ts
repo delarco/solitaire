@@ -25,8 +25,6 @@ import { ShakeAnimation } from "../../Engine/Animations/ShakeAnimation";
 
 export class SolitaireScene extends Scene {
 
-    public static readonly MOVING_CARD_DEPTH = 100
-
     private cards: Array<Card> = []
     private piles: Array<IPile> = []
     private tableauPiles: Array<TableauPile> = []
@@ -160,7 +158,7 @@ export class SolitaireScene extends Scene {
 
             gameObject.savePosition()
             gameObject.saveDepth()
-            gameObject.setDepth(SolitaireScene.MOVING_CARD_DEPTH)
+            gameObject.setDepth(Dimensions.MOVING_CARD_DEPTH)
         }
 
         // console.log(`[SolitaireScene] onGameObjectStartDrag at ${gameObject.x}, ${gameObject.y}`);

@@ -6,7 +6,7 @@ import { TextureManager } from "../../Engine/TextureManager";
 import { IPosition } from "../../Engine/interfaces/IPosition";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { PileType } from "../Enums/PileType";
-import { SolitaireScene } from "../Scenes/SolitaireScene";
+import { Dimensions } from "../Utils/Dimensions";
 import { IPile } from "../interfaces/IPile";
 import { Card } from "./Card";
 
@@ -50,7 +50,7 @@ export class FoundationPile extends Rectangle implements IPile {
             card,
             this.x,
             this.y,
-            SolitaireScene.MOVING_CARD_DEPTH, card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
+            Dimensions.MOVING_CARD_DEPTH, card.z = Card.CARD_DEFAULT_DEPTH + this.cards.length
         ))
 
         this.cards.push(card)

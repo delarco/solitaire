@@ -129,11 +129,11 @@ export class Game {
         TouchEventHandler.onTouchStart(scene, drawingPosition)
     }
 
-    public onTouchEnd(event: TouchEvent): void {
+    public onTouchEnd(event: GestureResponderEvent): void {
 
         const screenPosition: IPosition = {
-            x: event.changedTouches[0].pageX,
-            y: event.changedTouches[0].pageY
+            x: event.nativeEvent.changedTouches[0].pageX,
+            y: event.nativeEvent.changedTouches[0].pageY
         }
 
         const drawingPosition = this.convertScreenToDrawingPosition(screenPosition)

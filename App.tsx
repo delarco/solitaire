@@ -24,13 +24,9 @@ export default function App() {
     GameDimensions.init({ width: gl.drawingBufferWidth, height: gl.drawingBufferHeight })
     GameDimensions.print()
 
-    game = new Game(gl, screenSize, [
-      SolitaireScene,
-      GameOverScene,
-      WinScene
-    ])
+    game = new Game(gl, screenSize)
     game.backgroundColor = new Color(0.215, 0.635, 0.313)
-    game.start()
+    game.start(SolitaireScene)
   }
 
   return (

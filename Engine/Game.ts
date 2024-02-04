@@ -32,7 +32,6 @@ export class Game {
     constructor(
         gl: ExpoWebGLRenderingContext,
         private screenSize: ISize,
-        private scenes: Array<typeof Scene>
     ) {
 
         Game._gl = gl
@@ -49,19 +48,22 @@ export class Game {
         TextureManager.init(gl)
     }
 
-    public async start(): Promise<void> {
+    public async start(sceneType: typeof Scene): Promise<Scene> {
 
         console.log("[Game] start")
 
-        if (this.scenes.length > 0) {
-
-            const SceneType = this.scenes[0]
-            const scene = new SceneType(this.resolution)
-            await scene.init()
-            this.renderingScenes.push(scene)
-        }
-
+        const scene = new sceneType(this.resolution)
+        scene.gameInstace = this
+        await scene.init()
+        this.renderingScenes.push(scene)
         this.animate()
+
+        return scene
+    }
+
+    public stop(scene: Scene): void {
+
+        this.renderingScenes = this.renderingScenes.filter(f => f !== scene)
     }
 
     private animate(): void {

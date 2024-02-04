@@ -3,9 +3,11 @@ import { ShaderProgram } from "./webgl/ShaderProgram";
 import { ShaderInfo } from "./webgl/ShaderInfo";
 import { IGameObject } from "./interfaces/IGameObject";
 import { IPosition } from "./interfaces/IPosition";
+import { Game } from "./Game";
 
 export class Scene {
 
+    public gameInstace!: Game
     public shaderProgram: ShaderProgram
     public objects: Array<IGameObject> = []
 
@@ -16,6 +18,8 @@ export class Scene {
 
         this.shaderProgram = new ShaderProgram(shadersInfo)
     }
+
+    public preload(): void { }
 
     public async init(): Promise<void> { }
 

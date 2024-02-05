@@ -22,8 +22,10 @@ export class Game {
         return this.renderingScenes[length - 1]
     }
 
-    private fps: number = 0
+    private _fps: number = 0
     private lastTime = 0
+
+    public get fps() { return this._fps }
 
     private resolution: ISize
 
@@ -103,7 +105,7 @@ export class Game {
         const now = time * 0.001
         const deltaTime = now - this.lastTime
         this.lastTime = now
-        this.fps = 1 / deltaTime
+        this._fps = 1 / deltaTime
 
         if (Platform.OS === "web") window.document.title = `fps: ${this.fps.toFixed(2)}`
 

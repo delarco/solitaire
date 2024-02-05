@@ -41,6 +41,7 @@ export class SolitaireScene extends Scene {
     private autoCompleteButton!: Text
     private autoCompleting = false
     private placingCards = false
+    private fpsText!: Text
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -66,14 +67,18 @@ export class SolitaireScene extends Scene {
         this.foundationPiles = PileUtils.generateFoundationPiles()
         this.stockPile = PileUtils.generateStockPile()
 
-        this.stockPile.onPress = () => this.onStockPilePress()
-
         this.piles.push(...this.tableauPiles)
         this.piles.push(...this.foundationPiles)
         this.piles.push(this.stockPile)
 
+        this.stockPile.onPress = () => this.onStockPilePress()
+
+        const fpsFontSize = Dimensions.fontSizeToFitWidth("fps: 999", Dimensions.screenSize.width * 0.2)
+        this.fpsText = new Text("fps: 999", 0, 0, 0, fpsFontSize, TextureManager.getTexture("yellow-font")!)
+
         this.objects.push(...this.cards)
         this.objects.push(...this.piles)
+        this.objects.push(this.fpsText)
 
         this.onNewGamePress()
     }
@@ -142,7 +147,10 @@ export class SolitaireScene extends Scene {
         this.objects.push(this.autoCompleteButton)
     }
 
-    public override update(): void { }
+    public override update(): void {
+
+        this.fpsText.text = `fps: ${this.gameInstace.fps.toFixed(0)}`
+    }
 
     public onGameObjectTouchStart(gameObject: IGameObject): void {
 
@@ -192,7 +200,6 @@ export class SolitaireScene extends Scene {
 
             // can't add to collided piles
             gameObject.restorePosition()
-            gameObject.restoreDepth()
         }
 
         // console.log(`[SolitaireScene] onGameObjectDrop at ${position.x}, ${position.y}`);
@@ -234,7 +241,7 @@ export class SolitaireScene extends Scene {
         this.placingCards = true
         // PileUtils.placeCards(
         PileUtils.placeCardsAnimated(
-        // PileUtils.placeCardsAllTableauWin(
+            // PileUtils.placeCardsAllTableauWin(
             this.cards,
             this.tableauPiles,
             this.stockPile,

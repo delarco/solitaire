@@ -7,15 +7,21 @@ import { TextureManager } from "../../Engine/TextureManager";
 import { IGameObject } from "../../Engine/interfaces/IGameObject";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { ShaderInfo, ShaderType } from "../../Engine/webgl/ShaderInfo";
+import { Text } from "../GameObjects/Text";
 import { fragmentShaderSourceCode } from "../Shaders/FragmentShader";
 import { vertexShaderSourceCode } from "../Shaders/VertexShader";
 import { Dimensions } from "../Utils/Dimensions";
 
 export class WinScene extends Scene {
 
-    private text!: Rectangle
+    private congratulation!: Text
     private background!: Rectangle
-    private newGameButton!: Rectangle
+    private newGameButton!: Text
+
+    private moves!: Text
+    private time!: Text
+    private score!: Text
+    private record!: Text
 
     public onNewGamePress: (() => void) | null = null
 
@@ -39,11 +45,6 @@ export class WinScene extends Scene {
             height: Math.floor(Dimensions.screenSize.width * 0.7),
         }
 
-        const screen30: ISize = {
-            width: Math.floor(Dimensions.screenSize.width * 0.3),
-            height: Math.floor(Dimensions.screenSize.width * 0.3),
-        }
-
         this.background = new Rectangle("background",
             (Dimensions.screenSize.width - screen80.width) / 2,
             ((Dimensions.screenSize.height - screen70.height) / 10) * 3,
@@ -52,32 +53,43 @@ export class WinScene extends Scene {
             screen70.height,
             new Color(0x2d / 255, 0x7b / 255, 0x40 / 255)
         )
-        this.background.texture = TextureManager.getTexture("card-flipped") //await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
+        this.background.texture = TextureManager.getTexture("card-flipped")
+        
+        const whiteFontTexture = TextureManager.getTexture("white-font")!
+        const yellowFontTexture = TextureManager.getTexture("yellow-font")!
 
-        this.text = new Rectangle("win-text",
-            (Dimensions.screenSize.width - screen70.width) / 2,
-            ((Dimensions.screenSize.height - screen70.height) / 10) * 4,
-            1,
-            screen70.width, screen70.width * 0.15,
-            Color.WHITE
-        )
-        this.text.texture = TextureManager.getTexture("win-text") //await TextureManager.loadTexture("gameover", require("../../assets/gameover.png"))
+        this.congratulation = new Text("CONGRATULATIONS!", 0, 0, 1, 32, yellowFontTexture)
+        this.newGameButton = new Text("NEW GAME", 0, 200, 2, 48, yellowFontTexture)
+        this.moves = new Text("MOVES:  1", 0, 0, 1, 32, whiteFontTexture)
+        this.time = new Text("TIME:   2", 0, 0, 1, 32, whiteFontTexture)
+        this.score = new Text("SCORE:  3", 0, 0, 1, 32, whiteFontTexture)
+        this.record = new Text("RECORD: 4", 0, 0, 1, 32, whiteFontTexture)
 
-        const newGameButtonHeight = screen30.width * 0.16
-        this.newGameButton = new Rectangle("new-game-button",
-            (Dimensions.screenSize.width - screen30.width) / 2,
-            this.background.y + this.background.height - (newGameButtonHeight * 2),
-            2,
-            screen30.width, newGameButtonHeight,
-            Color.WHITE
+        this.congratulation.move(
+            (Dimensions.screenSize.width - this.congratulation.width) / 2,
+            ((Dimensions.screenSize.height - screen70.height) / 10) * 4
         )
-        this.newGameButton.texture = TextureManager.getTexture("new-game") //await TextureManager.loadTexture("new-game", require("../../assets/new-game.png"))
+
+        this.newGameButton.move(
+            (Dimensions.screenSize.width - this.newGameButton.width) / 2,
+            this.background.y + this.background.height - (this.newGameButton.height * 3),
+        )
+
         this.newGameButton.onPress = () => {
             if (this.onNewGamePress) this.onNewGamePress()
         }
 
+        this.moves.move(this.congratulation.x, this.congratulation.y + (this.congratulation.height * 2))
+        this.time.move(this.congratulation.x, this.moves.y + (this.moves.height * 1.5))
+        this.score.move(this.congratulation.x, this.time.y + (this.time.height * 1.5))
+        this.record.move(this.congratulation.x, this.score.y + (this.score.height * 1.5))
+
         this.objects.push(this.background)
-        this.objects.push(this.text)
+        this.objects.push(this.congratulation)
+        this.objects.push(this.moves)
+        this.objects.push(this.time)
+        this.objects.push(this.score)
+        this.objects.push(this.record)
         this.objects.push(this.newGameButton)
     }
 

@@ -1,10 +1,15 @@
 import { StockPile } from "../GameObjects/StockPile";
+import { ScoreUtils } from "../Utils/ScoreUtils";
 import { IAction } from "../interfaces/IAction";
 
-// TODO: implement StockClearAction
 export class StockClearAction implements IAction {
 
-    constructor(private stockPile: StockPile) { }
+    public points: number
+
+    constructor(private stockPile: StockPile) {
+
+        this.points = ScoreUtils.stockResetPoints(stockPile)
+    }
 
     public execute(): void {
 

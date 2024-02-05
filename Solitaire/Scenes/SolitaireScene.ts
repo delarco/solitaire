@@ -28,6 +28,8 @@ import { WinScene } from "./WinScene";
 import { Text } from "../GameObjects/Text";
 import { StockClearAction } from "../Actions/StockClearAction";
 import { TimeUtis } from "../Utils/TimeUtils";
+import { Score } from "../classes/Score";
+import { ScoreUtils } from "../Utils/ScoreUtils";
 
 export class SolitaireScene extends Scene {
 
@@ -43,7 +45,7 @@ export class SolitaireScene extends Scene {
     private autoCompleteButton!: Text
     private autoCompleting = false
     private placingCards = false
-    
+
     private fpsText!: Text
     private timeText!: Text
     private scoreText!: Text
@@ -52,7 +54,7 @@ export class SolitaireScene extends Scene {
     private startTime = new Date().getTime()
     private endTime: number = 0
     private moves = 0
-    private score = 0
+    private score: Score = new Score()
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -87,7 +89,7 @@ export class SolitaireScene extends Scene {
 
         this.objects.push(...this.cards)
         this.objects.push(...this.piles)
-        
+
         this.onNewGamePress()
     }
 
@@ -166,15 +168,15 @@ export class SolitaireScene extends Scene {
 
         const timePosition = Dimensions.centerPosition(Dimensions.textSize("     1:23:45", fontSize), Dimensions.screenSize50)
         const timeLabel = new Text("TIME:", timePosition.x, initialY, 0, fontSize, TextureManager.getTexture("white-font")!)
-        this.timeText= new Text("     1:23:45", timePosition.x, initialY, 0, fontSize, TextureManager.getTexture("yellow-font")!)
-        
+        this.timeText = new Text("     1:23:45", timePosition.x, initialY, 0, fontSize, TextureManager.getTexture("yellow-font")!)
+
         const movesPosition = { x: timePosition.x + Dimensions.screenSize50.width }
         const movesLabel = new Text("MOVES:", movesPosition.x, initialY, 0, fontSize, TextureManager.getTexture("white-font")!)
-        this.movesText= new Text("      999", movesPosition.x, initialY, 0, fontSize, TextureManager.getTexture("yellow-font")!)
-        
+        this.movesText = new Text("      999", movesPosition.x, initialY, 0, fontSize, TextureManager.getTexture("yellow-font")!)
+
         const scorePosition = Dimensions.centerPosition(Dimensions.textSize("      6840", fontSize), Dimensions.screenSize)
         const scoreLabel = new Text("SCORE:", scorePosition.x, initialY + fontSize * 1.3, 0, fontSize, TextureManager.getTexture("white-font")!)
-        this.scoreText= new Text("      6840", scorePosition.x, initialY + fontSize * 1.3, 0, fontSize, TextureManager.getTexture("yellow-font")!)
+        this.scoreText = new Text("      6840", scorePosition.x, initialY + fontSize * 1.3, 0, fontSize, TextureManager.getTexture("yellow-font")!)
 
         this.objects.push(timeLabel)
         this.objects.push(movesLabel)
@@ -187,12 +189,13 @@ export class SolitaireScene extends Scene {
 
     public override update(): void {
 
-        this.fpsText.text = `fps: ${this.gameInstace.fps.toFixed(0)}`
-        this.movesText.text = `      ${this.moves}` 
-        this.scoreText.text = `      ${this.score}`
-        
         const endTime = this.endTime ? this.endTime : new Date().getTime()
         const time = TimeUtis.calculateTime(this.startTime, endTime)
+        this.score.updateTimePoints(ScoreUtils.timePoints(this.startTime, endTime))
+
+        this.fpsText.text = `fps: ${this.gameInstace.fps.toFixed(0)}`
+        this.movesText.text = `      ${this.moves}`
+        this.scoreText.text = `      ${this.score.total}`
         this.timeText.text = `     ${time.hours}:${time.minutes.toString().padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}`
     }
 
@@ -287,7 +290,7 @@ export class SolitaireScene extends Scene {
         this.startTime = new Date().getTime()
         this.endTime = 0
         this.moves = 0
-        this.score = 0
+        this.score.reset()
 
         this.cards.forEach(card => card.reset())
         this.piles.forEach(pile => pile.reset())
@@ -389,8 +392,9 @@ export class SolitaireScene extends Scene {
     }
 
     private executeAction(action: IAction): void {
-        
-        this.moves += 1
+
+        this.moves++
+        this.score.sum(action)
 
         action.execute()
         this.actions.push(action)
@@ -406,6 +410,7 @@ export class SolitaireScene extends Scene {
     private undoAction(action: IAction): void {
 
         this.moves++
+        this.score.sub(action)
 
         action.undo()
     }
@@ -484,7 +489,7 @@ export class SolitaireScene extends Scene {
         const time = TimeUtis.calculateTime(this.startTime, this.endTime)
 
         const winScene = <WinScene>await this.gameInstace.start(WinScene)
-        winScene.setData(this.moves, time, this.score)
+        winScene.setData(this.moves, time, this.score.total)
 
         winScene.onNewGamePress = () => {
 

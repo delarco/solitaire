@@ -1,16 +1,11 @@
-import { Card } from "../GameObjects/Card";
 import { StockPile } from "../GameObjects/StockPile";
 import { IAction } from "../interfaces/IAction";
-import { IPile } from "../interfaces/IPile";
 
 export class StockNextAction implements IAction {
 
-    private previousIndex: number
+    public points = 0
 
-    constructor(private stockPile: StockPile) {
-
-        this.previousIndex = stockPile.currentIndex
-    }
+    constructor(private stockPile: StockPile) { }
 
     public execute(): void {
 

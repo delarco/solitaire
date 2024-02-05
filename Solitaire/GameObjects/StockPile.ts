@@ -38,6 +38,10 @@ export class StockPile extends Container implements IPile {
 
     private firstCardBaseX: number
 
+    private _loopCount = 0
+
+    public get loopCount() { return this._loopCount }
+
     constructor(id: string, position: IPosition, size: ISize) {
         super(id,
             position.x, position.y, 0,
@@ -123,6 +127,7 @@ export class StockPile extends Container implements IPile {
     public reset(): void {
 
         this._currentIndex = -1
+        this._loopCount = 0
         this.cards = []
         this.texture = TextureManager.getTexture("card")
     }
@@ -135,7 +140,11 @@ export class StockPile extends Container implements IPile {
             this.showNextCard()
         }
         else {
-            if (this.cards.length > 0) this.hideAllCards()
+            if (this.cards.length > 0) {
+
+                this._loopCount++
+                this.hideAllCards()
+            }
         }
     }
 
@@ -218,18 +227,20 @@ export class StockPile extends Container implements IPile {
 
     public roolbackClear(): void {
 
+        this._loopCount--
+
         this._currentIndex = this.cards.length - 1
-        
+
         this.texture = TextureManager.getTexture("card-empty")
 
-        for(let cardIndex = 0; cardIndex < this.cards.length; cardIndex++) {
+        for (let cardIndex = 0; cardIndex < this.cards.length; cardIndex++) {
 
             const card = this.cards[cardIndex]
 
             let position = 2
 
-            if(cardIndex === this.cards.length - 1) position = 0
-            if(cardIndex === this.cards.length - 2) position = 1
+            if (cardIndex === this.cards.length - 1) position = 0
+            if (cardIndex === this.cards.length - 2) position = 1
 
             card.visible = true
 

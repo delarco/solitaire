@@ -1,18 +1,23 @@
 import { Card } from "../GameObjects/Card";
 import { StockPile } from "../GameObjects/StockPile";
 import { Dimensions } from "../Utils/Dimensions";
+import { ScoreUtils } from "../Utils/ScoreUtils";
 import { IAction } from "../interfaces/IAction";
 import { IPile } from "../interfaces/IPile";
 
 export class MoveAction implements IAction {
 
     private previousPile: IPile
-    private cardAbove: Card | null = null
-    private cardAboveFlipped: boolean | null = null
+    public cardAbove: Card | null = null
+    public cardAboveFlipped: boolean | null = null
+
+    public points = 0
 
     constructor(
         public card: Card,
         public newPile: IPile) {
+
+        this.points = ScoreUtils.movePoints(this)
 
         this.previousPile = card.pile!
         const previousIndex = card.pile!.cards.indexOf(card)

@@ -25,7 +25,7 @@ export class Window implements IGameObject {
     public visible = true
     public draggable = false
 
-    private objects: Array<IGameObject> = []
+    public objects: Array<IGameObject> = []
 
     constructor(
         private _id: number | string,

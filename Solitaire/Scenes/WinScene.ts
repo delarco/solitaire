@@ -1,7 +1,5 @@
 import { Animator } from "../../Engine/Animations/Animator";
 import { ColorBlinkAnimation } from "../../Engine/Animations/ColorBlinkAnimation";
-import { Color } from "../../Engine/Color";
-import { Rectangle } from "../../Engine/GameObjects/Rectangle";
 import { Window } from "../../Engine/GameObjects/Window";
 import { Scene } from "../../Engine/Scene";
 import { TextureManager } from "../../Engine/TextureManager";
@@ -23,12 +21,7 @@ export class WinScene extends Scene {
     private readonly RECORD_TEXT = "RECORD: 7680"
     private readonly NEW_GAME_TEXT = "NEW GAME"
 
-    // private congratulation!: Text
-    // private newGameButton!: Text
-    // private moves!: Text
-    // private time!: Text
-    // private score!: Text
-    // private record!: Text
+    private newGameButton!: Text
 
     public onNewGamePress: (() => void) | null = null
 
@@ -61,7 +54,7 @@ export class WinScene extends Scene {
         const newGameFontSize = Dimensions.fontSizeToFitWidth(this.NEW_GAME_TEXT, winWindow.width * 0.7)
         const newGameSize = Dimensions.textSize(this.NEW_GAME_TEXT, newGameFontSize)
         const newGamePosition = Dimensions.centerPosition(newGameSize, winWindow)
-        const newGameButton = new Text(this.NEW_GAME_TEXT, newGamePosition.x, winWindow.height - 2 * newGameSize.height, 2, newGameFontSize, yellowFontTexture)
+        this.newGameButton = new Text(this.NEW_GAME_TEXT, newGamePosition.x, winWindow.height - 2 * newGameSize.height, 2, newGameFontSize, yellowFontTexture)
 
         const dataFontSize = Dimensions.fontSizeToFitWidth(this.PLACEHOLDER_TEXT, winWindow.width * 0.7)
         const dataSize = Dimensions.textSize(this.PLACEHOLDER_TEXT, dataFontSize)
@@ -78,19 +71,22 @@ export class WinScene extends Scene {
         winWindow.addObject(timeText)
         winWindow.addObject(scoreText)
         winWindow.addObject(recordText)
-        winWindow.addObject(newGameButton)
+        winWindow.addObject(this.newGameButton)
         this.objects.push(winWindow)
+
+        this.newGameButton.onPress = () => {
+
+            if (this.onNewGamePress) this.onNewGamePress()
+        }
     }
 
     public update(time: number, deltaTime: number): void { }
 
     public onGameObjectTouchStart(gameObject: IGameObject): void {
 
-        if (this.onNewGamePress) this.onNewGamePress()
+        if (gameObject === this.newGameButton) {
 
-        // if (gameObject === this.newGameButton) {
-
-        //     Animator.add(new ColorBlinkAnimation(gameObject))
-        // }
+            Animator.add(new ColorBlinkAnimation(gameObject))
+        }
     }
 }

@@ -7,6 +7,10 @@ export class Color {
     public static readonly BLACK = new Color(0, 0, 0)
     public static readonly WHITE = new Color(1, 1, 1)
     public static get YELLOW() { return new Color(1, 1, 0) }
+    public static readonly DIM_GRAY = new Color(105 / 255, 105 / 255, 105 / 255)
+    public static readonly TABLE_GREEN = new Color(0.215, 0.635, 0.313)
+    public static readonly TABLE_DARK_GREEN = new Color(0x2d / 255, 0x7b / 255, 0x40 / 255)
+
 
     public get array() {
         return [this.red, this.green, this.blue, this.alpha]

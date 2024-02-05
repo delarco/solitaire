@@ -7,15 +7,16 @@ import { TextureManager } from "../../Engine/TextureManager";
 import { IGameObject } from "../../Engine/interfaces/IGameObject";
 import { ISize } from "../../Engine/interfaces/ISize";
 import { ShaderInfo, ShaderType } from "../../Engine/webgl/ShaderInfo";
+import { Text } from "../GameObjects/Text";
 import { fragmentShaderSourceCode } from "../Shaders/FragmentShader";
 import { vertexShaderSourceCode } from "../Shaders/VertexShader";
 import { Dimensions } from "../Utils/Dimensions";
 
 export class GameOverScene extends Scene {
 
-    private text!: Rectangle
+    private gameover!: Text
     private background!: Rectangle
-    private newGameButton!: Rectangle
+    private newGameButton!: Text
 
     public onNewGamePress: (() => void) | null = null
 
@@ -39,11 +40,6 @@ export class GameOverScene extends Scene {
             height: Math.floor(Dimensions.screenSize.width * 0.7),
         }
 
-        const screen30: ISize = {
-            width: Math.floor(Dimensions.screenSize.width * 0.3),
-            height: Math.floor(Dimensions.screenSize.width * 0.3),
-        }
-
         this.background = new Rectangle("background",
             (Dimensions.screenSize.width - screen80.width) / 2,
             ((Dimensions.screenSize.height - screen70.height) / 10) * 3,
@@ -52,32 +48,30 @@ export class GameOverScene extends Scene {
             screen70.height,
             new Color(0x2d / 255, 0x7b / 255, 0x40 / 255)
         )
-        this.background.texture = TextureManager.getTexture("card-flipped") //await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
+        this.background.texture = TextureManager.getTexture("card-flipped")
+        
+        const whiteFontTexture = TextureManager.getTexture("white-font")!
+        const yellowFontTexture = TextureManager.getTexture("yellow-font")!
 
-        this.text = new Rectangle("gameover-text",
-            (Dimensions.screenSize.width - screen70.width) / 2,
-            ((Dimensions.screenSize.height - screen70.height) / 10) * 4,
-            1,
-            screen70.width, screen70.width * 0.15,
-            Color.WHITE
-        )
-        this.text.texture = TextureManager.getTexture("gameover") //await TextureManager.loadTexture("gameover", require("../../assets/gameover.png"))
+        this.gameover = new Text("GAME OVER!", 0, 0, 1, 54, whiteFontTexture)
+        this.newGameButton = new Text("NEW GAME", 0, 200, 2, 48, yellowFontTexture)
 
-        const newGameButtonHeight = screen30.width * 0.16
-        this.newGameButton = new Rectangle("new-game-button",
-            (Dimensions.screenSize.width - screen30.width) / 2,
-            this.background.y + this.background.height - (newGameButtonHeight * 2),
-            2,
-            screen30.width, newGameButtonHeight,
-            Color.WHITE
+        this.gameover.move(
+            (Dimensions.screenSize.width - this.gameover.width) / 2,
+            ((Dimensions.screenSize.height - screen70.height) / 10) * 4
         )
-        this.newGameButton.texture = TextureManager.getTexture("new-game") //await TextureManager.loadTexture("new-game", require("../../assets/new-game.png"))
+
+        this.newGameButton.move(
+            (Dimensions.screenSize.width - this.newGameButton.width) / 2,
+            this.background.y + this.background.height - (this.newGameButton.height * 3),
+        )
+
         this.newGameButton.onPress = () => {
             if (this.onNewGamePress) this.onNewGamePress()
         }
 
         this.objects.push(this.background)
-        this.objects.push(this.text)
+        this.objects.push(this.gameover)
         this.objects.push(this.newGameButton)
     }
 

@@ -25,6 +25,7 @@ import { ShakeAnimation } from "../../Engine/Animations/ShakeAnimation";
 import { CardBlinkAnimation } from "../Animations/CardBlinkAnimation";
 import { GameOverScene } from "./GameOverScene";
 import { WinScene } from "./WinScene";
+import { Text } from "../GameObjects/Text";
 
 export class SolitaireScene extends Scene {
 
@@ -37,7 +38,7 @@ export class SolitaireScene extends Scene {
     private newGameButton!: Rectangle
     private hintButton!: Rectangle
     private undoButton!: Rectangle
-    private autoCompleteButton!: Rectangle
+    private autoCompleteButton!: Text
     private autoCompleting = false
     private placingCards = false
 
@@ -90,7 +91,6 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("cards", require("../../assets/cards.png"))
         await TextureManager.loadTexture("hint", require("../../assets/hint.png"))
         await TextureManager.loadTexture("undo", require("../../assets/undo.png"))
-        await TextureManager.loadTexture("auto-complete", require("../../assets/auto-complete.png"))
         await TextureManager.loadTexture("2", require("../../assets/2.png"))
         await TextureManager.loadTexture("3", require("../../assets/3.png"))
         await TextureManager.loadTexture("4", require("../../assets/4.png"))
@@ -105,18 +105,14 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("Q", require("../../assets/Q.png"))
         await TextureManager.loadTexture("K", require("../../assets/K.png"))
         await TextureManager.loadTexture("card-flipped", require("../../assets/card-flipped.png"))
-        await TextureManager.loadTexture("gameover", require("../../assets/gameover.png"))
-        await TextureManager.loadTexture("new-game", require("../../assets/new-game.png"))
-        await TextureManager.loadTexture("win-text", require("../../assets/win-text.png"))
         await TextureManager.loadTexture("white-font", require("../../assets/font/white.png"))
         await TextureManager.loadTexture("yellow-font", require("../../assets/font/yellow.png"))
     }
 
     private createButtons(): void {
 
-        const screenWidth80 = Dimensions.screenSize.width * 0.8
-        const screenPadding = (Dimensions.screenSize.width - screenWidth80) / 2
-        const widthOver3 = screenWidth80 / 3
+        const screenPadding = (Dimensions.screenSize.width - Dimensions.screenSize80.width) / 2
+        const widthOver3 = Dimensions.screenSize80.width / 3
         const baseButtonX = widthOver3 + ((widthOver3 - Dimensions.buttonSize.width) / 2)
         const buttonX = (index: number) => index * baseButtonX + screenPadding
 
@@ -132,10 +128,11 @@ export class SolitaireScene extends Scene {
         this.undoButton.texture = TextureManager.getTexture("undo")
         this.undoButton.onPress = () => this.onUndoPress()
 
-        this.autoCompleteButton = new Rectangle("auto-complete-button",
-            (Dimensions.screenSize.width - screenWidth80) / 2, Dimensions.buttonsY - Dimensions.buttonSize.height - Dimensions.gapBetweenPiles, 1,
-            screenWidth80, screenWidth80 * 0.09)
-        this.autoCompleteButton.texture = TextureManager.getTexture("auto-complete")
+        this.autoCompleteButton = new Text("AUTO COMPLETE", 0, 0, 100, Dimensions.fontSizeToFitWidth("AUTO COMPLETE", Dimensions.screenSize80.width), TextureManager.getTexture("yellow-font")!)
+        this.autoCompleteButton.move(
+            (Dimensions.screenSize.width - this.autoCompleteButton.width) / 2,
+            Dimensions.buttonsY - this.autoCompleteButton.height * 2
+        )
         this.autoCompleteButton.onPress = () => this.onAutoCompletePress()
         this.autoCompleteButton.visible = false
 
@@ -237,11 +234,13 @@ export class SolitaireScene extends Scene {
         this.placingCards = true
         // PileUtils.placeCards(
         PileUtils.placeCardsAnimated(
+        // PileUtils.placeCardsAllTableauWin(
             this.cards,
             this.tableauPiles,
             this.stockPile,
             () => this.placingCards = false
         )
+        // this.placingCards = false
     }
 
     private onHintPress(): void {

@@ -6,6 +6,7 @@ export class Dimensions {
     public static readonly MOVING_CARD_DEPTH = 100
 
     public static screenSize: ISize
+    public static screenSize50: ISize
     public static screenSize80: ISize
     public static screenPaddingTop: number
     public static screenPaddingBottom: number
@@ -24,10 +25,8 @@ export class Dimensions {
     public static init(screen: ISize) {
 
         Dimensions.screenSize = screen
-        Dimensions.screenSize80 = {
-            width: screen.width * 0.8,
-            height: screen.height * 0.8
-        }
+        Dimensions.screenSize50 = { width: screen.width * 0.5, height: screen.height * 0.5 }
+        Dimensions.screenSize80 = { width: screen.width * 0.8, height: screen.height * 0.8 }
         Dimensions.screenPaddingTop = Math.floor(screen.height * 0.1)
         Dimensions.screenPaddingBottom = Math.floor(screen.height * 0.1)
 
@@ -59,7 +58,7 @@ export class Dimensions {
         return width / text.length
     }
 
-    public static centerPosition(object: IPosition & ISize, container: IPosition & ISize): IPosition {
+    public static centerPosition(object: ISize, container: ISize): IPosition {
 
         return {
             x: (container.width - object.width) / 2,

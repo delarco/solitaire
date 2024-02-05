@@ -15,6 +15,9 @@ import { Dimensions } from "../Utils/Dimensions";
 
 export class GameOverScene extends Scene {
 
+    private readonly GAMEOVER_TEXT = "GAME OVER!"
+    private readonly NEW_GAME_TEXT = "NEW GAME"
+
     private gameoverText!: Text
     private newGameButton!: Text
 
@@ -40,15 +43,15 @@ export class GameOverScene extends Scene {
         const whiteFontTexture = TextureManager.getTexture("white-font")!
         const yellowFontTexture = TextureManager.getTexture("yellow-font")!
 
-        const gameoverFontSize = Dimensions.fontSizeToFitWidth("GAME OVER!", gameoverWindow.width * 0.9)
-        const gameoverSize = Dimensions.textSize("GAME OVER!", gameoverFontSize)
+        const gameoverFontSize = Dimensions.fontSizeToFitWidth(this.GAMEOVER_TEXT, gameoverWindow.width * 0.9)
+        const gameoverSize = Dimensions.textSize(this.GAMEOVER_TEXT, gameoverFontSize)
         const gameOverPosition = Dimensions.centerPosition(gameoverSize, gameoverWindow)
-        this.gameoverText = new Text("GAME OVER!", gameOverPosition.x, gameoverSize.height, 1, gameoverFontSize, whiteFontTexture)
+        this.gameoverText = new Text(this.GAMEOVER_TEXT, gameOverPosition.x, gameoverSize.height, 1, gameoverFontSize, whiteFontTexture)
 
-        const newGameFontSize = Dimensions.fontSizeToFitWidth("NEW GAME", gameoverWindow.width * 0.7)
-        const newGameSize = Dimensions.textSize("NEW GAME", newGameFontSize)
+        const newGameFontSize = Dimensions.fontSizeToFitWidth(this.NEW_GAME_TEXT, gameoverWindow.width * 0.7)
+        const newGameSize = Dimensions.textSize(this.NEW_GAME_TEXT, newGameFontSize)
         const newGamePosition = Dimensions.centerPosition(newGameSize, gameoverWindow)
-        this.newGameButton = new Text("NEW GAME", newGamePosition.x, gameoverWindow.height - 2 * newGameSize.height, 2, newGameFontSize, yellowFontTexture)
+        this.newGameButton = new Text(this.NEW_GAME_TEXT, newGamePosition.x, gameoverWindow.height - 2 * newGameSize.height, 2, newGameFontSize, yellowFontTexture)
 
         gameoverWindow.addObject(this.gameoverText)
         gameoverWindow.addObject(this.newGameButton)

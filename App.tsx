@@ -25,7 +25,7 @@ export default function App() {
     GameDimensions.print()
 
     game = new Game(gl, screenSize)
-    game.backgroundColor = new Color(0.215, 0.635, 0.313)
+    game.backgroundColor = Color.TABLE_GREEN
     game.start(SolitaireScene)
   }
 

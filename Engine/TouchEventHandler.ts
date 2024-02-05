@@ -12,7 +12,7 @@ export class TouchEventHandler {
 
     private static isContainer(object: any): object is IContainer {
 
-        return 'objects' in object
+        return 'children' in object
     }
 
     public static onTouchStart(scene: Scene, position: IPosition): void {
@@ -25,7 +25,7 @@ export class TouchEventHandler {
 
             if (TouchEventHandler.isContainer(gameObject)) {
 
-                const innerGameObject = TouchEventHandler.checkObjectAtPosition(position, gameObject.objects)
+                const innerGameObject = TouchEventHandler.checkObjectAtPosition(position, gameObject.children)
                 if (innerGameObject) targetGameObject = innerGameObject
             }
 

@@ -2,8 +2,8 @@ import { IGameObject } from "./IGameObject";
 
 export interface IContainer {
 
-    objects: Array<IGameObject>
+    children: Array<IGameObject>
 
-    addObject(gameObject: IGameObject): void
-    removeObject(gameObject: IGameObject): void
+    addChild(gameObject: IGameObject): void
+    removeChild(gameObject: IGameObject): void
 }

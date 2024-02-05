@@ -66,12 +66,12 @@ export class WinScene extends Scene {
         const scoreText = new Text(this.SCORE_TEXT, dataPosition.x, dataPosition.y + (2 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
         const recordText = new Text(this.RECORD_TEXT, dataPosition.x, dataPosition.y + (3 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
 
-        winWindow.addObject(congratulationText)
-        winWindow.addObject(movesText)
-        winWindow.addObject(timeText)
-        winWindow.addObject(scoreText)
-        winWindow.addObject(recordText)
-        winWindow.addObject(this.newGameButton)
+        winWindow.addChild(congratulationText)
+        winWindow.addChild(movesText)
+        winWindow.addChild(timeText)
+        winWindow.addChild(scoreText)
+        winWindow.addChild(recordText)
+        winWindow.addChild(this.newGameButton)
         this.objects.push(winWindow)
 
         this.newGameButton.onPress = () => {

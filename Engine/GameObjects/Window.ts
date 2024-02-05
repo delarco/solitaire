@@ -4,7 +4,6 @@ import { IGameObject } from "../interfaces/IGameObject";
 import { Texture } from "../Texture";
 import { TextureManager } from "../TextureManager";
 import { Game } from "../Game";
-import { Dimensions } from "../../Solitaire/Utils/Dimensions";
 import { IContainer } from "../interfaces/IContainer";
 
 export class Window implements IGameObject, IContainer {
@@ -26,7 +25,7 @@ export class Window implements IGameObject, IContainer {
     public visible = true
     public draggable = false
 
-    public objects: Array<IGameObject> = []
+    public children: Array<IGameObject> = []
 
     constructor(
         private _id: number | string,
@@ -127,12 +126,12 @@ export class Window implements IGameObject, IContainer {
         Game.gl.uniform4fv(program.colorLocation, Color.BLACK.array);
         Game.gl.drawArrays(Game.gl.LINE_LOOP, 0, this.borderVertexCount);
 
-        for (const object of this.objects.filter(obj => obj.visible)) object.draw(program)
+        for (const object of this.children.filter(obj => obj.visible)) object.draw(program)
     }
 
     public move(x: number | null = null, y: number | null = null, z: number | null = null): void {
 
-        for (const object of this.objects) {
+        for (const object of this.children) {
 
             const offsets = {
                 x: x === null ? null : object.x - this.x + (x || 0),
@@ -152,14 +151,14 @@ export class Window implements IGameObject, IContainer {
 
     public onPress(): void { }
 
-    public addObject(gameObject: IGameObject): void {
+    public addChild(gameObject: IGameObject): void {
 
         gameObject.move(this.x + gameObject.x, this.y + gameObject.y, this.z + (gameObject.z || 0))
-        this.objects.push(gameObject)
+        this.children.push(gameObject)
     }
 
-    public removeObject(gameObject: IGameObject): void {
+    public removeChild(gameObject: IGameObject): void {
 
-        this.objects = this.objects.filter(obj => obj !== gameObject)
+        this.children = this.children.filter(obj => obj !== gameObject)
     }
 }

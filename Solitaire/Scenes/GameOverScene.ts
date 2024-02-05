@@ -53,8 +53,8 @@ export class GameOverScene extends Scene {
         const newGamePosition = Dimensions.centerPosition(newGameSize, gameoverWindow)
         this.newGameButton = new Text(this.NEW_GAME_TEXT, newGamePosition.x, gameoverWindow.height - 2 * newGameSize.height, 2, newGameFontSize, yellowFontTexture)
 
-        gameoverWindow.addObject(this.gameoverText)
-        gameoverWindow.addObject(this.newGameButton)
+        gameoverWindow.addChild(this.gameoverText)
+        gameoverWindow.addChild(this.newGameButton)
         this.objects.push(gameoverWindow)
 
         this.newGameButton.onPress = () => {

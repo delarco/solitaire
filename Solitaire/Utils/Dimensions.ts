@@ -6,6 +6,7 @@ export class Dimensions {
     public static readonly MOVING_CARD_DEPTH = 100
 
     public static screenSize: ISize
+    public static screenSize20: ISize
     public static screenSize50: ISize
     public static screenSize80: ISize
     public static screenPaddingTop: number
@@ -25,6 +26,7 @@ export class Dimensions {
     public static init(screen: ISize) {
 
         Dimensions.screenSize = screen
+        Dimensions.screenSize20 = { width: screen.width * 0.2, height: screen.height * 0.2 }
         Dimensions.screenSize50 = { width: screen.width * 0.5, height: screen.height * 0.5 }
         Dimensions.screenSize80 = { width: screen.width * 0.8, height: screen.height * 0.8 }
         Dimensions.screenPaddingTop = Math.floor(screen.height * 0.1)

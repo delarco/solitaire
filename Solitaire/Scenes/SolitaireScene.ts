@@ -42,7 +42,11 @@ export class SolitaireScene extends Scene {
     private autoCompleteButton!: Text
     private autoCompleting = false
     private placingCards = false
+    
     private fpsText!: Text
+    private timeText!: Text
+    private scoreText!: Text
+    private movesText!: Text
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -62,6 +66,7 @@ export class SolitaireScene extends Scene {
         await this.loadTextures()
 
         this.createButtons()
+        this.createTexts()
 
         this.cards = DeckGenerator.generate()
         this.tableauPiles = PileUtils.generateTableauPiles()
@@ -74,13 +79,9 @@ export class SolitaireScene extends Scene {
 
         this.stockPile.onPress = () => this.onStockPilePress()
 
-        const fpsFontSize = Dimensions.fontSizeToFitWidth("fps: 999", Dimensions.screenSize.width * 0.2)
-        this.fpsText = new Text("fps: 999", 0, 0, 0, fpsFontSize, TextureManager.getTexture("yellow-font")!)
-
         this.objects.push(...this.cards)
         this.objects.push(...this.piles)
-        this.objects.push(this.fpsText)
-
+        
         this.onNewGamePress()
     }
 
@@ -146,6 +147,36 @@ export class SolitaireScene extends Scene {
         this.objects.push(this.hintButton)
         this.objects.push(this.undoButton)
         this.objects.push(this.autoCompleteButton)
+    }
+
+    private createTexts(): void {
+
+        const fpsFontSize = Dimensions.fontSizeToFitWidth("fps: 999", Dimensions.screenSize20.width)
+        this.fpsText = new Text("fps: 999", 0, 0, 0, fpsFontSize, TextureManager.getTexture("yellow-font")!)
+        this.fpsText.visible = false
+
+        const fontSize = Dimensions.fontSizeToFitWidth("TIME:0:00:00", Dimensions.screenSize20.width * 2)
+        const initialY = Dimensions.screenPaddingTop - fontSize * 2.5
+
+        const timePosition = Dimensions.centerPosition(Dimensions.textSize("     1:23:45", fontSize), Dimensions.screenSize50)
+        const timeLabel = new Text("TIME:", timePosition.x, initialY, 0, fontSize, TextureManager.getTexture("white-font")!)
+        this.timeText= new Text("     1:23:45", timePosition.x, initialY, 0, fontSize, TextureManager.getTexture("yellow-font")!)
+        
+        const movesPosition = { x: timePosition.x + Dimensions.screenSize50.width }
+        const movesLabel = new Text("MOVES:", movesPosition.x, initialY, 0, fontSize, TextureManager.getTexture("white-font")!)
+        this.movesText= new Text("      999", movesPosition.x, initialY, 0, fontSize, TextureManager.getTexture("yellow-font")!)
+        
+        const scorePosition = Dimensions.centerPosition(Dimensions.textSize("      6840", fontSize), Dimensions.screenSize)
+        const scoreLabel = new Text("SCORE:", scorePosition.x, initialY + fontSize * 1.3, 0, fontSize, TextureManager.getTexture("white-font")!)
+        this.scoreText= new Text("      6840", scorePosition.x, initialY + fontSize * 1.3, 0, fontSize, TextureManager.getTexture("yellow-font")!)
+
+        this.objects.push(timeLabel)
+        this.objects.push(movesLabel)
+        this.objects.push(scoreLabel)
+        this.objects.push(this.fpsText)
+        this.objects.push(this.timeText)
+        this.objects.push(this.movesText)
+        this.objects.push(this.scoreText)
     }
 
     public override update(): void {

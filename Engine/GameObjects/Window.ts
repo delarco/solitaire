@@ -5,8 +5,9 @@ import { Texture } from "../Texture";
 import { TextureManager } from "../TextureManager";
 import { Game } from "../Game";
 import { Dimensions } from "../../Solitaire/Utils/Dimensions";
+import { IContainer } from "../interfaces/IContainer";
 
-export class Window implements IGameObject {
+export class Window implements IGameObject, IContainer {
 
     public get id() { return this._id }
 

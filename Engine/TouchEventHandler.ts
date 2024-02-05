@@ -1,14 +1,19 @@
 import { Collision } from "./Collision";
-import { Window } from "./GameObjects/Window";
 import { Scene } from "./Scene";
 import { IGameObject } from "./interfaces/IGameObject";
 import { IPosition } from "./interfaces/IPosition";
+import { IContainer} from "./interfaces/IContainer"
 
 export class TouchEventHandler {
 
     private static selectedGameObject: IGameObject | null = null
     private static offsets: IPosition = { x: 0, y: 0 }
     private static gameObjectMoved = false
+
+    private static isContainer(object: any): object is IContainer {
+
+        return 'objects' in object
+    }
 
     public static onTouchStart(scene: Scene, position: IPosition): void {
 
@@ -18,7 +23,7 @@ export class TouchEventHandler {
 
             let targetGameObject = gameObject
 
-            if (gameObject instanceof Window) {
+            if (TouchEventHandler.isContainer(gameObject)) {
 
                 const innerGameObject = TouchEventHandler.checkObjectAtPosition(position, gameObject.objects)
                 if (innerGameObject) targetGameObject = innerGameObject
@@ -35,27 +40,6 @@ export class TouchEventHandler {
             scene.onGameObjectTouchStart(targetGameObject)
             return
         }
-
-        // const gameObjectList = scene.objects
-        //     .filter(f => f.visible)
-        //     .sort((a, b) => (b.z || 0) - (a.z || 0))
-
-        // for (const gameObject of gameObjectList) {
-
-        //     if (Collision.pointInRect(position, gameObject)) {
-
-        //         TouchEventHandler.selectedGameObject = gameObject
-        //         TouchEventHandler.gameObjectMoved = false
-
-        //         TouchEventHandler.offsets = {
-        //             x: position.x - gameObject.x,
-        //             y: position.y - gameObject.y
-        //         }
-
-        //         scene.onGameObjectTouchStart(gameObject)
-        //         return
-        //     }
-        // }
     }
 
     public static onTouchEnd(scene: Scene, position: IPosition): void {

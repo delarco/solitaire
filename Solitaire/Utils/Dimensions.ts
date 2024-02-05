@@ -1,3 +1,4 @@
+import { IPosition } from "../../Engine/interfaces/IPosition"
 import { ISize } from "../../Engine/interfaces/ISize"
 
 export class Dimensions {
@@ -5,6 +6,7 @@ export class Dimensions {
     public static readonly MOVING_CARD_DEPTH = 100
 
     public static screenSize: ISize
+    public static screenSize80: ISize
     public static screenPaddingTop: number
     public static screenPaddingBottom: number
 
@@ -22,6 +24,10 @@ export class Dimensions {
     public static init(screen: ISize) {
 
         Dimensions.screenSize = screen
+        Dimensions.screenSize80 = {
+            width: screen.width * 0.8,
+            height: screen.height * 0.8
+        }
         Dimensions.screenPaddingTop = Math.floor(screen.height * 0.1)
         Dimensions.screenPaddingBottom = Math.floor(screen.height * 0.1)
 
@@ -38,6 +44,27 @@ export class Dimensions {
 
         Dimensions.foundationPilesY = Dimensions.screenPaddingTop
         Dimensions.tableauPilesY = Dimensions.foundationPilesY + Dimensions.cardSize.height + Dimensions.gapBetweenPiles
+    }
+
+    public static textSize(text: string, fontSize: number): ISize {
+
+        return {
+            width: text.length * fontSize,
+            height: fontSize
+        }
+    }
+
+    public static fontSizeToFitWidth(text: string, width: number): number {
+
+        return width / text.length
+    }
+
+    public static centerPosition(object: IPosition & ISize, container: IPosition & ISize): IPosition {
+
+        return {
+            x: (container.width - object.width) / 2,
+            y: (container.height - object.height) / 2
+        }
     }
 
     public static print() {

@@ -1,33 +1,30 @@
 import { IAnimation } from "../interfaces/IAnimation"
 import { IGameObject } from "../interfaces/IGameObject"
-import { IPosition } from "../interfaces/IPosition"
 
 export class MoveAnimation implements IAnimation {
 
     public done = false
 
-    private frames = 10
-    private stepX = 0
-    private stepY = 0
-    private frameCounter = 0
+    private velocity = 10
+    private diffX = 0
+    private diffY = 0
+    private sum = 0
 
     constructor(
         public gameObject: IGameObject,
-        public toX: number | null = null,
-        public toY: number | null = null,
-        public movingZ: number | null = null,
-        public endZ: number | null = null,
+        private toX: number | null = null,
+        private toY: number | null = null,
+        private movingZ: number | null = null,
+        private endZ: number | null = null,
         public callback: (() => void) | null = null
     ) {
-
         this.init()
     }
 
     public init(): void {
 
-        this.stepX = ((this.toX || 0) - this.gameObject.x) / this.frames
-        this.stepY = ((this.toY || 0) - this.gameObject.y) / this.frames
-
+        if (this.toX !== null) this.diffX = this.toX - this.gameObject.x
+        if (this.toY !== null) this.diffY = this.toY - this.gameObject.y
         if (this.movingZ) this.gameObject.z = this.movingZ
     }
 
@@ -40,21 +37,21 @@ export class MoveAnimation implements IAnimation {
         return
     }
 
-    public update(time: number): void {
+    public update(time: number, deltaTime: number): void {
 
         if (this.done) return
 
         let x: number | null = null
         let y: number | null = null
 
-        if (this.toX !== null) x = this.gameObject.x + this.stepX
-        if (this.toY !== null) y = this.gameObject.y + this.stepY
+        if (this.toX !== null) x = this.gameObject.x + (this.diffX * deltaTime * this.velocity)
+        if (this.toY !== null) y = this.gameObject.y + (this.diffY * deltaTime * this.velocity)
+
+        this.sum += deltaTime * this.velocity
 
         this.gameObject.move(x, y)
 
-        this.frameCounter++
-
-        if (this.frameCounter >= this.frames) {
+        if (this.sum >= 1) {
 
             this.gameObject.move(this.toX, this.toY)
             if (this.endZ) this.gameObject.z = this.endZ

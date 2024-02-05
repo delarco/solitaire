@@ -2,6 +2,7 @@ import { Animator } from "../../Engine/Animations/Animator";
 import { ColorBlinkAnimation } from "../../Engine/Animations/ColorBlinkAnimation";
 import { Color } from "../../Engine/Color";
 import { Rectangle } from "../../Engine/GameObjects/Rectangle";
+import { Window } from "../../Engine/GameObjects/Window";
 import { Scene } from "../../Engine/Scene";
 import { TextureManager } from "../../Engine/TextureManager";
 import { IGameObject } from "../../Engine/interfaces/IGameObject";
@@ -14,8 +15,7 @@ import { Dimensions } from "../Utils/Dimensions";
 
 export class GameOverScene extends Scene {
 
-    private gameover!: Text
-    private background!: Rectangle
+    private gameoverText!: Text
     private newGameButton!: Text
 
     public onNewGamePress: (() => void) | null = null
@@ -30,58 +30,46 @@ export class GameOverScene extends Scene {
 
     public async init(): Promise<void> {
 
-        const screen80: ISize = {
-            width: Math.floor(Dimensions.screenSize.width * 0.8),
-            height: Math.floor(Dimensions.screenSize.height * 0.8)
-        }
+        const windowPosition = Dimensions.centerPosition(Dimensions.screenSize80, Dimensions.screenSize)
 
-        const screen70: ISize = {
-            width: Math.floor(Dimensions.screenSize.width * 0.7),
-            height: Math.floor(Dimensions.screenSize.width * 0.7),
-        }
-
-        this.background = new Rectangle("background",
-            (Dimensions.screenSize.width - screen80.width) / 2,
-            ((Dimensions.screenSize.height - screen70.height) / 10) * 3,
-            0,
-            screen80.width,
-            screen70.height,
-            new Color(0x2d / 255, 0x7b / 255, 0x40 / 255)
+        const gameoverWindow = new Window("gameover-window",
+            windowPosition.x, windowPosition.y, 100,
+            Dimensions.screenSize80.width, Dimensions.screenSize50.height
         )
-        this.background.texture = TextureManager.getTexture("card-flipped")
-        
+
         const whiteFontTexture = TextureManager.getTexture("white-font")!
         const yellowFontTexture = TextureManager.getTexture("yellow-font")!
 
-        this.gameover = new Text("GAME OVER!", 0, 0, 1, 54, whiteFontTexture)
-        this.newGameButton = new Text("NEW GAME", 0, 200, 2, 48, yellowFontTexture)
+        const gameoverFontSize = Dimensions.fontSizeToFitWidth("GAME OVER!", gameoverWindow.width * 0.9)
+        const gameoverSize = Dimensions.textSize("GAME OVER!", gameoverFontSize)
+        const gameOverPosition = Dimensions.centerPosition(gameoverSize, gameoverWindow)
+        this.gameoverText = new Text("GAME OVER!", gameOverPosition.x, gameoverSize.height, 1, gameoverFontSize, whiteFontTexture)
 
-        this.gameover.move(
-            (Dimensions.screenSize.width - this.gameover.width) / 2,
-            ((Dimensions.screenSize.height - screen70.height) / 10) * 4
-        )
+        const newGameFontSize = Dimensions.fontSizeToFitWidth("NEW GAME", gameoverWindow.width * 0.7)
+        const newGameSize = Dimensions.textSize("NEW GAME", newGameFontSize)
+        const newGamePosition = Dimensions.centerPosition(newGameSize, gameoverWindow)
+        this.newGameButton = new Text("NEW GAME", newGamePosition.x, gameoverWindow.height - 2 * newGameSize.height, 2, newGameFontSize, yellowFontTexture)
 
-        this.newGameButton.move(
-            (Dimensions.screenSize.width - this.newGameButton.width) / 2,
-            this.background.y + this.background.height - (this.newGameButton.height * 3),
-        )
+        gameoverWindow.addObject(this.gameoverText)
+        gameoverWindow.addObject(this.newGameButton)
+        this.objects.push(gameoverWindow)
 
         this.newGameButton.onPress = () => {
+
             if (this.onNewGamePress) this.onNewGamePress()
         }
-
-        this.objects.push(this.background)
-        this.objects.push(this.gameover)
-        this.objects.push(this.newGameButton)
     }
 
     public update(time: number, deltaTime: number): void { }
 
     public onGameObjectTouchStart(gameObject: IGameObject): void {
 
-        if (gameObject === this.newGameButton) {
+        // TODO: fix inside window objects not getting events
+        if (this.onNewGamePress) this.onNewGamePress()
 
-            Animator.add(new ColorBlinkAnimation(gameObject))
-        }
+        // if (gameObject === this.newGameButton) {
+
+        //     Animator.add(new ColorBlinkAnimation(gameObject))
+        // }
     }
 }

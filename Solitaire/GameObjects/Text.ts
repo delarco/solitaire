@@ -43,6 +43,7 @@ export class Text implements IGameObject {
         this.height = fontSize
         this.color = color
         this.texture = fontTexture
+        this.text = text.toUpperCase()
 
         this.mapFont()
 
@@ -61,7 +62,7 @@ export class Text implements IGameObject {
 
     private mapFont(): void {
 
-        const fontChars = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ:/,!+-%"
+        const fontChars = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ:/,!+-% "
 
         let charCounter = 0
 
@@ -195,5 +196,9 @@ export class Text implements IGameObject {
 
         Game.gl.uniform4fv(program.colorLocation, this.color.array);
         Game.gl.drawArrays(Game.gl.TRIANGLES, 0, this.vertexCount);
+    }
+
+    public onPress(): void {
+        
     }
 }

@@ -1,3 +1,5 @@
+import { Animator } from "../../Engine/Animations/Animator";
+import { MoveAnimation } from "../../Engine/Animations/MoveAnimation";
 import { Color } from "../../Engine/Color";
 import { Container } from "../../Engine/GameObjects/Container";
 import { TextureManager } from "../../Engine/TextureManager";
@@ -84,9 +86,18 @@ export class Card extends Container {
     public restorePosition(): void {
 
         if (this.lastPosition === null) throw new Error("restorePosition")
-        this.move(this.lastPosition.x, this.lastPosition.y)
-        this.lastPosition = null
-        if (this.child) this.child.restorePosition()
+
+        Animator.add(new MoveAnimation(
+            this,
+            this.lastPosition.x, this.lastPosition.y,
+            Dimensions.MOVING_CARD_DEPTH,
+            this.lastDepth,
+            () => {
+
+                this.lastPosition = null
+                if (this.child) this.child.restoreDepth()
+            }
+        ))
     }
 
     public canSetChild(card: Card): boolean {

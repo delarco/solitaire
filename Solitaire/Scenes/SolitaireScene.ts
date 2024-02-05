@@ -108,6 +108,8 @@ export class SolitaireScene extends Scene {
         await TextureManager.loadTexture("gameover", require("../../assets/gameover.png"))
         await TextureManager.loadTexture("new-game", require("../../assets/new-game.png"))
         await TextureManager.loadTexture("win-text", require("../../assets/win-text.png"))
+        await TextureManager.loadTexture("white-font", require("../../assets/font/white.png"))
+        await TextureManager.loadTexture("yellow-font", require("../../assets/font/yellow.png"))
     }
 
     private createButtons(): void {

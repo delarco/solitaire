@@ -19,6 +19,17 @@ export class Text implements IGameObject {
 
     public get id() { return this._id }
 
+    public get text() { return this._text }
+
+    public set text(value: string) {
+
+        if (value === this._text) return
+
+        this._text = value.toUpperCase()
+        this.updateVertexArrayBuffer()
+        this.updateTextureArrayBuffer()
+    }
+
     private vertexBuffer: WebGLBuffer
     private textureBuffer: WebGLBuffer
     private vertexArray: Float32Array = new Float32Array()
@@ -28,7 +39,7 @@ export class Text implements IGameObject {
     private fontMapping: { [key: string]: IPosition } = {}
 
     constructor(
-        private text: string,
+        private _text: string,
         public x: number,
         public y: number,
         public z: number,
@@ -36,14 +47,14 @@ export class Text implements IGameObject {
         fontTexture: Texture,
         color: Color = Color.WHITE) {
 
-        this._id = `text-${text}`
+        this._id = `text-${_text}`
         this.visible = true
         this.draggable = false
-        this.width = text.length * fontSize
+        this.width = _text.length * fontSize
         this.height = fontSize
         this.color = color
         this.texture = fontTexture
-        this.text = text.toUpperCase()
+        this._text = _text.toUpperCase()
 
         this.mapFont()
 
@@ -57,7 +68,7 @@ export class Text implements IGameObject {
         if (!textureBuffer) throw new Error("Can't create WebGLBuffer (texture)")
 
         this.textureBuffer = textureBuffer
-        this.createTextureArrayBuffer()
+        this.updateTextureArrayBuffer()
     }
 
     private mapFont(): void {
@@ -135,7 +146,7 @@ export class Text implements IGameObject {
         this.vertexCount = this.vertexArray.length / this.vertexNumComponents;
     }
 
-    private createTextureArrayBuffer(): void {
+    private updateTextureArrayBuffer(): void {
 
         const texCoords: Array<number> = []
 
@@ -199,6 +210,6 @@ export class Text implements IGameObject {
     }
 
     public onPress(): void {
-        
+
     }
 }

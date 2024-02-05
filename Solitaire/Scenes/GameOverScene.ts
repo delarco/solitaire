@@ -33,10 +33,11 @@ export class GameOverScene extends Scene {
 
     public async init(): Promise<void> {
 
-        const windowPosition = Dimensions.centerPosition(Dimensions.screenSize80, Dimensions.screenSize)
+        const windowPosition50 = Dimensions.centerPosition(Dimensions.screenSize50, Dimensions.screenSize)
+        const windowPosition80 = Dimensions.centerPosition(Dimensions.screenSize80, Dimensions.screenSize)
 
         const gameoverWindow = new Window("gameover-window",
-            windowPosition.x, windowPosition.y, 100,
+            windowPosition80.x, windowPosition50.y, 100,
             Dimensions.screenSize80.width, Dimensions.screenSize50.height
         )
 

@@ -27,6 +27,7 @@ import { GameOverScene } from "./GameOverScene";
 import { WinScene } from "./WinScene";
 import { Text } from "../GameObjects/Text";
 import { StockClearAction } from "../Actions/StockClearAction";
+import { TimeUtis } from "../Utils/TimeUtils";
 
 export class SolitaireScene extends Scene {
 
@@ -47,6 +48,11 @@ export class SolitaireScene extends Scene {
     private timeText!: Text
     private scoreText!: Text
     private movesText!: Text
+
+    private startTime = new Date().getTime()
+    private endTime: number = 0
+    private moves = 0
+    private score = 0
 
     constructor(protected resolution: ISize) {
         const shaders = [
@@ -182,6 +188,12 @@ export class SolitaireScene extends Scene {
     public override update(): void {
 
         this.fpsText.text = `fps: ${this.gameInstace.fps.toFixed(0)}`
+        this.movesText.text = `      ${this.moves}` 
+        this.scoreText.text = `      ${this.score}`
+        
+        const endTime = this.endTime ? this.endTime : new Date().getTime()
+        const time = TimeUtis.calculateTime(this.startTime, endTime)
+        this.timeText.text = `     ${time.hours}:${time.minutes.toString().padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}`
     }
 
     public onGameObjectTouchStart(gameObject: IGameObject): void {
@@ -272,6 +284,10 @@ export class SolitaireScene extends Scene {
         this.hintButton.visible = true
         this.undoButton.visible = true
         this.actions = []
+        this.startTime = new Date().getTime()
+        this.endTime = 0
+        this.moves = 0
+        this.score = 0
 
         this.cards.forEach(card => card.reset())
         this.piles.forEach(pile => pile.reset())
@@ -373,6 +389,8 @@ export class SolitaireScene extends Scene {
     }
 
     private executeAction(action: IAction): void {
+        
+        this.moves += 1
 
         action.execute()
         this.actions.push(action)
@@ -386,6 +404,8 @@ export class SolitaireScene extends Scene {
     }
 
     private undoAction(action: IAction): void {
+
+        this.moves++
 
         action.undo()
     }
@@ -460,7 +480,11 @@ export class SolitaireScene extends Scene {
 
     private async onWin(): Promise<void> {
 
+        this.endTime = new Date().getTime()
+        const time = TimeUtis.calculateTime(this.startTime, this.endTime)
+
         const winScene = <WinScene>await this.gameInstace.start(WinScene)
+        winScene.setData(this.moves, time, this.score)
 
         winScene.onNewGamePress = () => {
 

@@ -73,7 +73,7 @@ export class Text implements IGameObject {
 
     private mapFont(): void {
 
-        const fontChars = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ:/,!+-% "
+        const fontChars = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ:/,!+-%  "
 
         let charCounter = 0
 

@@ -10,17 +10,22 @@ import { Text } from "../GameObjects/Text";
 import { fragmentShaderSourceCode } from "../Shaders/FragmentShader";
 import { vertexShaderSourceCode } from "../Shaders/VertexShader";
 import { Dimensions } from "../Utils/Dimensions";
+import { ITime } from "../interfaces/ITime";
 
 export class WinScene extends Scene {
 
     private readonly CONGRATULATIONS_TEXT = "CONGRATULATIONS!"
-    private readonly PLACEHOLDER_TEXT = "            "
-    private readonly MOVES_TEXT = "MOVES:   135"
-    private readonly TIME_TEXT = "TIME:   2:47"
-    private readonly SCORE_TEXT = "SCORE:  6530"
-    private readonly RECORD_TEXT = "RECORD: 7680"
+    private readonly PLACEHOLDER_TEXT = "             "
+    private readonly MOVES_TEXT = "MOVES:    135"
+    private readonly TIME_TEXT = "TIME: 0:02:47"
+    private readonly SCORE_TEXT = "SCORE:   6530"
+    private readonly RECORD_TEXT = "RECORD:  7680"
     private readonly NEW_GAME_TEXT = "NEW GAME"
 
+    private movesText!: Text
+    private timeText!: Text
+    private scoreText!: Text
+    private recordText!: Text
     private newGameButton!: Text
 
     public onNewGamePress: (() => void) | null = null
@@ -38,11 +43,11 @@ export class WinScene extends Scene {
         const whiteFontTexture = TextureManager.getTexture("white-font")!
         const yellowFontTexture = TextureManager.getTexture("yellow-font")!
 
-
-        const windowPosition = Dimensions.centerPosition(Dimensions.screenSize80, Dimensions.screenSize)
+        const windowPosition50 = Dimensions.centerPosition(Dimensions.screenSize50, Dimensions.screenSize)
+        const windowPosition80 = Dimensions.centerPosition(Dimensions.screenSize80, Dimensions.screenSize)
 
         const winWindow = new Window("win-window",
-            windowPosition.x, windowPosition.y, 100,
+            windowPosition80.x, windowPosition50.y, 100,
             Dimensions.screenSize80.width, Dimensions.screenSize50.height
         )
 
@@ -56,21 +61,21 @@ export class WinScene extends Scene {
         const newGamePosition = Dimensions.centerPosition(newGameSize, winWindow)
         this.newGameButton = new Text(this.NEW_GAME_TEXT, newGamePosition.x, winWindow.height - 2 * newGameSize.height, 2, newGameFontSize, yellowFontTexture)
 
-        const dataFontSize = Dimensions.fontSizeToFitWidth(this.PLACEHOLDER_TEXT, winWindow.width * 0.7)
+        const dataFontSize = Dimensions.fontSizeToFitWidth(this.PLACEHOLDER_TEXT, winWindow.width * 0.8)
         const dataSize = Dimensions.textSize(this.PLACEHOLDER_TEXT, dataFontSize)
         const dataPosition = Dimensions.centerPosition(dataSize, winWindow)
         dataPosition.y = congratulationText.y + congratulationText.height + dataSize.height
 
-        const movesText = new Text(this.MOVES_TEXT, dataPosition.x, dataPosition.y + (0 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
-        const timeText = new Text(this.TIME_TEXT, dataPosition.x, dataPosition.y + (1 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
-        const scoreText = new Text(this.SCORE_TEXT, dataPosition.x, dataPosition.y + (2 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
-        const recordText = new Text(this.RECORD_TEXT, dataPosition.x, dataPosition.y + (3 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
+        this.movesText = new Text(this.MOVES_TEXT, dataPosition.x, dataPosition.y + (0 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
+        this.timeText = new Text(this.TIME_TEXT, dataPosition.x, dataPosition.y + (1 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
+        this.scoreText = new Text(this.SCORE_TEXT, dataPosition.x, dataPosition.y + (2 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
+        this.recordText = new Text(this.RECORD_TEXT, dataPosition.x, dataPosition.y + (3 * (dataSize.height * 1.5)), 2, dataFontSize, whiteFontTexture)
 
         winWindow.addChild(congratulationText)
-        winWindow.addChild(movesText)
-        winWindow.addChild(timeText)
-        winWindow.addChild(scoreText)
-        winWindow.addChild(recordText)
+        winWindow.addChild(this.movesText)
+        winWindow.addChild(this.timeText)
+        winWindow.addChild(this.scoreText)
+        winWindow.addChild(this.recordText)
         winWindow.addChild(this.newGameButton)
         this.objects.push(winWindow)
 
@@ -78,6 +83,17 @@ export class WinScene extends Scene {
 
             if (this.onNewGamePress) this.onNewGamePress()
         }
+    }
+
+    public setData(moves: number, time: ITime, score: number): void {
+
+        // TODO: save/load record
+        const record = 7840
+
+        this.movesText.text = `MOVES:${moves.toString().padStart(7, " ")}`
+        this.timeText.text = `TIME: ${time.hours}:${time.minutes.toString().padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}`
+        this.scoreText.text = `SCORE:${score.toString().padStart(7, " ")}`
+        this.recordText.text = `RECORD:${record.toString().padStart(6, " ")}`
     }
 
     public update(time: number, deltaTime: number): void { }

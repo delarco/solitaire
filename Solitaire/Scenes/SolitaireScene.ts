@@ -26,6 +26,7 @@ import { CardBlinkAnimation } from "../Animations/CardBlinkAnimation";
 import { GameOverScene } from "./GameOverScene";
 import { WinScene } from "./WinScene";
 import { Text } from "../GameObjects/Text";
+import { StockClearAction } from "../Actions/StockClearAction";
 
 export class SolitaireScene extends Scene {
 
@@ -214,7 +215,14 @@ export class SolitaireScene extends Scene {
 
         if (this.stockPile.cards.length === 0) return
 
-        this.executeAction(new StockNextAction(this.stockPile))
+        if (this.stockPile.currentCard === this.stockPile.last) {
+
+            this.executeAction(new StockClearAction(this.stockPile))
+        }
+        else {
+
+            this.executeAction(new StockNextAction(this.stockPile))
+        }
     }
 
     private checkVictory(): boolean {
@@ -239,15 +247,12 @@ export class SolitaireScene extends Scene {
         DeckGenerator.shuffle(this.cards)
 
         this.placingCards = true
-        // PileUtils.placeCards(
         PileUtils.placeCardsAnimated(
-            // PileUtils.placeCardsAllTableauWin(
             this.cards,
             this.tableauPiles,
             this.stockPile,
             () => this.placingCards = false
         )
-        // this.placingCards = false
     }
 
     private onHintPress(): void {

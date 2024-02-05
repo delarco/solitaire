@@ -22,7 +22,6 @@ export default function App() {
     console.log(`[App] onContextCreate ${screenSize.width}x${screenSize.height}`);
 
     GameDimensions.init({ width: gl.drawingBufferWidth, height: gl.drawingBufferHeight })
-    GameDimensions.print()
 
     game = new Game(gl, screenSize)
     game.backgroundColor = Color.TABLE_GREEN

@@ -73,8 +73,6 @@ export class PileUtils {
 
     public static placeCards(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
 
-        console.log("[PileUtils] placeCards");
-
         let cardCounter = 0
 
         // add cards to tableau piles
@@ -112,8 +110,6 @@ export class PileUtils {
 
     public static placeCardsAllTableauWin(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
 
-        console.log("[PileUtils] placeCardsWin");
-
         let allCards: Array<Card> = []
         allCards.push(...cards)
 
@@ -136,8 +132,6 @@ export class PileUtils {
     }
 
     public static placeCardsTableauAndStockWin(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile): void {
-
-        console.log("[PileUtils] placeCardsWin");
 
         let allCards: Array<Card> = []
         allCards.push(...cards)
@@ -168,8 +162,6 @@ export class PileUtils {
     }
 
     public static placeCardsAnimated(cards: Array<Card>, tableauPiles: Array<IPile>, stockPile: IPile, callback: () => void): void {
-
-        console.log("[PileUtils] placeCardsAnimated");
 
         let cardCounter = 0
 

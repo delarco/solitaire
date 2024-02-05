@@ -130,7 +130,6 @@ export class StockPile extends Container implements IPile {
     public nextCard(): void {
 
         this._currentIndex++
-console.log(this._currentIndex);
 
         if (this._currentIndex < this.cards.length) {
             this.showNextCard()

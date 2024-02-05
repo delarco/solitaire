@@ -130,6 +130,7 @@ export class StockPile extends Container implements IPile {
     public nextCard(): void {
 
         this._currentIndex++
+console.log(this._currentIndex);
 
         if (this._currentIndex < this.cards.length) {
             this.showNextCard()
@@ -144,6 +145,7 @@ export class StockPile extends Container implements IPile {
         if (this.currentCard) {
 
             this.currentCard.visible = false
+            this.currentCard.move(this.x, this.y)
             this.texture = TextureManager.getTexture("card")
         }
 
@@ -213,5 +215,29 @@ export class StockPile extends Container implements IPile {
 
         this.texture = TextureManager.getTexture("card")
         this._currentIndex = -1
+    }
+
+    public roolbackClear(): void {
+
+        this._currentIndex = this.cards.length - 1
+        
+        this.texture = TextureManager.getTexture("card-empty")
+
+        for(let cardIndex = 0; cardIndex < this.cards.length; cardIndex++) {
+
+            const card = this.cards[cardIndex]
+
+            let position = 2
+
+            if(cardIndex === this.cards.length - 1) position = 0
+            if(cardIndex === this.cards.length - 2) position = 1
+
+            card.visible = true
+
+            Animator.add(new MoveAnimation(
+                card,
+                this.firstCardBaseX - position * Math.floor(Dimensions.cardSize.width / 2), null
+            ))
+        }
     }
 }

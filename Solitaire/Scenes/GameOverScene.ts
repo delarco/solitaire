@@ -67,12 +67,9 @@ export class GameOverScene extends Scene {
 
     public onGameObjectTouchStart(gameObject: IGameObject): void {
 
-        // TODO: fix inside window objects not getting events
-        if (this.onNewGamePress) this.onNewGamePress()
+        if (gameObject === this.newGameButton) {
 
-        // if (gameObject === this.newGameButton) {
-
-        //     Animator.add(new ColorBlinkAnimation(gameObject))
-        // }
+            Animator.add(new ColorBlinkAnimation(gameObject))
+        }
     }
 }

@@ -11,6 +11,7 @@ import { fragmentShaderSourceCode } from "../Shaders/FragmentShader";
 import { vertexShaderSourceCode } from "../Shaders/VertexShader";
 import { Dimensions } from "../Utils/Dimensions";
 import { ITime } from "../interfaces/ITime";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export class WinScene extends Scene {
 
@@ -27,6 +28,9 @@ export class WinScene extends Scene {
     private scoreText!: Text
     private recordText!: Text
     private newGameButton!: Text
+
+    private readonly RECORD_STORAGE_KEY = "SCORE_RECORD"
+    private record: number = 0
 
     public onNewGamePress: (() => void) | null = null
 
@@ -83,17 +87,37 @@ export class WinScene extends Scene {
 
             if (this.onNewGamePress) this.onNewGamePress()
         }
+
+        // load record
+        const record = await AsyncStorage.getItem(this.RECORD_STORAGE_KEY)
+        if (record) this.record = Number(record)
+
+        // AsyncStorage.setItem("")
+
+        // const storeData = async () => {
+        //     try {
+        //       await AsyncStorage.setItem(
+        //         '@MySuperStore:key',
+        //         'I like to save it.',
+        //       );
+        //     } catch (error) {
+        //       // Error saving data
+        //     }
+        //   };
     }
 
     public setData(moves: number, time: ITime, score: number): void {
 
-        // TODO: save/load record
-        const record = 7840
+        if (score > this.record) {
+
+            this.record = score
+            AsyncStorage.setItem(this.RECORD_STORAGE_KEY, String(score))
+        }
 
         this.movesText.text = `MOVES:${moves.toString().padStart(7, " ")}`
         this.timeText.text = `TIME: ${time.hours}:${time.minutes.toString().padStart(2, "0")}:${time.seconds.toString().padStart(2, "0")}`
         this.scoreText.text = `SCORE:${score.toString().padStart(7, " ")}`
-        this.recordText.text = `RECORD:${record.toString().padStart(6, " ")}`
+        this.recordText.text = `RECORD:${this.record.toString().padStart(6, " ")}`
     }
 
     public update(time: number, deltaTime: number): void { }

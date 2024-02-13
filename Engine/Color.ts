@@ -25,6 +25,14 @@ export class Color {
         ])
     }
 
+    public get hex() {
+
+        const red = ('0' + ((this.red) * 255 & 0xFF).toString(16)).slice(-2)
+        const green = ('0' + ((this.green) * 255 & 0xFF).toString(16)).slice(-2)
+        const blue = ('0' + ((this.blue) * 255 & 0xFF).toString(16)).slice(-2)
+        return `#${red}${green}${blue}`
+    }
+
     constructor(
         public red: number,
         public green: number,

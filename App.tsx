@@ -1,10 +1,8 @@
 import { ExpoWebGLRenderingContext, GLView } from 'expo-gl';
-import { Dimensions, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import { Game } from './Engine/Game';
 import { SolitaireScene } from './Solitaire/Scenes/SolitaireScene';
 import { ISize } from './Engine/interfaces/ISize';
-import { GameOverScene } from './Solitaire/Scenes/GameOverScene';
-import { WinScene } from './Solitaire/Scenes/WinScene';
 import { Color } from './Engine/Color';
 import { Dimensions as GameDimensions } from "./Solitaire/Utils/Dimensions";
 
@@ -15,6 +13,10 @@ export default function App() {
   const screenSize: ISize = {
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
+  }
+
+  if (screenSize.width / screenSize.height > 0.6) {
+    screenSize.width = 512;
   }
 
   function onContextCreate(gl: ExpoWebGLRenderingContext): void {
@@ -29,9 +31,9 @@ export default function App() {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <GLView
-        style={{ width: screenSize.width, height: screenSize.height, }}
+        style={{ margin: "auto", width: screenSize.width, height: screenSize.height, }}
         onContextCreate={onContextCreate}
         onStartShouldSetResponder={() => true}
         onTouchStart={ev => game?.onTouchStart(ev)}
@@ -40,3 +42,10 @@ export default function App() {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    backgroundColor: Color.TABLE_DARK_GREEN.hex,
+  },
+});

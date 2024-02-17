@@ -57,6 +57,7 @@ export class TouchEventHandler {
                 }
 
                 scene.onGameObjectPress(TouchEventHandler.selectedGameObject)
+                TouchEventHandler.selectedGameObject = null
             }
 
             return

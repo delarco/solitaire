@@ -1,5 +1,5 @@
 import { ExpoWebGLRenderingContext } from "expo-gl";
-import { GestureResponderEvent, Platform } from "react-native";
+import { GestureResponderEvent, Platform, PointerEvent } from "react-native";
 import { Scene } from "./Scene";
 import { ISize } from "./interfaces/ISize";
 import { IPosition } from "./interfaces/IPosition";
@@ -31,6 +31,8 @@ export class Game {
 
     public backgroundColor: Color = new Color(0.75, 0.75, 0.75, 1)
 
+    private deviceMode: boolean
+
     constructor(
         gl: ExpoWebGLRenderingContext,
         private screenSize: ISize,
@@ -39,6 +41,9 @@ export class Game {
         Game._gl = gl
 
         console.log("[Game] platform", Platform.OS)
+
+        this.deviceMode = window.navigator.userAgent.indexOf('Mobile') !== -1 // window.devicePixelRatio > 1
+        console.log("Device Mode", this.deviceMode);
 
         this.resolution = {
             width: gl.drawingBufferWidth,
@@ -107,8 +112,6 @@ export class Game {
         this.lastTime = now
         this._fps = 1 / deltaTime
 
-        // if (Platform.OS === "web") window.document.title = `fps: ${this.fps.toFixed(2)}`
-
         Animator.update(time, deltaTime)
         for (const scene of this.renderingScenes) scene.update(time, deltaTime)
     }
@@ -122,6 +125,8 @@ export class Game {
     }
 
     public onTouchStart(event: GestureResponderEvent): void {
+
+        if (!this.deviceMode) return
 
         const scene = this.lastRenderingScenes
         if (!scene) return
@@ -137,6 +142,8 @@ export class Game {
 
     public onTouchEnd(event: GestureResponderEvent): void {
 
+        if (!this.deviceMode) return
+
         const screenPosition: IPosition = {
             x: event.nativeEvent.changedTouches[0].pageX,
             y: event.nativeEvent.changedTouches[0].pageY
@@ -151,6 +158,8 @@ export class Game {
 
     public onTouchMove(event: GestureResponderEvent): void {
 
+        if (!this.deviceMode) return
+
         const scene = this.lastRenderingScenes
         if (!scene) return
         const screenPosition: IPosition = {
@@ -160,5 +169,50 @@ export class Game {
 
         const drawingPosition = this.convertScreenToDrawingPosition(screenPosition)
         TouchEventHandler.onTouchMove(scene, drawingPosition)
+    }
+
+    public onPointerDown(event: PointerEvent) {
+
+        if (this.deviceMode) return
+
+        const scene = this.lastRenderingScenes
+        if (!scene) return
+
+        const screenPosition: IPosition = {
+            x: (<any>event).nativeEvent.layerX,
+            y: (<any>event).nativeEvent.layerY
+        }
+
+        TouchEventHandler.onTouchStart(scene, screenPosition)
+    }
+
+    public onPointerUp(event: PointerEvent) {
+
+        if (this.deviceMode) return
+
+        const scene = this.lastRenderingScenes
+        if (!scene) return
+
+        const screenPosition: IPosition = {
+            x: (<any>event).nativeEvent.layerX,
+            y: (<any>event).nativeEvent.layerY
+        }
+
+        TouchEventHandler.onTouchEnd(scene, screenPosition)
+    }
+
+    public onPointerMove(event: PointerEvent) {
+
+        if (this.deviceMode) return
+
+        const scene = this.lastRenderingScenes
+        if (!scene) return
+
+        const screenPosition: IPosition = {
+            x: (<any>event).nativeEvent.layerX,
+            y: (<any>event).nativeEvent.layerY
+        }
+
+        TouchEventHandler.onTouchMove(scene, screenPosition)
     }
 }

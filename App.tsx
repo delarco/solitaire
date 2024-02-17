@@ -38,7 +38,12 @@ export default function App() {
         onStartShouldSetResponder={() => true}
         onTouchStart={ev => game?.onTouchStart(ev)}
         onTouchEnd={ev => game?.onTouchEnd(ev)}
-        onTouchMove={ev => game?.onTouchMove(ev)} />
+        onTouchMove={ev => game?.onTouchMove(ev)}
+        onPointerDown={ev => game?.onPointerDown(ev)}
+        onPointerUp={ev => game?.onPointerUp(ev)}
+        onPointerMove={ev => game?.onPointerMove(ev)}
+        onPointerLeave={ev => game?.onPointerUp(ev)}
+      />
     </View>
   );
 }
